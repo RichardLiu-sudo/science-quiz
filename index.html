@@ -437,6 +437,7 @@ body {
     <span id="stat-total">总题数: 394</span>
     <span id="stat-correct">正确: 0</span>
     <span id="stat-accuracy">正确率: -</span>
+    <span id="stat-wrong">错题: 0</span>
   </div>
 </div>
 
@@ -456,6 +457,7 @@ body {
     <button id="btn-remove-correct" onclick="toggleRemoveCorrect()">答对排除</button>
     <button id="btn-timer" onclick="toggleTimer()">计时器</button>
     <button id="btn-wrong-book" onclick="showWrongBook()">错题本</button>
+    <button id="btn-wrong-practice" style="display:none" onclick="startWrongQuiz()">错题本强化练习</button>
     <button id="btn-records" onclick="showRecords()">学习记录</button>
     <span class="timer-display" id="timer-display" style="display:none">00:00</span>
   </div>
@@ -1202,6 +1204,25 @@ let timerOn = false;
 let timerSeconds = 0;
 let timerInterval = null;
 let quizFinished = false;
+let wrongMap = {};
+
+function loadWrongMap() {
+  try {
+    const raw = localStorage.getItem(getStorageKey() + "_wrongMap");
+    if (raw) wrongMap = JSON.parse(raw);
+  } catch(e) { wrongMap = {}; }
+}
+
+function saveWrongMap() {
+  localStorage.setItem(getStorageKey() + "_wrongMap", JSON.stringify(wrongMap));
+}
+
+function updateWrongStat() {
+  const count = Object.keys(wrongMap).length;
+  document.getElementById("stat-wrong").textContent = "错题: " + count;
+  const btn = document.getElementById("btn-wrong-practice");
+  if (btn) btn.style.display = count > 0 ? "" : "none";
+}
 
 function getStorageKey() {
   return currentMode === "choice" ? "science_quiz_choice_v4" : "science_quiz_fill_v4";
@@ -1252,6 +1273,9 @@ function switchMode(mode) {
   document.getElementById("stat-total").textContent = "总题数: " + getData().length;
   document.getElementById("stat-correct").textContent = "正确: 0";
   document.getElementById("stat-accuracy").textContent = "正确率: -";
+
+  loadWrongMap();
+  updateWrongStat();
 
   renderUnitSelector();
   startQuiz(null);
@@ -1317,6 +1341,49 @@ function startQuiz(unit) {
   }
 
   document.getElementById("stat-total").textContent = "当前: " + currentQuestions.length + " 题";
+  document.getElementById("stat-correct").textContent = "正确: 0";
+  document.getElementById("stat-accuracy").textContent = "正确率: -";
+
+  loadWrongMap();
+  updateWrongStat();
+
+  renderQuiz();
+  updateProgress();
+}
+
+function startWrongQuiz() {
+  loadWrongMap();
+  const wrongIds = Object.keys(wrongMap).map(Number);
+  if (wrongIds.length === 0) return;
+
+  stopTimer();
+  currentUnit = null;
+  quizFinished = false;
+  answeredCount = 0;
+  correctCount = 0;
+  timerSeconds = 0;
+  removeCorrect = false;
+  timerOn = false;
+
+  document.getElementById("btn-remove-correct").className = "";
+  document.getElementById("btn-timer").className = "";
+  document.getElementById("timer-display").style.display = "none";
+  document.getElementById("timer-display").textContent = "00:00";
+  document.getElementById("result-panel").style.display = "none";
+  document.getElementById("wrong-book-area").style.display = "none";
+  document.getElementById("records-area").style.display = "none";
+
+  const data = getData();
+  const activeCls = getActiveClass();
+
+  // Clear unit button highlights
+  document.querySelectorAll(".unit-btn").forEach(btn => {
+    btn.className = "unit-btn";
+  });
+
+  currentQuestions = data.filter(q => wrongIds.includes(q.id)).map(q => ({...q, _answered: false, _correct: null, _userAnswer: null}));
+
+  document.getElementById("stat-total").textContent = "当前: " + currentQuestions.length + " 题 (错题本)";
   document.getElementById("stat-correct").textContent = "正确: 0";
   document.getElementById("stat-accuracy").textContent = "正确率: -";
 
@@ -1706,6 +1773,7 @@ function saveRecord(score, total) {
     } catch(e) {}
 
     for (const wq of wrongQs) {
+      wrongMap[wq.id] = (wrongMap[wq.id] || 0) + 1;
       const exists = wrongBook.find(w => w.id === wq.id);
       if (!exists) {
         const entry = {
@@ -1728,6 +1796,8 @@ function saveRecord(score, total) {
 
     if (wrongBook.length > 500) wrongBook = wrongBook.slice(-500);
     localStorage.setItem(getStorageKey() + "_wrong", JSON.stringify(wrongBook));
+    saveWrongMap();
+    updateWrongStat();
   }
 }
 
@@ -1780,6 +1850,9 @@ function showWrongBook() {
 function clearWrongBook() {
   if (confirm("确定要清空「" + (currentMode === "choice" ? "选择题" : "填空题") + "」错题本吗？此操作不可撤销。")) {
     localStorage.removeItem(getStorageKey() + "_wrong");
+    wrongMap = {};
+    saveWrongMap();
+    updateWrongStat();
     showWrongBook();
   }
 }
@@ -1837,6 +1910,8 @@ function clearRecords() {
 
 // ==================== START ====================
 document.getElementById("stat-total").textContent = "总题数: " + CHOICE_DATA.length;
+loadWrongMap();
+updateWrongStat();
 renderUnitSelector();
 startQuiz(null);
 </script>
