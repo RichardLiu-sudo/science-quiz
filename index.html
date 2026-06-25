@@ -1205,6 +1205,8 @@ let timerSeconds = 0;
 let timerInterval = null;
 let quizFinished = false;
 let wrongMap = {};
+let choiceIndex = 0;
+let fillIndex = 0;
 
 function loadWrongMap() {
   try {
@@ -1215,6 +1217,25 @@ function loadWrongMap() {
 
 function saveWrongMap() {
   localStorage.setItem(getStorageKey() + "_wrongMap", JSON.stringify(wrongMap));
+}
+
+function getCurrentIndex() {
+  return currentMode === "choice" ? choiceIndex : fillIndex;
+}
+function setCurrentIndex(val) {
+  if (currentMode === "choice") choiceIndex = val;
+  else fillIndex = val;
+}
+function getVisibleQs() {
+  if (removeCorrect) return currentQuestions.filter(q => q._correct !== true);
+  return currentQuestions;
+}
+function findNextUnansweredIdx(startIdx) {
+  const visibleQs = getVisibleQs();
+  for (let i = startIdx + 1; i < visibleQs.length; i++) {
+    if (!visibleQs[i]._answered) return i;
+  }
+  return -1;
 }
 
 function updateWrongStat() {
@@ -1245,6 +1266,7 @@ function switchMode(mode) {
   if (currentMode === mode) return;
   stopTimer();
   currentMode = mode;
+  setCurrentIndex(0);
 
   // Update tabs
   document.getElementById("tab-choice").className = mode === "choice" ? "mode-tab choice-active" : "mode-tab";
@@ -1314,6 +1336,7 @@ function startQuiz(unit) {
   timerSeconds = 0;
   removeCorrect = false;
   timerOn = false;
+  setCurrentIndex(0);
 
   document.getElementById("btn-remove-correct").className = "";
   document.getElementById("btn-timer").className = "";
@@ -1364,6 +1387,7 @@ function startWrongQuiz() {
   timerSeconds = 0;
   removeCorrect = false;
   timerOn = false;
+  setCurrentIndex(0);
 
   document.getElementById("btn-remove-correct").className = "";
   document.getElementById("btn-timer").className = "";
@@ -1397,6 +1421,7 @@ function shuffleQuestions() {
     const j = Math.floor(Math.random() * (i + 1));
     [currentQuestions[i], currentQuestions[j]] = [currentQuestions[j], currentQuestions[i]];
   }
+  setCurrentIndex(0);
   renderQuiz();
 }
 
@@ -1408,6 +1433,7 @@ function toggleRemoveCorrect() {
   } else {
     btn.className = "";
   }
+  setCurrentIndex(0);
   renderQuiz();
 }
 
@@ -1474,12 +1500,36 @@ function renderQuiz() {
   }
 }
 
+function renderNavButtons() {
+  const visibleQs = getVisibleQs();
+  const idx = getCurrentIndex();
+  const cls = getToolbarActiveClass();
+  return '<div style="display:flex;justify-content:center;gap:12px;margin-top:16px">' +
+    '<button class="btn btn-outline" onclick="goToPrevQuestion()"' + (idx <= 0 ? ' disabled' : '') + '>&#9664; 上一题</button>' +
+    '<button class="btn btn-outline" onclick="goToNextQuestion()"' + (idx >= visibleQs.length - 1 ? ' disabled' : '') + '>下一题 &#9654;</button>' +
+    '</div>';
+}
+
+function goToPrevQuestion() {
+  const idx = getCurrentIndex();
+  if (idx > 0) {
+    setCurrentIndex(idx - 1);
+    renderQuiz();
+  }
+}
+
+function goToNextQuestion() {
+  const visibleQs = getVisibleQs();
+  const idx = getCurrentIndex();
+  if (idx < visibleQs.length - 1) {
+    setCurrentIndex(idx + 1);
+    renderQuiz();
+  }
+}
+
 function renderChoiceQuiz() {
   const area = document.getElementById("quiz-area");
-  let visibleQs = currentQuestions;
-  if (removeCorrect) {
-    visibleQs = visibleQs.filter(q => q._correct !== true);
-  }
+  const visibleQs = getVisibleQs();
 
   if (visibleQs.length === 0) {
     if (removeCorrect && currentQuestions.every(q => q._correct === true)) {
@@ -1490,17 +1540,15 @@ function renderChoiceQuiz() {
     return;
   }
 
-  let html = "";
-  for (const q of visibleQs) {
-    html += renderChoiceCard(q);
-  }
-  area.innerHTML = html;
+  // Clamp index
+  if (choiceIndex >= visibleQs.length) choiceIndex = visibleQs.length - 1;
+  if (choiceIndex < 0) choiceIndex = 0;
 
-  // Focus first unanswered fill input
-  if (currentMode === "fill") {
-    const firstInput = area.querySelector(".fill-input:not([disabled])");
-    if (firstInput) firstInput.focus();
-  }
+  const q = visibleQs[choiceIndex];
+  let html = '<div style="text-align:center;margin-bottom:8px;color:#888;font-size:13px">第 ' + (choiceIndex + 1) + ' / ' + visibleQs.length + ' 题</div>';
+  html += renderChoiceCard(q);
+  html += renderNavButtons();
+  area.innerHTML = html;
 }
 
 function renderChoiceCard(q) {
@@ -1555,21 +1603,21 @@ function selectChoiceAnswer(id, userAnswer) {
   updateStats();
   updateProgress();
 
-  const card = document.getElementById("card-" + id);
-  if (card) {
-    card.outerHTML = renderChoiceCard(q);
+  // Auto-advance to next unanswered
+  const visibleQs = getVisibleQs();
+  const currentIdx = getCurrentIndex();
+  const nextUnanswered = findNextUnansweredIdx(currentIdx);
+  if (nextUnanswered >= 0) {
+    setCurrentIndex(nextUnanswered);
   }
-
+  renderQuiz();
   checkFinish();
 }
 
 // ==================== FILL MODE ====================
 function renderFillQuiz() {
   const area = document.getElementById("quiz-area");
-  let visibleQs = currentQuestions;
-  if (removeCorrect) {
-    visibleQs = visibleQs.filter(q => q._correct !== true);
-  }
+  const visibleQs = getVisibleQs();
 
   if (visibleQs.length === 0) {
     if (removeCorrect && currentQuestions.every(q => q._correct === true)) {
@@ -1580,15 +1628,21 @@ function renderFillQuiz() {
     return;
   }
 
-  let html = "";
-  for (const q of visibleQs) {
-    html += renderFillCard(q);
-  }
+  // Clamp index
+  if (fillIndex >= visibleQs.length) fillIndex = visibleQs.length - 1;
+  if (fillIndex < 0) fillIndex = 0;
+
+  const q = visibleQs[fillIndex];
+  let html = '<div style="text-align:center;margin-bottom:8px;color:#888;font-size:13px">第 ' + (fillIndex + 1) + ' / ' + visibleQs.length + ' 题</div>';
+  html += renderFillCard(q);
+  html += renderNavButtons();
   area.innerHTML = html;
 
-  // Focus first unanswered input
-  const firstInput = area.querySelector(".fill-input:not([disabled])");
-  if (firstInput) firstInput.focus();
+  // Focus input if unanswered
+  if (!q._answered) {
+    const input = area.querySelector(".fill-input:not([disabled])");
+    if (input) input.focus();
+  }
 }
 
 function renderFillCard(q) {
@@ -1654,15 +1708,14 @@ function submitFillAnswer(id) {
   updateStats();
   updateProgress();
 
-  const card = document.getElementById("fill-card-" + id);
-  if (card) {
-    card.outerHTML = renderFillCard(q);
+  // Auto-advance to next unanswered
+  const visibleQs = getVisibleQs();
+  const currentIdx = getCurrentIndex();
+  const nextUnanswered = findNextUnansweredIdx(currentIdx);
+  if (nextUnanswered >= 0) {
+    setCurrentIndex(nextUnanswered);
   }
-
-  // Focus next unanswered
-  const nextInput = document.querySelector(".fill-input:not([disabled])");
-  if (nextInput) nextInput.focus();
-
+  renderQuiz();
   checkFinish();
 }
 
