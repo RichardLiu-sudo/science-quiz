@@ -211,6 +211,27 @@ body {
 .quiz-card.correct { border-left: 4px solid var(--success); }
 .quiz-card.wrong { border-left: 4px solid var(--danger); }
 
+/* Feedback toast */
+.feedback-toast {
+  padding: 14px 20px;
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  font-size: 16px;
+  margin-bottom: 14px;
+  text-align: center;
+  animation: toastIn 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.feedback-toast.correct-toast { background: var(--success); color: #fff; }
+.feedback-toast.wrong-toast { background: var(--danger); color: #fff; }
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY(-12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 .quiz-meta {
   display: flex;
   justify-content: space-between;
@@ -1203,6 +1224,7 @@ let timerInterval = null;
 let quizFinished = false;
 let wrongMap = {};
 let masteredSet = {};
+let autoAdvanceTimer = null;
 let choiceIndex = 0;
 let fillIndex = 0;
 
@@ -1338,6 +1360,7 @@ function renderUnitSelector() {
 
 function startQuiz(unit) {
   stopTimer();
+  clearAutoAdvance();
   currentUnit = unit;
   quizFinished = false;
   answeredCount = 0;
@@ -1427,6 +1450,7 @@ function startWrongQuiz() {
 
 function shuffleQuestions() {
   if (quizFinished) return;
+  clearAutoAdvance();
   for (let i = currentQuestions.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [currentQuestions[i], currentQuestions[j]] = [currentQuestions[j], currentQuestions[i]];
@@ -1506,6 +1530,7 @@ function renderNavButtons() {
 }
 
 function goToPrevQuestion() {
+  clearAutoAdvance();
   const idx = getCurrentIndex();
   if (idx > 0) {
     setCurrentIndex(idx - 1);
@@ -1514,11 +1539,19 @@ function goToPrevQuestion() {
 }
 
 function goToNextQuestion() {
+  clearAutoAdvance();
   const visibleQs = getVisibleQs();
   const idx = getCurrentIndex();
   if (idx < visibleQs.length - 1) {
     setCurrentIndex(idx + 1);
     renderQuiz();
+  }
+}
+
+function clearAutoAdvance() {
+  if (autoAdvanceTimer) {
+    clearTimeout(autoAdvanceTimer);
+    autoAdvanceTimer = null;
   }
 }
 
@@ -1551,8 +1584,18 @@ function renderChoiceCard(q) {
   if (q._correct === true) cardClass += " correct";
   else if (q._correct === false) cardClass += " wrong";
 
-  let html = `<div class="${cardClass}" id="card-${q.id}">
-    <div class="quiz-meta">
+  let html = `<div class="${cardClass}" id="card-${q.id}">`;
+
+  // Feedback toast
+  if (q._answered) {
+    if (q._correct) {
+      html += '<div class="feedback-toast correct-toast">&#10003; 回答正确</div>';
+    } else {
+      html += '<div class="feedback-toast wrong-toast">&#10007; 回答错误，正确答案是：' + q.answer + '</div>';
+    }
+  }
+
+  html += `<div class="quiz-meta">
       <span>${q.unit} · ${q.lesson}</span>
       <span>#${q.id}</span>
     </div>
@@ -1607,15 +1650,23 @@ function selectChoiceAnswer(id, userAnswer) {
   updateStats();
   updateProgress();
 
-  // Auto-advance to next unanswered
+  // Render current card with feedback first, then auto-advance
+  renderQuiz();
+  clearAutoAdvance();
   const visibleQs = getVisibleQs();
   const currentIdx = getCurrentIndex();
   const nextUnanswered = findNextUnansweredIdx(currentIdx);
   if (nextUnanswered >= 0) {
-    setCurrentIndex(nextUnanswered);
+    autoAdvanceTimer = setTimeout(() => {
+      if (!quizFinished) {
+        setCurrentIndex(nextUnanswered);
+        renderQuiz();
+        checkFinish();
+      }
+    }, 1200);
+  } else {
+    checkFinish();
   }
-  renderQuiz();
-  checkFinish();
 }
 
 // ==================== FILL MODE ====================
@@ -1657,8 +1708,18 @@ function renderFillCard(q) {
   // Highlight blanks
   const questionHtml = q.question.replace(/______/g, '<span class="blank">______</span>');
 
-  let html = `<div class="${cardClass}" id="fill-card-${q.id}">
-    <div class="quiz-meta">
+  let html = `<div class="${cardClass}" id="fill-card-${q.id}">`;
+
+  // Feedback toast
+  if (q._answered) {
+    if (q._correct) {
+      html += '<div class="feedback-toast correct-toast">&#10003; 回答正确</div>';
+    } else {
+      html += '<div class="feedback-toast wrong-toast">&#10007; 回答错误，正确答案是：' + q.answer.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</div>';
+    }
+  }
+
+  html += `<div class="quiz-meta">
       <span>${q.unit} · ${q.lesson}</span>
       <span>#${q.id}</span>
     </div>
@@ -1721,15 +1782,23 @@ function submitFillAnswer(id) {
   updateStats();
   updateProgress();
 
-  // Auto-advance to next unanswered
+  // Render current card with feedback first, then auto-advance
+  renderQuiz();
+  clearAutoAdvance();
   const visibleQs = getVisibleQs();
   const currentIdx = getCurrentIndex();
   const nextUnanswered = findNextUnansweredIdx(currentIdx);
   if (nextUnanswered >= 0) {
-    setCurrentIndex(nextUnanswered);
+    autoAdvanceTimer = setTimeout(() => {
+      if (!quizFinished) {
+        setCurrentIndex(nextUnanswered);
+        renderQuiz();
+        checkFinish();
+      }
+    }, 1200);
+  } else {
+    checkFinish();
   }
-  renderQuiz();
-  checkFinish();
 }
 
 function fuzzyMatch(user, correct) {
