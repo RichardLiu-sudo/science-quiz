@@ -454,11 +454,10 @@ body {
   <!-- Toolbar -->
   <div class="toolbar" id="toolbar">
     <button id="btn-shuffle" onclick="shuffleQuestions()">随机打乱</button>
-    <button id="btn-remove-correct" onclick="toggleRemoveCorrect()">答对排除</button>
     <button id="btn-timer" onclick="toggleTimer()">计时器</button>
-    <button id="btn-wrong-book" onclick="showWrongBook()">错题本</button>
-    <button id="btn-wrong-practice" style="display:none" onclick="startWrongQuiz()">错题本强化练习</button>
+    <button id="btn-wrong-practice" style="display:none" onclick="startWrongQuiz()">错题练习</button>
     <button id="btn-records" onclick="showRecords()">学习记录</button>
+    <span id="correct-count-display" style="font-size:13px;color:#888;margin-left:auto">已答对: 0</span>
     <span class="timer-display" id="timer-display" style="display:none">00:00</span>
   </div>
 
@@ -1199,7 +1198,6 @@ let currentUnit = null;
 let currentQuestions = [];
 let answeredCount = 0;
 let correctCount = 0;
-let removeCorrect = true;
 let timerOn = false;
 let timerSeconds = 0;
 let timerInterval = null;
@@ -1227,8 +1225,7 @@ function setCurrentIndex(val) {
   else fillIndex = val;
 }
 function getVisibleQs() {
-  if (removeCorrect) return currentQuestions.filter(q => q._correct !== true);
-  return currentQuestions;
+  return currentQuestions.filter(q => q._correct !== true);
 }
 function findNextUnansweredIdx(startIdx) {
   const visibleQs = getVisibleQs();
@@ -1280,18 +1277,16 @@ function switchMode(mode) {
   currentQuestions = [];
   answeredCount = 0;
   correctCount = 0;
-  removeCorrect = true;
   timerOn = false;
   quizFinished = false;
 
-  document.getElementById("btn-remove-correct").className = getToolbarActiveClass();
-  document.getElementById("btn-remove-correct").textContent = "答对排除：开";
   document.getElementById("btn-timer").className = "";
   document.getElementById("timer-display").style.display = "none";
   document.getElementById("result-panel").style.display = "none";
   document.getElementById("wrong-book-area").style.display = "none";
   document.getElementById("records-area").style.display = "none";
   document.getElementById("timer-display").textContent = "00:00";
+  document.getElementById("correct-count-display").textContent = "已答对: 0";
 
   document.getElementById("stat-total").textContent = "总题数: " + getData().length;
   document.getElementById("stat-correct").textContent = "正确: 0";
@@ -1335,18 +1330,16 @@ function startQuiz(unit) {
   answeredCount = 0;
   correctCount = 0;
   timerSeconds = 0;
-  removeCorrect = true;
   timerOn = false;
   setCurrentIndex(0);
 
-  document.getElementById("btn-remove-correct").className = getToolbarActiveClass();
-  document.getElementById("btn-remove-correct").textContent = "答对排除：开";
   document.getElementById("btn-timer").className = "";
   document.getElementById("timer-display").style.display = "none";
   document.getElementById("timer-display").textContent = "00:00";
   document.getElementById("result-panel").style.display = "none";
   document.getElementById("wrong-book-area").style.display = "none";
   document.getElementById("records-area").style.display = "none";
+  document.getElementById("correct-count-display").textContent = "已答对: 0";
 
   const data = getData();
   const activeCls = getActiveClass();
@@ -1379,7 +1372,10 @@ function startQuiz(unit) {
 function startWrongQuiz() {
   loadWrongMap();
   const wrongIds = Object.keys(wrongMap).map(Number);
-  if (wrongIds.length === 0) return;
+  if (wrongIds.length === 0) {
+    alert("暂无错题");
+    return;
+  }
 
   stopTimer();
   currentUnit = null;
@@ -1387,12 +1383,9 @@ function startWrongQuiz() {
   answeredCount = 0;
   correctCount = 0;
   timerSeconds = 0;
-  removeCorrect = false;
   timerOn = false;
   setCurrentIndex(0);
 
-  document.getElementById("btn-remove-correct").className = "";
-  document.getElementById("btn-remove-correct").textContent = "答对排除";
   document.getElementById("btn-timer").className = "";
   document.getElementById("timer-display").style.display = "none";
   document.getElementById("timer-display").textContent = "00:00";
@@ -1423,20 +1416,6 @@ function shuffleQuestions() {
   for (let i = currentQuestions.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [currentQuestions[i], currentQuestions[j]] = [currentQuestions[j], currentQuestions[i]];
-  }
-  setCurrentIndex(0);
-  renderQuiz();
-}
-
-function toggleRemoveCorrect() {
-  removeCorrect = !removeCorrect;
-  const btn = document.getElementById("btn-remove-correct");
-  if (removeCorrect) {
-    btn.classList.add(getToolbarActiveClass());
-    btn.textContent = "答对排除：开";
-  } else {
-    btn.className = "";
-    btn.textContent = "答对排除";
   }
   setCurrentIndex(0);
   renderQuiz();
@@ -1490,6 +1469,7 @@ function updateProgress() {
 
 function updateStats() {
   document.getElementById("stat-correct").textContent = "正确: " + correctCount;
+  document.getElementById("correct-count-display").textContent = "已答对: " + correctCount;
   if (answeredCount > 0) {
     const pct = Math.round(correctCount / answeredCount * 100);
     document.getElementById("stat-accuracy").textContent = "正确率: " + pct + "%";
@@ -1537,7 +1517,7 @@ function renderChoiceQuiz() {
   const visibleQs = getVisibleQs();
 
   if (visibleQs.length === 0) {
-    if (removeCorrect && currentQuestions.every(q => q._correct === true)) {
+    if (currentQuestions.every(q => q._correct === true)) {
       area.innerHTML = '<div class="empty-state"><div style="font-size:48px;margin-bottom:12px;">&#127942;</div><p>全部答对！太棒了！</p></div>';
     } else {
       area.innerHTML = '<div class="empty-state"><p>暂无题目</p></div>';
@@ -1632,7 +1612,7 @@ function renderFillQuiz() {
   const visibleQs = getVisibleQs();
 
   if (visibleQs.length === 0) {
-    if (removeCorrect && currentQuestions.every(q => q._correct === true)) {
+    if (currentQuestions.every(q => q._correct === true)) {
       area.innerHTML = '<div class="empty-state"><div style="font-size:48px;margin-bottom:12px;">&#127942;</div><p>全部答对！太棒了！</p></div>';
     } else {
       area.innerHTML = '<div class="empty-state"><p>暂无题目</p></div>';
@@ -1757,8 +1737,8 @@ function fuzzyMatch(user, correct) {
 
 // ==================== COMMON ====================
 function checkFinish() {
-  const unanswered = currentQuestions.filter(q => !q._answered);
-  if (unanswered.length === 0 || (removeCorrect && currentQuestions.filter(q => !q._answered && q._correct !== true).length === 0)) {
+  const unanswered = currentQuestions.filter(q => !q._answered && q._correct !== true);
+  if (unanswered.length === 0) {
     finishQuiz();
   }
 }
@@ -1805,7 +1785,6 @@ function finishQuiz() {
       <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
         <button class="btn btn-primary" onclick="startQuiz(currentUnit)">重新测试</button>
         <button class="btn ${currentMode === 'choice' ? 'btn-outline' : 'btn-fill'}" onclick="startQuiz(null)">${homeText}</button>
-        ${wrongQs.length > 0 ? '<button class="btn btn-danger" onclick="showWrongBook()">查看错题 (' + wrongQs.length + ')</button>' : ''}
       </div>
     </div>
   `;
@@ -1870,62 +1849,6 @@ function saveRecord(score, total) {
     localStorage.setItem(getStorageKey() + "_wrong", JSON.stringify(wrongBook));
     saveWrongMap();
     updateWrongStat();
-  }
-}
-
-function showWrongBook() {
-  let wrongBook = [];
-  try {
-    const raw = localStorage.getItem(getStorageKey() + "_wrong");
-    if (raw) wrongBook = JSON.parse(raw);
-  } catch(e) {}
-
-  document.getElementById("quiz-area").innerHTML = "";
-  document.getElementById("result-panel").style.display = "none";
-  document.getElementById("records-area").style.display = "none";
-
-  const area = document.getElementById("wrong-book-area");
-  if (wrongBook.length === 0) {
-    area.innerHTML = '<div class="empty-state"><div style="font-size:48px;margin-bottom:12px;">&#127881;</div><p>${currentMode === "choice" ? "选择题" : "填空题"}错题本为空，继续保持！</p></div>';
-  } else {
-    let html = `<h3 style="margin-bottom:12px">${currentMode === "choice" ? "选择题" : "填空题"}错题本 (${wrongBook.length} 题)</h3>
-      <button class="btn btn-danger" onclick="clearWrongBook()" style="margin-bottom:16px">清空错题本</button>
-      <div class="wrong-book">`;
-
-    const reversed = [...wrongBook].reverse();
-    if (currentMode === "choice") {
-      for (const w of reversed) {
-        const optText = w.options ? (w.options.find(o => o.startsWith(w.answer + ".")) || "").substring(2).trim() : w.answer;
-        html += `<div class="wrong-item">
-          <div class="quiz-meta"><span>${w.unit} · ${w.lesson}</span><span>#${w.id}</span></div>
-          <div class="question">${w.question}</div>
-          <div class="answer-info">正确答案: <strong style="color:var(--success)">${w.answer}. ${optText}</strong> | 你的答案: <span style="color:var(--danger)">${w.userAnswer}</span></div>
-          <div style="font-size:12px;color:#999;margin-top:6px">${w.explanation || ""}</div>
-        </div>`;
-      }
-    } else {
-      for (const w of reversed) {
-        html += `<div class="wrong-item">
-          <div class="quiz-meta"><span>${w.unit} · ${w.lesson}</span><span>#${w.id}</span></div>
-          <div class="question">${w.question}</div>
-          <div class="answer-info">正确答案: <strong style="color:var(--success)">${w.answer.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</strong> | 你的答案: <span style="color:var(--danger)">${(w.userAnswer || "").replace(/</g, '&lt;').replace(/>/g, '&gt;')}</span></div>
-        </div>`;
-      }
-    }
-    html += '</div>';
-    area.innerHTML = html;
-  }
-  area.style.display = "block";
-  area.scrollIntoView({ behavior: "smooth" });
-}
-
-function clearWrongBook() {
-  if (confirm("确定要清空「" + (currentMode === "choice" ? "选择题" : "填空题") + "」错题本吗？此操作不可撤销。")) {
-    localStorage.removeItem(getStorageKey() + "_wrong");
-    wrongMap = {};
-    saveWrongMap();
-    updateWrongStat();
-    showWrongBook();
   }
 }
 
