@@ -1199,7 +1199,7 @@ let currentUnit = null;
 let currentQuestions = [];
 let answeredCount = 0;
 let correctCount = 0;
-let removeCorrect = false;
+let removeCorrect = true;
 let timerOn = false;
 let timerSeconds = 0;
 let timerInterval = null;
@@ -1280,11 +1280,12 @@ function switchMode(mode) {
   currentQuestions = [];
   answeredCount = 0;
   correctCount = 0;
-  removeCorrect = false;
+  removeCorrect = true;
   timerOn = false;
   quizFinished = false;
 
-  document.getElementById("btn-remove-correct").className = "";
+  document.getElementById("btn-remove-correct").className = getToolbarActiveClass();
+  document.getElementById("btn-remove-correct").textContent = "答对排除：开";
   document.getElementById("btn-timer").className = "";
   document.getElementById("timer-display").style.display = "none";
   document.getElementById("result-panel").style.display = "none";
@@ -1334,11 +1335,12 @@ function startQuiz(unit) {
   answeredCount = 0;
   correctCount = 0;
   timerSeconds = 0;
-  removeCorrect = false;
+  removeCorrect = true;
   timerOn = false;
   setCurrentIndex(0);
 
-  document.getElementById("btn-remove-correct").className = "";
+  document.getElementById("btn-remove-correct").className = getToolbarActiveClass();
+  document.getElementById("btn-remove-correct").textContent = "答对排除：开";
   document.getElementById("btn-timer").className = "";
   document.getElementById("timer-display").style.display = "none";
   document.getElementById("timer-display").textContent = "00:00";
@@ -1390,6 +1392,7 @@ function startWrongQuiz() {
   setCurrentIndex(0);
 
   document.getElementById("btn-remove-correct").className = "";
+  document.getElementById("btn-remove-correct").textContent = "答对排除";
   document.getElementById("btn-timer").className = "";
   document.getElementById("timer-display").style.display = "none";
   document.getElementById("timer-display").textContent = "00:00";
@@ -1430,8 +1433,10 @@ function toggleRemoveCorrect() {
   const btn = document.getElementById("btn-remove-correct");
   if (removeCorrect) {
     btn.classList.add(getToolbarActiveClass());
+    btn.textContent = "答对排除：开";
   } else {
     btn.className = "";
+    btn.textContent = "答对排除";
   }
   setCurrentIndex(0);
   renderQuiz();
@@ -1598,7 +1603,14 @@ function selectChoiceAnswer(id, userAnswer) {
   q._correct = (userAnswer === q.answer);
 
   answeredCount++;
-  if (q._correct) correctCount++;
+  if (q._correct) {
+    correctCount++;
+    delete wrongMap[q.id];
+  } else {
+    wrongMap[q.id] = (wrongMap[q.id] || 0) + 1;
+  }
+  saveWrongMap();
+  updateWrongStat();
 
   updateStats();
   updateProgress();
@@ -1703,7 +1715,14 @@ function submitFillAnswer(id) {
   q._correct = correct;
 
   answeredCount++;
-  if (correct) correctCount++;
+  if (correct) {
+    correctCount++;
+    delete wrongMap[q.id];
+  } else {
+    wrongMap[q.id] = (wrongMap[q.id] || 0) + 1;
+  }
+  saveWrongMap();
+  updateWrongStat();
 
   updateStats();
   updateProgress();
