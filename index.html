@@ -2,482 +2,1222 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
-<title>五年级科学知识点测试</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>五年级科学测试题库</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f0f4f8;color:#333;min-height:100vh}
-.container{max-width:480px;margin:0 auto;padding:16px;min-height:100vh}
+:root {
+  --bg: #f5f6fa;
+  --card-bg: #ffffff;
+  --text: #2d3436;
+  --text-secondary: #636e72;
+  --primary: #0984e3;
+  --primary-light: #dfe6e9;
+  --success: #00b894;
+  --danger: #d63031;
+  --warning: #fdcb6e;
+  --fill-accent: #6c5ce7;
+  --border: #dfe6e9;
+  --shadow: 0 2px 12px rgba(0,0,0,0.08);
+  --radius: 12px;
+  --radius-sm: 8px;
+}
 
-.home-header{text-align:center;padding:32px 0 20px}
-.home-header h1{font-size:22px;color:#1a73e8;margin-bottom:6px}
-.home-header p{font-size:13px;color:#888}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
-.unit-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
-.unit-card{background:#fff;border-radius:12px;padding:20px 16px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.06);cursor:pointer;transition:transform 0.15s}
-.unit-card:active{transform:scale(0.97)}
-.unit-card .name{font-size:14px;font-weight:600;color:#333}
-.unit-card .count{font-size:11px;color:#999;margin-top:2px}
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
 
-.btn-all{background:#1a73e8;color:#fff;border:none;border-radius:12px;padding:14px;width:100%;font-size:15px;font-weight:600;cursor:pointer;box-shadow:0 2px 8px rgba(26,115,232,0.25);margin-bottom:16px}
-.btn-all:active{opacity:0.85}
+/* Header */
+.header {
+  background: var(--card-bg);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow);
+}
 
-.stats-bar{background:#fff;border-radius:12px;padding:16px;box-shadow:0 2px 8px rgba(0,0,0,0.06);margin-bottom:16px}
-.stats-bar h3{font-size:14px;color:#555;margin-bottom:10px}
-.stats-row{display:flex;justify-content:space-around;text-align:center}
-.stat-item .num{font-size:22px;font-weight:700;color:#1a73e8}
-.stat-item .label{font-size:11px;color:#999;margin-top:2px}
+.header h1 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--primary);
+}
 
-.btn-wrong{background:#fff;color:#e53935;border:2px solid #e53935;border-radius:12px;padding:12px;width:100%;font-size:14px;font-weight:600;cursor:pointer;margin-bottom:12px}
-.btn-wrong:active{background:#ffebee}
-.btn-reset{background:none;color:#999;border:none;font-size:12px;cursor:pointer;display:block;margin:0 auto}
+.header-stats {
+  display: flex;
+  gap: 16px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  flex-wrap: wrap;
+}
 
-.time-setting{background:#fff;border-radius:12px;padding:14px 16px;box-shadow:0 2px 8px rgba(0,0,0,0.06);margin-bottom:16px;display:flex;align-items:center;gap:10px;font-size:13px;color:#555}
-.time-setting input{width:60px;padding:6px 8px;border:1px solid #ddd;border-radius:8px;text-align:center;font-size:14px;color:#333}
-.time-setting input:focus{outline:none;border-color:#1a73e8}
-.time-unit{color:#999}
+.header-stats span {
+  background: var(--primary-light);
+  padding: 4px 12px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
 
-/* 答题页 */
-.quiz-top{display:flex;align-items:center;padding:12px 0;gap:12px}
-.btn-back{background:#fff;border:none;width:36px;height:36px;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,0.1)}
-.progress-text{flex:1;font-size:13px;color:#888}
-.timer{font-size:13px;font-weight:600;min-width:40px;text-align:right}
-.timer.warn{color:#e53935}
+/* Mode Switch */
+.mode-switch {
+  display: flex;
+  gap: 0;
+  margin-bottom: 20px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  border: 2px solid var(--border);
+}
 
-.quiz-card{background:#fff;border-radius:16px;padding:24px 20px;box-shadow:0 4px 16px rgba(0,0,0,0.08);margin-bottom:12px}
-.quiz-card .unit-tag{font-size:11px;color:#1a73e8;background:#e8f0fe;display:inline-block;padding:2px 8px;border-radius:4px;margin-bottom:12px}
-.quiz-card .question{font-size:16px;line-height:1.8;color:#222;font-weight:500;margin-bottom:4px}
-.quiz-card .lesson-tag{font-size:11px;color:#aaa;margin-bottom:16px}
+.mode-btn {
+  flex: 1;
+  padding: 12px 24px;
+  border: none;
+  background: var(--card-bg);
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  transition: all 0.2s;
+  color: var(--text-secondary);
+}
 
-.options{display:flex;flex-direction:column;gap:10px}
-.option{display:flex;align-items:center;gap:12px;padding:14px 16px;background:#f7f9fc;border:2px solid #e8ecf1;border-radius:12px;cursor:pointer;font-size:14px;transition:all 0.15s}
-.option:active{background:#e8f0fe;border-color:#1a73e8}
-.option.correct{background:#e8f5e9;border-color:#4caf50;color:#2e7d32}
-.option.wrong{background:#ffebee;border-color:#e53935;color:#c62828}
-.option.disabled{pointer-events:none;opacity:0.7}
-.option .letter{width:28px;height:28px;border-radius:50%;background:#e0e0e0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
-.option.correct .letter{background:#4caf50;color:#fff}
-.option.wrong .letter{background:#e53935;color:#fff}
-.option .text{flex:1}
+.mode-btn:first-child { border-right: 1px solid var(--border); }
 
-.explanation{background:#fffde7;border:1px solid #fff9c4;border-radius:12px;padding:14px 16px;margin-top:12px;font-size:13px;color:#795548;display:none;line-height:1.6}
-.explanation.show{display:block}
-.explanation .exp-label{font-weight:700;color:#f57f17;margin-bottom:4px}
+.mode-btn:hover { background: var(--primary-light); }
 
-.btn-next{background:#1a73e8;color:#fff;border:none;border-radius:12px;padding:14px;width:100%;font-size:15px;font-weight:600;cursor:pointer;margin-top:12px;display:none}
-.btn-next.show{display:block}
-.btn-next:active{opacity:0.85}
+.mode-btn.active {
+  background: var(--primary);
+  color: #fff;
+}
 
-/* 成绩页 */
-.result-card{background:#fff;border-radius:16px;padding:32px 24px;box-shadow:0 4px 16px rgba(0,0,0,0.08);text-align:center}
-.result-card .score{font-size:56px;font-weight:800;color:#1a73e8}
-.result-card .score-label{font-size:13px;color:#888;margin:4px 0 20px}
-.result-card .stats{display:flex;justify-content:space-around;margin-bottom:24px}
-.result-detail{text-align:left;margin-top:20px}
-.result-detail h4{font-size:14px;color:#555;margin-bottom:10px}
-.wrong-item{background:#fafafa;border-radius:8px;padding:12px;margin-bottom:8px;font-size:13px;line-height:1.5}
-.wrong-item .q{font-weight:500;margin-bottom:4px}
-.wrong-item .a{color:#4caf50;font-size:12px}
-.btn-row{display:flex;gap:10px;margin-top:20px}
-.btn-row button{flex:1;padding:12px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;border:none}
-.btn-again{background:#1a73e8;color:#fff}
-.btn-home{background:#f0f4f8;color:#555}
+.mode-btn.fill-active {
+  background: var(--fill-accent);
+  color: #fff;
+}
 
-.hidden{display:none!important}
+/* Main */
+.main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+/* Unit Selector */
+.unit-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.unit-btn {
+  padding: 10px 18px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--card-bg);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s;
+  color: var(--text);
+}
+
+.unit-btn:hover { border-color: var(--primary); color: var(--primary); }
+.unit-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+/* Toolbar */
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+  align-items: center;
+}
+
+.toolbar button {
+  padding: 8px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--card-bg);
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.2s;
+  color: var(--text);
+}
+
+.toolbar button:hover { background: var(--primary-light); }
+.toolbar button.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+.timer-display {
+  font-size: 15px;
+  font-weight: 600;
+  margin-left: auto;
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+  font-family: "SF Mono", "Menlo", monospace;
+}
+
+/* Progress */
+.progress-bar {
+  height: 6px;
+  background: var(--primary-light);
+  border-radius: 3px;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--success);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+/* Quiz card */
+.quiz-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow);
+  margin-bottom: 16px;
+  transition: all 0.3s;
+}
+
+.quiz-card.correct { border-left: 4px solid var(--success); }
+.quiz-card.wrong { border-left: 4px solid var(--danger); }
+
+.quiz-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+.quiz-question {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
+
+.options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.option-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 14px;
+  user-select: none;
+}
+
+.option-item:hover:not(.disabled) { border-color: var(--primary); background: #f0f7ff; }
+.option-item.selected { border-color: var(--primary); background: #e8f4fd; }
+.option-item.correct-answer { border-color: var(--success); background: #e6fff2; }
+.option-item.wrong-answer { border-color: var(--danger); background: #ffe8e8; }
+.option-item.disabled { pointer-events: none; opacity: 0.7; }
+
+.option-letter {
+  width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  background: var(--primary-light);
+  font-weight: 700;
+  margin-right: 12px;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.correct-answer .option-letter { background: var(--success); color: #fff; }
+.wrong-answer .option-letter { background: var(--danger); color: #fff; }
+
+.explanation {
+  margin-top: 12px;
+  padding: 12px 16px;
+  background: #fff9e6;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  line-height: 1.6;
+  color: #856404;
+  display: none;
+  border: 1px solid #ffeeba;
+}
+
+.explanation.show { display: block; }
+
+/* Fill-in-the-blank specific */
+.fill-input-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.fill-input {
+  flex: 1;
+  padding: 10px 14px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.2s;
+  font-family: inherit;
+}
+
+.fill-input:focus { border-color: var(--fill-accent); }
+.fill-input:disabled { background: #f5f5f5; color: #888; }
+.fill-input.correct-input { border-color: var(--success); background: #e6fff2; }
+.fill-input.wrong-input { border-color: var(--danger); background: #ffe8e8; }
+
+.fill-submit-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--fill-accent);
+  color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: opacity 0.2s;
+  white-space: nowrap;
+}
+
+.fill-submit-btn:hover { opacity: 0.9; }
+.fill-submit-btn:disabled { opacity: 0.5; cursor: default; }
+
+.fill-answer-display {
+  margin-top: 10px;
+  font-size: 14px;
+  display: none;
+}
+
+.fill-answer-display.show { display: block; }
+
+.fill-answer-display .correct-ans {
+  color: var(--success);
+  font-weight: 600;
+}
+
+.fill-answer-display .wrong-ans {
+  color: var(--danger);
+}
+
+/* Result Panel */
+.result-panel {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 32px;
+  box-shadow: var(--shadow);
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.result-panel h2 { font-size: 24px; margin-bottom: 16px; }
+.result-panel .score { font-size: 48px; font-weight: 800; color: var(--primary); }
+.result-panel .stats { color: var(--text-secondary); margin: 8px 0 20px; }
+
+/* Wrong book */
+.wrong-book { margin-top: 20px; }
+
+.wrong-item {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow);
+  margin-bottom: 12px;
+}
+
+.wrong-item .question { font-weight: 600; margin-bottom: 8px; }
+.wrong-item .answer-info { font-size: 13px; color: var(--text-secondary); }
+
+/* Learning Record */
+.record-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+  font-size: 13px;
+}
+
+.record-table th, .record-table td {
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+.record-table th { background: var(--primary-light); font-weight: 600; }
+.record-table tr:hover { background: #f8f9fa; }
+
+/* Empty state */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-secondary);
+}
+
+.empty-state .icon { font-size: 48px; margin-bottom: 12px; }
+
+/* Buttons */
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.btn-primary { background: var(--primary); color: #fff; }
+.btn-primary:hover { opacity: 0.9; }
+.btn-outline { background: transparent; border: 2px solid var(--primary); color: var(--primary); }
+.btn-outline:hover { background: var(--primary); color: #fff; }
+.btn-danger { background: var(--danger); color: #fff; }
+.btn-danger:hover { opacity: 0.9; }
+
+/* Responsive */
+@media (max-width: 600px) {
+  .header { padding: 12px 16px; }
+  .header h1 { font-size: 17px; }
+  .quiz-card { padding: 16px; }
+  .option-item { padding: 10px 12px; font-size: 13px; }
+  .fill-input-row { flex-direction: column; }
+  .fill-submit-btn { width: 100%; }
+}
 </style>
 </head>
 <body>
-<div class="container">
-  <div id="homePage">
-    <div class="home-header">
-      <h1>五年级科学知识点测试</h1>
-      <p>教科版 · 下册</p>
-    </div>
-    <button class="btn-all" onclick="startQuiz('all')">全部单元混合测试</button>
-    <div class="unit-grid" id="unitGrid"></div>
-    <div class="stats-bar">
-      <h3>学习记录</h3>
-      <div class="stats-row">
-        <div class="stat-item"><div class="num" id="totalDone">0</div><div class="label">已答题数</div></div>
-        <div class="stat-item"><div class="num" id="correctRate">-</div><div class="label">正确率</div></div>
-        <div class="stat-item"><div class="num" id="wrongCount">0</div><div class="label">错题数</div></div>
-      </div>
-    </div>
-    <div class="time-setting">
-      <span class="time-label">每题时间限制</span>
-      <input type="number" id="timeInput" min="5" max="120" value="10" onchange="setTimeLimit(this.value)">
-      <span class="time-unit">秒</span>
-    </div>
-    <button class="btn-wrong" id="btnWrongBook" onclick="startWrongQuiz()">错题本强化练习</button>
-    <button class="btn-reset" onclick="resetData()">清空学习记录</button>
-  </div>
 
-  <div id="quizPage" class="hidden">
-    <div class="quiz-top">
-      <button class="btn-back" onclick="goHome()">←</button>
-      <span class="progress-text" id="progressText">第 1/10 题</span>
-      <span class="timer" id="timer">10s</span>
-    </div>
-    <div class="quiz-card" id="quizCard"></div>
-    <button class="btn-next" id="btnNext" onclick="nextQuestion()">下一题</button>
-  </div>
-
-  <div id="resultPage" class="hidden">
-    <div class="quiz-top">
-      <button class="btn-back" onclick="goHome()">←</button>
-      <span class="progress-text">测试完成</span>
-    </div>
-    <div id="resultContent"></div>
+<div class="header">
+  <h1>五年级科学测试题库</h1>
+  <div class="header-stats">
+    <span id="stat-total">总题数: 0</span>
+    <span id="stat-correct">正确: 0</span>
+    <span id="stat-accuracy">正确率: -</span>
   </div>
 </div>
 
+<div class="main">
+  <!-- Mode Switch -->
+  <div class="mode-switch" id="mode-switch">
+    <button class="mode-btn active" id="btn-choice-mode" onclick="switchMode('choice')">选择题</button>
+    <button class="mode-btn" id="btn-fill-mode" onclick="switchMode('fill')">填空题</button>
+  </div>
+
+  <!-- Unit Selector -->
+  <div class="unit-selector" id="unit-selector"></div>
+
+  <!-- Toolbar -->
+  <div class="toolbar" id="toolbar">
+    <button id="btn-shuffle" onclick="shuffleQuestions()">随机打乱</button>
+    <button id="btn-remove-correct" onclick="toggleRemoveCorrect()">答对排除</button>
+    <button id="btn-timer" onclick="toggleTimer()">计时器</button>
+    <button id="btn-wrong-book" onclick="showWrongBook()">错题本</button>
+    <button id="btn-records" onclick="showRecords()">学习记录</button>
+    <span class="timer-display" id="timer-display" style="display:none">00:00</span>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+
+  <!-- Quiz Area -->
+  <div id="quiz-area"></div>
+
+  <!-- Result Panel -->
+  <div id="result-panel" style="display:none"></div>
+
+  <!-- Wrong Book -->
+  <div id="wrong-book-area" style="display:none"></div>
+
+  <!-- Records -->
+  <div id="records-area" style="display:none"></div>
+</div>
+
 <script>
-const ALL_QUESTIONS = [{"id": 1, "unit": "生物与环境", "lesson": "第1课 种子发芽实验", "question": "许多植物的新生命是从什么开始的？", "options": ["A. 开花", "B. 种子发芽", "C. 长叶", "D. 结果"], "answer": "B", "explanation": "许多植物的新生命是从种子发芽开始的，种子在适宜条件下萌发成幼苗。", "fillAnswer": "种子发芽", "fillKeywords": ["种子发芽"], "suitableForFill": true}, {"id": 2, "unit": "生物与环境", "lesson": "第1课 种子发芽实验", "question": "做对比实验时，一般只能改变几个条件？", "options": ["A. 一个", "B. 两个", "C. 三个", "D. 不限制"], "answer": "A", "explanation": "对比实验只能改变一个条件，其他条件保持不变，以确保实验结果的可靠性。", "fillAnswer": "一个", "fillKeywords": ["一个"], "suitableForFill": true}, {"id": 3, "unit": "生物与环境", "lesson": "第1课 种子发芽实验", "question": "做种子发芽实验时，每组至少用几粒种子？", "options": ["A. 1粒", "B. 2粒", "C. 3粒", "D. 5粒"], "answer": "C", "explanation": "至少用3粒种子，可以避免种子自身质量差异带来的偶然性，提高实验准确性。", "fillAnswer": "3粒", "fillKeywords": ["3粒"], "suitableForFill": true}, {"id": 4, "unit": "生物与环境", "lesson": "第1课 种子发芽实验", "question": "种子发芽实验中，研究「水」的影响时，需要改变的条件是？", "options": ["A. 温度", "B. 光照", "C. 水的多少", "D. 空气"], "answer": "C", "explanation": "研究水的影响时，只能改变水的多少，其他条件如温度、光照、空气等均应相同。", "fillAnswer": "水的多少", "fillKeywords": ["水的多少"], "suitableForFill": true}, {"id": 5, "unit": "生物与环境", "lesson": "第1课 种子发芽实验", "question": "做种子发芽对比实验时，实验组和对照组的关系是？", "options": ["A. 不需要对照组", "B. 对照组与实验组条件完全相同", "C. 对照组不改变条件，实验组改变一个条件", "D. 实验组不改变条件，对照组改变一个条件"], "answer": "C", "explanation": "对比实验中，对照组保持正常条件不变，实验组只改变一个条件，以便比较该条件的影响。", "fillAnswer": "对照组不改变条件，实验组改变一个条件", "fillKeywords": ["对照组不改变条件，实验组改变一个条件"], "suitableForFill": false}, {"id": 6, "unit": "生物与环境", "lesson": "第2课 比较种子发芽实验", "question": "种子发芽不需要的条件是？", "options": ["A. 适宜的温度", "B. 适量的水", "C. 土壤和阳光", "D. 充足的空气"], "answer": "C", "explanation": "种子发芽需要适宜的温度、适量的水和充足的空气，土壤和阳光不是萌发的必要条件。", "fillAnswer": "土壤和阳光", "fillKeywords": ["土壤和阳光"], "suitableForFill": true}, {"id": 7, "unit": "生物与环境", "lesson": "第2课 比较种子发芽实验", "question": "浇水过多导致种子腐烂的主要原因是？", "options": ["A. 温度过高", "B. 缺少阳光", "C. 缺少空气（缺氧）", "D. 养分流失"], "answer": "C", "explanation": "水太多会使种子周围空气被挤出，导致缺氧而腐烂。", "fillAnswer": "缺少空气（缺氧）", "fillKeywords": ["缺少空气（缺氧）"], "suitableForFill": true}, {"id": 8, "unit": "生物与环境", "lesson": "第2课 比较种子发芽实验", "question": "比较种子发芽实验时，如何判断实验结果？", "options": ["A. 只看发芽最快的组", "B. 比较不同条件下种子的发芽情况", "C. 只看浇水最多的组", "D. 只看温度最高的组"], "answer": "B", "explanation": "通过比较不同条件下种子的发芽情况，分析各条件对种子发芽的影响。", "fillAnswer": "比较不同条件下种子的发芽情况", "fillKeywords": ["比较不同条件下种子的发芽情况"], "suitableForFill": false}, {"id": 9, "unit": "生物与环境", "lesson": "第2课 比较种子发芽实验", "question": "种子发芽需要的适宜温度一般在什么范围？", "options": ["A. 0℃以下", "B. 0-5℃", "C. 15-30℃", "D. 50℃以上"], "answer": "C", "explanation": "大多数种子发芽需要15-30℃的适宜温度，温度过低或过高都不利于发芽。", "fillAnswer": "15-30℃", "fillKeywords": ["15-30℃"], "suitableForFill": true}, {"id": 10, "unit": "生物与环境", "lesson": "第3课 绿豆苗的生长", "question": "空气的主要成分中，占比最大的是？", "options": ["A. 氧气", "B. 氮气", "C. 二氧化碳", "D. 水蒸气"], "answer": "B", "explanation": "空气主要成分是氮气（约占78%）和氧气（约占21%），氮气占比最大。", "fillAnswer": "氮气", "fillKeywords": ["氮气"], "suitableForFill": true}, {"id": 11, "unit": "生物与环境", "lesson": "第3课 绿豆苗的生长", "question": "植物总是朝着阳光的方向生长，这种现象称为？", "options": ["A. 向水性", "B. 向地性", "C. 向光性", "D. 向化性"], "answer": "C", "explanation": "植物朝向光源生长的特性叫向光性，有利于植物获得更多光照进行光合作用。", "fillAnswer": "向光性", "fillKeywords": ["向光性"], "suitableForFill": true}, {"id": 12, "unit": "生物与环境", "lesson": "第3课 绿豆苗的生长", "question": "植物光合作用吸收什么、释放什么？", "options": ["A. 吸收氧气，释放二氧化碳", "B. 吸收二氧化碳和水，释放氧气", "C. 吸收氮气，释放氧气", "D. 吸收氧气和水，释放氮气"], "answer": "B", "explanation": "光合作用是植物利用光能，吸收二氧化碳和水，制造养料并释放氧气的过程。", "fillAnswer": "吸收二氧化碳和水，释放氧气", "fillKeywords": ["吸收二氧化碳和水，释放氧气"], "suitableForFill": false}, {"id": 13, "unit": "生物与环境", "lesson": "第3课 绿豆苗的生长", "question": "植物光合作用的场所是？", "options": ["A. 根", "B. 茎", "C. 叶绿体", "D. 花"], "answer": "C", "explanation": "光合作用主要在植物细胞的叶绿体中进行，叶绿体中的叶绿素能吸收光能。", "fillAnswer": "叶绿体", "fillKeywords": ["叶绿体"], "suitableForFill": true}, {"id": 14, "unit": "生物与环境", "lesson": "第3课 绿豆苗的生长", "question": "植物生长需要的条件包括？", "options": ["A. 只有水和阳光", "B. 阳光、空气、水分和适宜的温度", "C. 只有土壤和水", "D. 只有空气和温度"], "answer": "B", "explanation": "植物健康生长需要阳光、空气、水分和适宜的温度。", "fillAnswer": "阳光、空气、水分和适宜的温度", "fillKeywords": ["阳光、空气、水分和适宜的温度"], "suitableForFill": false}, {"id": 15, "unit": "生物与环境", "lesson": "第4课 蚯蚓的选择", "question": "蚯蚓喜欢生活在怎样的环境中？", "options": ["A. 干燥、明亮", "B. 潮湿、阴暗", "C. 干燥、阴暗", "D. 潮湿、明亮"], "answer": "B", "explanation": "蚯蚓喜欢潮湿、阴暗的环境，有利于保持身体湿润和躲避天敌。", "fillAnswer": "潮湿、阴暗", "fillKeywords": ["潮湿、阴暗"], "suitableForFill": true}, {"id": 16, "unit": "生物与环境", "lesson": "第4课 蚯蚓的选择", "question": "研究蚯蚓对光照的选择实验中，改变的条件是？", "options": ["A. 温度", "B. 湿度", "C. 有无光照", "D. 土壤类型"], "answer": "C", "explanation": "对比实验中研究光照的影响，改变的条件是有无光照，其他条件保持一致。", "fillAnswer": "有无光照", "fillKeywords": ["有无光照"], "suitableForFill": true}, {"id": 17, "unit": "生物与环境", "lesson": "第4课 蚯蚓的选择", "question": "关于动物与环境的关系，以下说法正确的是？", "options": ["A. 动物不需要适应环境", "B. 只有植物需要适应环境", "C. 动物也需要适应环境的变化", "D. 动物可以随意改变环境"], "answer": "C", "explanation": "动物和植物一样，都需要适应环境的变化才能生存和繁衍。", "fillAnswer": "动物也需要适应环境的变化", "fillKeywords": ["动物也需要适应环境的变化"], "suitableForFill": false}, {"id": 18, "unit": "生物与环境", "lesson": "第4课 蚯蚓的选择", "question": "蚯蚓在生态系统中扮演什么角色？", "options": ["A. 生产者", "B. 消费者", "C. 分解者", "D. 非生物"], "answer": "C", "explanation": "蚯蚓以腐烂的有机物为食，将其分解为无机物，在生态系统中扮演分解者角色。", "fillAnswer": "分解者", "fillKeywords": ["分解者"], "suitableForFill": true}, {"id": 19, "unit": "生物与环境", "lesson": "第5课 当环境改变了", "question": "下列哪种方式不是动物适应冬季环境的方式？", "options": ["A. 冬眠", "B. 迁徙", "C. 换毛", "D. 繁殖"], "answer": "D", "explanation": "动物通过冬眠、迁徙、换毛等方式适应冬季环境变化，繁殖不是针对季节变化的适应方式。", "fillAnswer": "繁殖", "fillKeywords": ["繁殖"], "suitableForFill": true}, {"id": 20, "unit": "生物与环境", "lesson": "第5课 当环境改变了", "question": "丹顶鹤主要通过什么方式适应气温变化？", "options": ["A. 冬眠", "B. 迁徙", "C. 换毛", "D. 改变食性"], "answer": "B", "explanation": "丹顶鹤是候鸟，通过迁徙来适应气温变化，冬天飞到温暖地区过冬。", "fillAnswer": "迁徙", "fillKeywords": ["迁徙"], "suitableForFill": true}, {"id": 21, "unit": "生物与环境", "lesson": "第5课 当环境改变了", "question": "保护野生动植物最有效的措施之一是？", "options": ["A. 人工喂养", "B. 建立自然保护区", "C. 大量种植树木", "D. 减少打猎"], "answer": "B", "explanation": "人类可以通过建立自然保护区来保护野生动植物及其栖息地，这是最有效的措施之一。", "fillAnswer": "建立自然保护区", "fillKeywords": ["建立自然保护区"], "suitableForFill": true}, {"id": 22, "unit": "生物与环境", "lesson": "第5课 当环境改变了", "question": "青蛙在冬季通过什么方式应对寒冷？", "options": ["A. 迁徙", "B. 冬眠", "C. 换毛", "D. 改变颜色"], "answer": "B", "explanation": "青蛙是变温动物，冬季通过冬眠来降低新陈代谢，适应寒冷环境。", "fillAnswer": "冬眠", "fillKeywords": ["冬眠"], "suitableForFill": true}, {"id": 23, "unit": "生物与环境", "lesson": "第5课 当环境改变了", "question": "北极熊用什么方式适应寒冷环境？", "options": ["A. 冬眠", "B. 厚皮毛和脂肪层", "C. 迁徙", "D. 换毛"], "answer": "B", "explanation": "北极熊依靠厚实的皮毛和脂肪层来抵御极地寒冷气候，是结构适应的一种。", "fillAnswer": "厚皮毛和脂肪层", "fillKeywords": ["厚皮毛和脂肪层"], "suitableForFill": false}, {"id": 24, "unit": "生物与环境", "lesson": "第5课 当环境改变了", "question": "人类活动对环境的影响可以是？", "options": ["A. 只有正面的", "B. 只有负面的", "C. 既有正面也有负面的", "D. 没有影响"], "answer": "C", "explanation": "人类活动对环境既有正面影响（建立保护区、植树造林）也有负面影响（污染、砍伐）。", "fillAnswer": "既有正面也有负面的", "fillKeywords": ["既有正面也有负面的"], "suitableForFill": true}, {"id": 25, "unit": "生物与环境", "lesson": "第6课 食物链和食物网", "question": "生物之间「吃与被吃」的关系叫做？", "options": ["A. 共生关系", "B. 竞争关系", "C. 食物链", "D. 寄生关系"], "answer": "C", "explanation": "生物之间吃与被吃的食物关系称为食物链，表示能量在生物之间的传递路径。", "fillAnswer": "食物链", "fillKeywords": ["食物链"], "suitableForFill": true}, {"id": 26, "unit": "生物与环境", "lesson": "第6课 食物链和食物网", "question": "多条食物链相互交错形成什么？", "options": ["A. 生态系统", "B. 食物网", "C. 生物圈", "D. 食物塔"], "answer": "B", "explanation": "复杂的食物关系相互交错形成食物网，真实生态系统中多数是食物网而非单一食物链。", "fillAnswer": "食物网", "fillKeywords": ["食物网"], "suitableForFill": true}, {"id": 27, "unit": "生物与环境", "lesson": "第6课 食物链和食物网", "question": "食物链通常从什么开始？", "options": ["A. 肉食动物", "B. 杂食动物", "C. 绿色植物", "D. 微生物"], "answer": "C", "explanation": "食物链通常从绿色植物（生产者）开始，到肉食动物（最高消费者）终止。", "fillAnswer": "绿色植物", "fillKeywords": ["绿色植物"], "suitableForFill": true}, {"id": 28, "unit": "生物与环境", "lesson": "第6课 食物链和食物网", "question": "在食物链「草->兔->狐」中，兔属于？", "options": ["A. 生产者", "B. 初级消费者", "C. 最高消费者", "D. 分解者"], "answer": "B", "explanation": "草是生产者，兔吃草是初级消费者（植食动物），狐吃兔是次级消费者。", "fillAnswer": "初级消费者", "fillKeywords": ["初级消费者"], "suitableForFill": true}, {"id": 29, "unit": "生物与环境", "lesson": "第6课 食物链和食物网", "question": "如果食物链中某个环节的生物数量锐减，会导致？", "options": ["A. 只影响下一级", "B. 没有影响", "C. 影响整个食物链/食物网", "D. 只影响上一级"], "answer": "C", "explanation": "食物链和食物网中各个生物相互关联，一个环节的变化会通过食物关系影响整个系统。", "fillAnswer": "影响整个食物链/食物网", "fillKeywords": ["影响整个食物链/食物网"], "suitableForFill": false}, {"id": 30, "unit": "生物与环境", "lesson": "第6课 食物链和食物网", "question": "在一个生态系统中，如果生产者数量减少，首先受影响的是？", "options": ["A. 分解者", "B. 初级消费者", "C. 最高消费者", "D. 非生物"], "answer": "B", "explanation": "生产者（植物）数量减少直接导致初级消费者（植食动物）食物短缺，最先受到影响。", "fillAnswer": "初级消费者", "fillKeywords": ["初级消费者"], "suitableForFill": true}, {"id": 31, "unit": "生物与环境", "lesson": "第7课 设计和制作生态瓶", "question": "生物与非生物在自然界中构成的统一整体叫做？", "options": ["A. 生物圈", "B. 食物网", "C. 生态系统", "D. 种群"], "answer": "C", "explanation": "生物与非生物在自然界中相互联系、相互影响，构成的统一整体称为生态系统。", "fillAnswer": "生态系统", "fillKeywords": ["生态系统"], "suitableForFill": true}, {"id": 32, "unit": "生物与环境", "lesson": "第7课 设计和制作生态瓶", "question": "生态瓶中，植物为动物提供什么？", "options": ["A. 二氧化碳和水", "B. 食物和氧气", "C. 氮气和土壤", "D. 阳光和温度"], "answer": "B", "explanation": "植物通过光合作用为动物提供食物（有机物）和氧气，是生态瓶中的生产者。", "fillAnswer": "食物和氧气", "fillKeywords": ["食物和氧气"], "suitableForFill": true}, {"id": 33, "unit": "生物与环境", "lesson": "第7课 设计和制作生态瓶", "question": "制作生态瓶的正确顺序是？", "options": ["A. 先加水再铺沙再种植物再放动物", "B. 先放动物再加水再种植物再铺沙", "C. 先铺沙再加水再种植物再放动物", "D. 先种植物再放动物再加水再铺沙"], "answer": "C", "explanation": "制作生态瓶应先铺沙、再加水、再种植物、最后放动物，构建稳定的生态系统。", "fillAnswer": "先铺沙再加水再种植物再放动物", "fillKeywords": ["先铺沙再加水再种植物再放动物"], "suitableForFill": false}, {"id": 34, "unit": "生物与环境", "lesson": "第7课 设计和制作生态瓶", "question": "生态瓶中放入的动物数量应该？", "options": ["A. 越多越好", "B. 适量，与植物数量匹配", "C. 不需要动物", "D. 随意放置"], "answer": "B", "explanation": "生态瓶中动物数量要适量，需与植物数量匹配，保持生态系统的平衡。", "fillAnswer": "适量，与植物数量匹配", "fillKeywords": ["适量，与植物数量匹配"], "suitableForFill": false}, {"id": 35, "unit": "生物与环境", "lesson": "第7课 设计和制作生态瓶", "question": "生态瓶中的水最好使用什么水？", "options": ["A. 自来水", "B. 纯净水", "C. 自然水域的水（含微生物）", "D. 开水"], "answer": "C", "explanation": "最好使用自然水域的水，因为其中含有微生物，能帮助构建完整的微型生态系统。", "fillAnswer": "自然水域的水（含微生物）", "fillKeywords": ["自然水域的水（含微生物）"], "suitableForFill": false}, {"id": 36, "unit": "生物与环境", "lesson": "第7课 设计和制作生态瓶", "question": "生态瓶放置在什么位置最合适？", "options": ["A. 完全黑暗处", "B. 有散射光但不直晒的地方", "C. 阳光直射处", "D. 冰箱里"], "answer": "B", "explanation": "生态瓶需要光照供植物光合作用，但阳光直射会导致水温过高、生物死亡，散射光最合适。", "fillAnswer": "有散射光但不直晒的地方", "fillKeywords": ["有散射光但不直晒的地方"], "suitableForFill": false}, {"id": 37, "unit": "生物与环境", "lesson": "第1课 种子发芽实验", "question": "做种子发芽实验时，提供「适量的水」意味着？", "options": ["A. 水越多越好", "B. 水越少越好", "C. 保持湿润但不积水", "D. 完全不用水"], "answer": "C", "explanation": "适量的水指保持种子周围环境湿润但不积水，既能满足发芽需要又不会导致缺氧。", "fillAnswer": "保持湿润但不积水", "fillKeywords": ["保持湿润但不积水"], "suitableForFill": true}, {"id": 38, "unit": "船的研究", "lesson": "第1课 船的历史", "question": "船的发展历程中，以下排序正确的是？", "options": ["A. 帆船->独木舟->蒸汽船->轮船", "B. 独木舟->帆船->蒸汽船->轮船", "C. 蒸汽船->帆船->独木舟->轮船", "D. 轮船->蒸汽船->帆船->独木舟"], "answer": "B", "explanation": "船的发展历程为：独木舟->摇橹木船->帆船->蒸汽船->轮船->潜艇。", "fillAnswer": "独木舟->帆船->蒸汽船->轮船", "fillKeywords": ["独木舟->帆船->蒸汽船->轮船"], "suitableForFill": false}, {"id": 39, "unit": "船的研究", "lesson": "第1课 船的历史", "question": "独木舟的主要缺点是？", "options": ["A. 速度太快", "B. 不易制作", "C. 装载量小、不稳定", "D. 材料太重"], "answer": "C", "explanation": "独木舟装载量小，容易侧翻，稳定性差，这是早期船型的主要不足。", "fillAnswer": "装载量小、不稳定", "fillKeywords": ["装载量小、不稳定"], "suitableForFill": false}, {"id": 40, "unit": "船的研究", "lesson": "第1课 船的历史", "question": "船首采用什么形状可以减小水的阻力？", "options": ["A. 方形", "B. 圆形", "C. 流线型", "D. 三角形"], "answer": "C", "explanation": "船首采用流线型（尖形）设计可以有效减小水对船的阻力，提高航行速度。", "fillAnswer": "流线型", "fillKeywords": ["流线型"], "suitableForFill": true}, {"id": 41, "unit": "船的研究", "lesson": "第1课 船的历史", "question": "帆船主要依靠什么动力航行？", "options": ["A. 人力", "B. 风力", "C. 蒸汽", "D. 电力"], "answer": "B", "explanation": "帆船主要利用风力推动船帆来航行，是人类较早利用自然力的交通工具。", "fillAnswer": "风力", "fillKeywords": ["风力"], "suitableForFill": true}, {"id": 42, "unit": "船的研究", "lesson": "第2课 用浮的材料造船", "question": "测试竹筏载重量时，螺母应如何摆放？", "options": ["A. 集中放在一侧", "B. 均匀摆放", "C. 堆在中间", "D. 随意摆放"], "answer": "B", "explanation": "测试载重量时螺母应均匀摆放，避免受力不均导致倾斜或翻沉，确保测试准确。", "fillAnswer": "均匀摆放", "fillKeywords": ["均匀摆放"], "suitableForFill": true}, {"id": 43, "unit": "船的研究", "lesson": "第2课 用浮的材料造船", "question": "与独木舟相比，竹筏的优势是？", "options": ["A. 更轻便", "B. 速度更快", "C. 更稳定、载重量更大", "D. 材料更少"], "answer": "C", "explanation": "竹筏比独木舟更稳定、载重量更大。", "fillAnswer": "更稳定、载重量更大", "fillKeywords": ["更稳定、载重量更大"], "suitableForFill": false}, {"id": 44, "unit": "船的研究", "lesson": "第2课 用浮的材料造船", "question": "竹筏的不足之处是？", "options": ["A. 太重", "B. 容易浸水、不牢固", "C. 无法浮起", "D. 速度太快"], "answer": "B", "explanation": "竹筏虽然有优势，但存在容易浸水、结构不牢固等问题。", "fillAnswer": "容易浸水、不牢固", "fillKeywords": ["容易浸水、不牢固"], "suitableForFill": false}, {"id": 45, "unit": "船的研究", "lesson": "第2课 用浮的材料造船", "question": "竹筏是利用什么原理浮在水面上的？", "options": ["A. 竹子比水轻（密度小于水）", "B. 竹子内部空心", "C. 水的推力", "D. 竹子的弹性"], "answer": "A", "explanation": "竹筏能浮起是因为竹子的密度比水小，受到的浮力大于自身重力。", "fillAnswer": "竹子比水轻（密度小于水）", "fillKeywords": ["竹子比水轻（密度小于水）"], "suitableForFill": false}, {"id": 46, "unit": "船的研究", "lesson": "第3课 用沉的材料造船", "question": "以下哪种材料在水中会下沉，但可以用来造船？", "options": ["A. 泡沫", "B. 木头", "C. 橡皮泥", "D. 竹筒"], "answer": "C", "explanation": "橡皮泥、铝箔、钢铁等在水中会下沉的材料，通过做成船型增大排水体积后也能造船。", "fillAnswer": "橡皮泥", "fillKeywords": ["橡皮泥"], "suitableForFill": true}, {"id": 47, "unit": "船的研究", "lesson": "第3课 用沉的材料造船", "question": "浮力的方向是？", "options": ["A. 竖直向下", "B. 竖直向上", "C. 水平方向", "D. 任意方向"], "answer": "B", "explanation": "浮力是竖直向上托起物体的力，方向始终竖直向上。", "fillAnswer": "竖直向上", "fillKeywords": ["竖直向上"], "suitableForFill": true}, {"id": 48, "unit": "船的研究", "lesson": "第3课 用沉的材料造船", "question": "沉的材料做成船型后为什么能浮起来？", "options": ["A. 重量变轻了", "B. 材料性质改变了", "C. 排水体积增大，浮力增大", "D. 水的密度变小了"], "answer": "C", "explanation": "做成船型后排开水的体积增大，受到的浮力增大，当浮力大于重力时就能浮起。", "fillAnswer": "排水体积增大，浮力增大", "fillKeywords": ["排水体积增大，浮力增大"], "suitableForFill": false}, {"id": 49, "unit": "船的研究", "lesson": "第3课 用沉的材料造船", "question": "钢铁造的轮船能浮在水面上，最主要的原因是？", "options": ["A. 钢铁密度变小了", "B. 做成中空船型，排开水的体积大", "C. 水有推力", "D. 钢铁被水托起"], "answer": "B", "explanation": "钢铁密度大于水，但做成中空的船型后排开水的体积大，浮力大于重力，所以能浮起。", "fillAnswer": "做成中空船型，排开水的体积大", "fillKeywords": ["做成中空船型，排开水的体积大"], "suitableForFill": false}, {"id": 50, "unit": "船的研究", "lesson": "第3课 用沉的材料造船", "question": "铝箔纸团成球会沉入水底，但做成小船就能浮起，这证明了？", "options": ["A. 铝的密度改变了", "B. 物体形状影响排开水的体积", "C. 水的密度改变了", "D. 铝变轻了"], "answer": "B", "explanation": "同样的铝箔，球状排水体积小、浮力小；船型排水体积大、浮力大。", "fillAnswer": "物体形状影响排开水的体积", "fillKeywords": ["物体形状影响排开水的体积"], "suitableForFill": false}, {"id": 51, "unit": "船的研究", "lesson": "第4课 增加船的载重量", "question": "如何增大船的载重量？", "options": ["A. 减小船的体积", "B. 增大船型的体积", "C. 减轻船的自重", "D. 加快航行速度"], "answer": "B", "explanation": "船型体积越大，排开水的体积越大，受到的浮力越大，载重量也就越大。", "fillAnswer": "增大船型的体积", "fillKeywords": ["增大船型的体积"], "suitableForFill": true}, {"id": 52, "unit": "船的研究", "lesson": "第4课 增加船的载重量", "question": "船舱分格的主要作用是？", "options": ["A. 美观", "B. 增加载重量", "C. 增加稳定性", "D. 加快速度"], "answer": "C", "explanation": "船舱分格结构可以增加船的稳定性，即使一个舱进水，其他舱仍能保持浮力。", "fillAnswer": "增加稳定性", "fillKeywords": ["增加稳定性"], "suitableForFill": true}, {"id": 53, "unit": "船的研究", "lesson": "第5课 给船装上动力", "question": "船通过什么来控制方向？", "options": ["A. 船桨", "B. 船舵", "C. 船帆", "D. 船锚"], "answer": "B", "explanation": "船通过船舵来控制航行方向，舵是船的重要操纵装置。", "fillAnswer": "船舵", "fillKeywords": ["船舵"], "suitableForFill": true}, {"id": 54, "unit": "船的研究", "lesson": "第5课 给船装上动力", "question": "以下哪种不是小学阶段学习的船的常见动力来源？", "options": ["A. 风力", "B. 蒸汽动力", "C. 核动力", "D. 机械动力"], "answer": "C", "explanation": "小学阶段学习的船的动力包括风力、蒸汽动力和机械动力等。", "fillAnswer": "核动力", "fillKeywords": ["核动力"], "suitableForFill": true}, {"id": 55, "unit": "船的研究", "lesson": "第5课 给船装上动力", "question": "潜艇是通过什么方式实现沉浮的？", "options": ["A. 改变体积", "B. 改变形状", "C. 进水或排水改变重力", "D. 改变航速"], "answer": "C", "explanation": "潜艇通过向水舱进水增加重力下沉，用压缩空气排水减小重力上浮，实现沉浮。", "fillAnswer": "进水或排水改变重力", "fillKeywords": ["进水或排水改变重力"], "suitableForFill": false}, {"id": 56, "unit": "船的研究", "lesson": "第5课 给船装上动力", "question": "蒸汽机船相比帆船的优势是？", "options": ["A. 更美观", "B. 不受风向和风力限制", "C. 成本更低", "D. 速度更慢"], "answer": "B", "explanation": "蒸汽机船使用机械动力，不受风向和风力限制，可以持续稳定航行。", "fillAnswer": "不受风向和风力限制", "fillKeywords": ["不受风向和风力限制"], "suitableForFill": false}, {"id": 57, "unit": "船的研究", "lesson": "第6、7课 设计与制作小船", "question": "设计小船时不需要考虑的因素是？", "options": ["A. 大小和形状", "B. 载重和稳固性", "C. 船的颜色", "D. 动力和成本"], "answer": "C", "explanation": "设计需考虑大小、形状、材料、载重、稳固性、动力、成本等实用因素。", "fillAnswer": "船的颜色", "fillKeywords": ["船的颜色"], "suitableForFill": true}, {"id": 58, "unit": "船的研究", "lesson": "第6、7课 设计与制作小船", "question": "工程实践的一般流程是？", "options": ["A. 设计->问题->制作->测试->评估改进", "B. 问题->设计->制作->测试->评估改进", "C. 测试->设计->制作->问题->评估改进", "D. 制作->测试->问题->设计->评估改进"], "answer": "B", "explanation": "工程流程为：明确问题->设计->制作->测试->评估改进。", "fillAnswer": "问题->设计->制作->测试->评估改进", "fillKeywords": ["问题->设计->制作->测试->评估改进"], "suitableForFill": false}, {"id": 59, "unit": "船的研究", "lesson": "第6、7课 设计与制作小船", "question": "制作小船时，以下哪种意识很重要？", "options": ["A. 只要好看就行", "B. 质量与成本意识", "C. 越贵越好", "D. 越大越好"], "answer": "B", "explanation": "在制作小船过程中需要建立质量与成本意识，平衡性能与成本。", "fillAnswer": "质量与成本意识", "fillKeywords": ["质量与成本意识"], "suitableForFill": false}, {"id": 60, "unit": "船的研究", "lesson": "第6、7课 设计与制作小船", "question": "测试小船后发现问题，应该怎么做？", "options": ["A. 放弃不做了", "B. 修改设计后重新测试", "C. 直接投入使用", "D. 换一个人来做"], "answer": "B", "explanation": "工程实践强调评估与改进，测试后发现问题应修改设计再测试，循环迭代直到达标。", "fillAnswer": "修改设计后重新测试", "fillKeywords": ["修改设计后重新测试"], "suitableForFill": true}, {"id": 61, "unit": "环境与我们", "lesson": "第1课 地球——宇宙的奇迹", "question": "地球适合生命存在的原因不包括什么？", "options": ["A. 有液态水", "B. 有大气层", "C. 有臭氧层保护", "D. 离太阳最近"], "answer": "D", "explanation": "地球有液态水、大气层和臭氧层等适合生命的条件。离太阳最近的行星是水星。", "fillAnswer": "离太阳最近", "fillKeywords": ["离太阳最近"], "suitableForFill": true}, {"id": 62, "unit": "环境与我们", "lesson": "第1课 地球——宇宙的奇迹", "question": "火星大气中基本不含有哪种气体？", "options": ["A. 二氧化碳", "B. 氮气", "C. 氧气", "D. 氩气"], "answer": "C", "explanation": "火星大气中基本不含氧气，主要成分是二氧化碳。", "fillAnswer": "氧气", "fillKeywords": ["氧气"], "suitableForFill": true}, {"id": 63, "unit": "环境与我们", "lesson": "第1课 地球——宇宙的奇迹", "question": "海洋为人类提供的资源包括？", "options": ["A. 生物资源、矿产资源、能源资源", "B. 只有生物资源", "C. 只有矿产资源", "D. 只有能源资源"], "answer": "A", "explanation": "海洋提供生物资源（鱼类等）、矿产资源（石油、天然气等）和能源资源（潮汐能等）。", "fillAnswer": "生物资源、矿产资源、能源资源", "fillKeywords": ["生物资源、矿产资源、能源资源"], "suitableForFill": false}, {"id": 64, "unit": "环境与我们", "lesson": "第1课 地球——宇宙的奇迹", "question": "臭氧层的主要作用是？", "options": ["A. 提供氧气", "B. 吸收紫外线", "C. 产生雨水", "D. 保持温度"], "answer": "B", "explanation": "臭氧层能吸收太阳辐射中的大部分紫外线，保护地球生物免受伤害。", "fillAnswer": "吸收紫外线", "fillKeywords": ["吸收紫外线"], "suitableForFill": true}, {"id": 65, "unit": "环境与我们", "lesson": "第2课 我们面临的环境问题", "question": "以下哪项不属于主要环境问题类型？", "options": ["A. 大气污染", "B. 水污染", "C. 固体废弃物污染", "D. 人口增长"], "answer": "D", "explanation": "主要环境问题包括大气污染、水污染、固体废弃物污染等，人口增长是社会问题。", "fillAnswer": "人口增长", "fillKeywords": ["人口增长"], "suitableForFill": true}, {"id": 66, "unit": "环境与我们", "lesson": "第2课 我们面临的环境问题", "question": "水体富营养化会导致什么后果？", "options": ["A. 鱼类增多", "B. 水生生物大量死亡", "C. 水质变清", "D. 水温升高"], "answer": "B", "explanation": "水体富营养化使藻类大量繁殖，消耗水中氧气，导致水生生物因缺氧而大量死亡。", "fillAnswer": "水生生物大量死亡", "fillKeywords": ["水生生物大量死亡"], "suitableForFill": true}, {"id": 67, "unit": "环境与我们", "lesson": "第2课 我们面临的环境问题", "question": "二氧化碳过量排放导致的主要环境问题是？", "options": ["A. 臭氧层破坏", "B. 全球变暖、冰川融化", "C. 酸雨", "D. 水体污染"], "answer": "B", "explanation": "二氧化碳等温室气体过量排放会导致温室效应加剧，引起全球变暖、冰川融化。", "fillAnswer": "全球变暖、冰川融化", "fillKeywords": ["全球变暖、冰川融化"], "suitableForFill": false}, {"id": 68, "unit": "环境与我们", "lesson": "第2课 我们面临的环境问题", "question": "酸雨主要是由什么引起的？", "options": ["A. 二氧化碳", "B. 二氧化硫和氮氧化物", "C. 氧气", "D. 水蒸气"], "answer": "B", "explanation": "酸雨主要由化石燃料燃烧产生的二氧化硫和氮氧化物排放到大气中形成。", "fillAnswer": "二氧化硫和氮氧化物", "fillKeywords": ["二氧化硫和氮氧化物"], "suitableForFill": false}, {"id": 69, "unit": "环境与我们", "lesson": "第2课 我们面临的环境问题", "question": "白色污染主要指什么？", "options": ["A. 白色纸张污染", "B. 塑料制品污染", "C. 白色涂料污染", "D. 牛奶污染"], "answer": "B", "explanation": "白色污染主要指塑料制品（塑料袋、塑料餐具等）造成的环境污染。", "fillAnswer": "塑料制品污染", "fillKeywords": ["塑料制品污染"], "suitableForFill": true}, {"id": 70, "unit": "环境与我们", "lesson": "第3课 珍惜水资源", "question": "地球上可供人类直接利用的淡水比例是？", "options": ["A. 很多，约占69.7%", "B. 很少，淡水总量稀缺", "C. 一半左右", "D. 全部水都可以"], "answer": "B", "explanation": "地球上多数淡水以冰川等形式存在难以直接利用，可供人类直接利用的淡水非常少。", "fillAnswer": "很少，淡水总量稀缺", "fillKeywords": ["很少，淡水总量稀缺"], "suitableForFill": true}, {"id": 71, "unit": "环境与我们", "lesson": "第3课 珍惜水资源", "question": "以下哪项是有效的节水措施？", "options": ["A. 水龙头一直开着", "B. 及时关水龙头", "C. 盆浴代替淋浴", "D. 多用水冲洗"], "answer": "B", "explanation": "及时关水龙头、淋浴代替盆浴等都是有效的日常节水措施。", "fillAnswer": "及时关水龙头", "fillKeywords": ["及时关水龙头"], "suitableForFill": true}, {"id": 72, "unit": "环境与我们", "lesson": "第3课 珍惜水资源", "question": "滴灌技术属于什么类型的灌溉方式？", "options": ["A. 传统灌溉", "B. 漫灌", "C. 先进的节水灌溉", "D. 不需要水的灌溉"], "answer": "C", "explanation": "滴灌是最先进的节水灌溉技术之一，直接将水送到植物根部，大大减少水的浪费。", "fillAnswer": "先进的节水灌溉", "fillKeywords": ["先进的节水灌溉"], "suitableForFill": true}, {"id": 73, "unit": "环境与我们", "lesson": "第3课 珍惜水资源", "question": "地球上的水绝大部分是？", "options": ["A. 淡水", "B. 咸水（海水）", "C. 地下水", "D. 冰川"], "answer": "B", "explanation": "地球上约97%的水是海水（咸水），淡水仅占约3%。", "fillAnswer": "咸水（海水）", "fillKeywords": ["咸水（海水）"], "suitableForFill": true}, {"id": 74, "unit": "环境与我们", "lesson": "第3课 珍惜水资源", "question": "以下哪项是日常生活中的节水行为？", "options": ["A. 刷牙时不关水龙头", "B. 用洗菜水浇花", "C. 只用流动水洗东西", "D. 洗澡时间越长越好"], "answer": "B", "explanation": "用洗菜水浇花是水的二次利用，属于节水行为。", "fillAnswer": "用洗菜水浇花", "fillKeywords": ["用洗菜水浇花"], "suitableForFill": true}, {"id": 75, "unit": "环境与我们", "lesson": "第4课 解决垃圾问题", "question": "生活垃圾分为几类？", "options": ["A. 两类", "B. 三类", "C. 四类", "D. 五类"], "answer": "C", "explanation": "生活垃圾分为四类：可回收垃圾、厨余垃圾、有害垃圾、其他垃圾。", "fillAnswer": "四类", "fillKeywords": ["四类"], "suitableForFill": true}, {"id": 76, "unit": "环境与我们", "lesson": "第4课 解决垃圾问题", "question": "解决垃圾问题的「三化」原则不包括？", "options": ["A. 减量化", "B. 资源化", "C. 无害化", "D. 集中化"], "answer": "D", "explanation": "解决垃圾问题的「三化」原则是减量化、资源化、无害化。", "fillAnswer": "集中化", "fillKeywords": ["集中化"], "suitableForFill": true}, {"id": 77, "unit": "环境与我们", "lesson": "第4课 解决垃圾问题", "question": "以下哪种不属于垃圾无害化处理方法？", "options": ["A. 填埋法", "B. 焚烧法", "C. 堆肥法", "D. 随意丢弃法"], "answer": "D", "explanation": "垃圾无害化处理包括填埋法、焚烧法和堆肥法。", "fillAnswer": "随意丢弃法", "fillKeywords": ["随意丢弃法"], "suitableForFill": true}, {"id": 78, "unit": "环境与我们", "lesson": "第4课 解决垃圾问题", "question": "废旧电池属于哪类垃圾？", "options": ["A. 可回收垃圾", "B. 厨余垃圾", "C. 有害垃圾", "D. 其他垃圾"], "answer": "C", "explanation": "废旧电池含有重金属等有害物质，属于有害垃圾，需要专门回收处理。", "fillAnswer": "有害垃圾", "fillKeywords": ["有害垃圾"], "suitableForFill": true}, {"id": 79, "unit": "环境与我们", "lesson": "第4课 解决垃圾问题", "question": "厨余垃圾适合用什么方法处理？", "options": ["A. 填埋法", "B. 焚烧法", "C. 堆肥法", "D. 直接丢弃"], "answer": "C", "explanation": "厨余垃圾是有机物，适合用堆肥法处理，可转化为有机肥料。", "fillAnswer": "堆肥法", "fillKeywords": ["堆肥法"], "suitableForFill": true}, {"id": 80, "unit": "环境与我们", "lesson": "第4课 解决垃圾问题", "question": "减少垃圾最根本的方法是？", "options": ["A. 多建垃圾站", "B. 减量化", "C. 焚烧所有垃圾", "D. 把垃圾运到别处"], "answer": "B", "explanation": "减量化是解决垃圾问题最根本的方法，从源头减少垃圾的产生。", "fillAnswer": "减量化", "fillKeywords": ["减量化"], "suitableForFill": true}, {"id": 81, "unit": "环境与我们", "lesson": "第5课 合理利用能源", "question": "我国电能来源中占比最大的是？", "options": ["A. 水电", "B. 火电", "C. 核电", "D. 风电"], "answer": "B", "explanation": "火力发电（以煤为主）在我国电能来源中占比最大。", "fillAnswer": "火电", "fillKeywords": ["火电"], "suitableForFill": true}, {"id": 82, "unit": "环境与我们", "lesson": "第5课 合理利用能源", "question": "温室效应主要是由什么产生的？", "options": ["A. 太阳能消耗", "B. 化石能源消耗", "C. 水能消耗", "D. 风能消耗"], "answer": "B", "explanation": "化石能源（煤、石油、天然气）消耗产生大量二氧化碳等温室气体。", "fillAnswer": "化石能源消耗", "fillKeywords": ["化石能源消耗"], "suitableForFill": true}, {"id": 83, "unit": "环境与我们", "lesson": "第5课 合理利用能源", "question": "以下哪种属于可再生能源？", "options": ["A. 煤炭", "B. 石油", "C. 天然气", "D. 太阳能"], "answer": "D", "explanation": "太阳能、风能、地热能等是可再生能源，煤炭、石油、天然气是不可再生能源。", "fillAnswer": "太阳能", "fillKeywords": ["太阳能"], "suitableForFill": true}, {"id": 84, "unit": "环境与我们", "lesson": "第5课 合理利用能源", "question": "化石能源不包括以下哪项？", "options": ["A. 煤", "B. 石油", "C. 天然气", "D. 地热能"], "answer": "D", "explanation": "煤、石油、天然气是化石能源。地热能来自地球内部，属于可再生能源。", "fillAnswer": "地热能", "fillKeywords": ["地热能"], "suitableForFill": true}, {"id": 85, "unit": "环境与我们", "lesson": "第5课 合理利用能源", "question": "以下哪种行为有助于节约能源？", "options": ["A. 人走灯灭", "B. 电器长期待机", "C. 空调温度设很低", "D. 开窗时开空调"], "answer": "A", "explanation": "人走灯灭是节约用电的基本行为。", "fillAnswer": "人走灯灭", "fillKeywords": ["人走灯灭"], "suitableForFill": true}, {"id": 86, "unit": "环境与我们", "lesson": "第5课 合理利用能源", "question": "开发和利用新能源的主要目的是？", "options": ["A. 让电更贵", "B. 减少对化石能源的依赖、保护环境", "C. 增加污染", "D. 使用更复杂的设备"], "answer": "B", "explanation": "开发新能源是为了减少对化石能源的依赖，降低污染，保护环境。", "fillAnswer": "减少对化石能源的依赖、保护环境", "fillKeywords": ["减少对化石能源的依赖、保护环境"], "suitableForFill": false}, {"id": 87, "unit": "环境与我们", "lesson": "第6课 让资源再生", "question": "以下哪种是不可再生资源？", "options": ["A. 太阳能", "B. 风能", "C. 煤炭", "D. 水能"], "answer": "C", "explanation": "煤、石油、天然气是古代生物遗骸转化而来，形成周期极长，属于不可再生资源。", "fillAnswer": "煤炭", "fillKeywords": ["煤炭"], "suitableForFill": true}, {"id": 88, "unit": "环境与我们", "lesson": "第6课 让资源再生", "question": "再生纸制作的正确顺序是？", "options": ["A. 搅拌->撕碎->平铺->挤压吸水->通风晾干", "B. 撕碎->搅拌->平铺->挤压吸水->通风晾干", "C. 平铺->撕碎->搅拌->挤压吸水->通风晾干", "D. 撕碎->平铺->搅拌->通风晾干->挤压吸水"], "answer": "B", "explanation": "再生纸制作步骤：撕碎废纸->加水搅拌成纸浆->平铺->挤压吸水->通风晾干。", "fillAnswer": "撕碎->搅拌->平铺->挤压吸水->通风晾干", "fillKeywords": ["撕碎->搅拌->平铺->挤压吸水->通风晾干"], "suitableForFill": false}, {"id": 89, "unit": "环境与我们", "lesson": "第6课 让资源再生", "question": "造纸术的改进者是？", "options": ["A. 张衡", "B. 毕昇", "C. 蔡伦", "D. 沈括"], "answer": "C", "explanation": "东汉时期蔡伦改进了造纸术，使纸张质量提高、成本降低。", "fillAnswer": "蔡伦", "fillKeywords": ["蔡伦"], "suitableForFill": true}, {"id": 90, "unit": "环境与我们", "lesson": "第6课 让资源再生", "question": "再生纸与原生纸相比，优势是？", "options": ["A. 质量更好", "B. 节约资源、减少污染", "C. 价格更贵", "D. 颜色更白"], "answer": "B", "explanation": "再生纸利用废纸为原料，可以节约木材、减少水污染和空气污染。", "fillAnswer": "节约资源、减少污染", "fillKeywords": ["节约资源、减少污染"], "suitableForFill": false}, {"id": 91, "unit": "环境与我们", "lesson": "第6课 让资源再生", "question": "以下哪种物品适合回收再生？", "options": ["A. 废纸", "B. 剩菜剩饭", "C. 废旧电池", "D. 陶瓷碎片"], "answer": "A", "explanation": "废纸属于可回收垃圾，可以回收后制成再生纸。", "fillAnswer": "废纸", "fillKeywords": ["废纸"], "suitableForFill": true}, {"id": 92, "unit": "环境与我们", "lesson": "第7课 分析实际环境问题", "question": "面对同一个环境污染问题，不同角色的态度通常？", "options": ["A. 完全相同", "B. 可能不同", "C. 无所谓", "D. 无法判断"], "answer": "B", "explanation": "不同角色（如工厂主、居民、环保人士）对同一污染问题的态度和诉求可能不同。", "fillAnswer": "可能不同", "fillKeywords": ["可能不同"], "suitableForFill": false}, {"id": 93, "unit": "环境与我们", "lesson": "第7课 分析实际环境问题", "question": "解决城中湖污染问题，最根本的措施是？", "options": ["A. 从自身做起、加强监管", "B. 把湖填平", "C. 更换湖中的水", "D. 不管它"], "answer": "A", "explanation": "解决环境问题需要从自身做起、加强监管、全民参与。", "fillAnswer": "从自身做起、加强监管", "fillKeywords": ["从自身做起、加强监管"], "suitableForFill": false}, {"id": 94, "unit": "环境与我们", "lesson": "第7课 分析实际环境问题", "question": "处理复杂环境问题需要学会什么？", "options": ["A. 坚持己见", "B. 协调和适当放弃", "C. 无视他人意见", "D. 推卸责任"], "answer": "B", "explanation": "处理复杂环境问题需要在多方利益中学会协调，有时需要适当放弃局部利益。", "fillAnswer": "协调和适当放弃", "fillKeywords": ["协调和适当放弃"], "suitableForFill": false}, {"id": 95, "unit": "环境与我们", "lesson": "第7课 分析实际环境问题", "question": "治理环境污染需要哪些方面的共同努力？", "options": ["A. 只需要政府的努力", "B. 只需要个人的努力", "C. 政府、企业、个人等共同努力", "D. 不需要努力"], "answer": "C", "explanation": "环境治理是一个系统工程，需要政府监管、企业自律和个人参与等多方面共同努力。", "fillAnswer": "政府、企业、个人等共同努力", "fillKeywords": ["政府、企业、个人等共同努力"], "suitableForFill": false}, {"id": 96, "unit": "热", "lesson": "第1课 温度与水的变化", "question": "小学阶段学习的物质存在形态不包括？", "options": ["A. 固态", "B. 液态", "C. 气态", "D. 等离子态"], "answer": "D", "explanation": "小学阶段学习的物质三态是固态、液态和气态。", "fillAnswer": "等离子态", "fillKeywords": ["等离子态"], "suitableForFill": true}, {"id": 97, "unit": "热", "lesson": "第1课 温度与水的变化", "question": "热是什么的一种表现形式？", "options": ["A. 物质", "B. 能量", "C. 重量", "D. 体积"], "answer": "B", "explanation": "热是能量的一种表现形式，可以从一个物体传递到另一个物体。", "fillAnswer": "能量", "fillKeywords": ["能量"], "suitableForFill": true}, {"id": 98, "unit": "热", "lesson": "第1课 温度与水的变化", "question": "标准大气压下，水的沸点是多少？", "options": ["A. 0℃", "B. 50℃", "C. 100℃", "D. 200℃"], "answer": "C", "explanation": "在标准大气压下，水的沸点是100℃，此时水剧烈汽化变为水蒸气。", "fillAnswer": "100℃", "fillKeywords": ["100℃"], "suitableForFill": true}, {"id": 99, "unit": "热", "lesson": "第1课 温度与水的变化", "question": "冰融化过程中温度会怎样？", "options": ["A. 持续上升", "B. 持续下降", "C. 保持在0℃不变", "D. 忽高忽低"], "answer": "C", "explanation": "冰在融化过程中吸收热量但温度保持在0℃不变，直到完全融化后水温才会继续上升。", "fillAnswer": "保持在0℃不变", "fillKeywords": ["保持在0℃不变"], "suitableForFill": true}, {"id": 100, "unit": "热", "lesson": "第1课 温度与水的变化", "question": "水结冰时的温度是？", "options": ["A. -10℃", "B. 0℃", "C. 4℃", "D. 10℃"], "answer": "B", "explanation": "标准大气压下，水在0℃时结冰（凝固），这是水的凝固点。", "fillAnswer": "0℃", "fillKeywords": ["0℃"], "suitableForFill": true}, {"id": 101, "unit": "热", "lesson": "第1课 温度与水的变化", "question": "温度计的工作原理是？", "options": ["A. 热胀冷缩", "B. 电磁感应", "C. 化学反应", "D. 光学原理"], "answer": "A", "explanation": "常用温度计利用液体（水银或酒精）热胀冷缩的性质来测量温度。", "fillAnswer": "热胀冷缩", "fillKeywords": ["热胀冷缩"], "suitableForFill": true}, {"id": 102, "unit": "热", "lesson": "第2课 水的蒸发和凝结", "question": "水蒸发时会怎样？", "options": ["A. 吸热", "B. 放热", "C. 温度不变", "D. 结冰"], "answer": "A", "explanation": "水蒸发需要吸收热量，因此蒸发有降温作用。水温越高，蒸发越快。", "fillAnswer": "吸热", "fillKeywords": ["吸热"], "suitableForFill": true}, {"id": 103, "unit": "热", "lesson": "第2课 水的蒸发和凝结", "question": "水蒸气凝结成水的过程会怎样？", "options": ["A. 吸热", "B. 放热", "C. 温度不变", "D. 体积增大"], "answer": "B", "explanation": "水蒸气凝结成液态水时会放出热量，温度越低凝结越快。", "fillAnswer": "放热", "fillKeywords": ["放热"], "suitableForFill": true}, {"id": 104, "unit": "热", "lesson": "第2课 水的蒸发和凝结", "question": "冬天哈出的「白气」实际上是什么？", "options": ["A. 水蒸气", "B. 水蒸气凝结成的小水滴", "C. 二氧化碳", "D. 空气中的灰尘"], "answer": "B", "explanation": "「白气」不是水蒸气（水蒸气是无色透明的），而是水蒸气遇冷凝结成的微小水滴。", "fillAnswer": "水蒸气凝结成的小水滴", "fillKeywords": ["水蒸气凝结成的小水滴"], "suitableForFill": true}, {"id": 105, "unit": "热", "lesson": "第2课 水的蒸发和凝结", "question": "影响水蒸发快慢的因素不包括？", "options": ["A. 温度", "B. 空气流动", "C. 颜色", "D. 表面积"], "answer": "C", "explanation": "水温越高、空气流动越快、表面积越大，蒸发越快。颜色对蒸发速度没有影响。", "fillAnswer": "颜色", "fillKeywords": ["颜色"], "suitableForFill": true}, {"id": 106, "unit": "热", "lesson": "第2课 水的蒸发和凝结", "question": "晒衣服时，把衣服展开的主要目的是？", "options": ["A. 好看", "B. 增大表面积，加快蒸发", "C. 防止起皱", "D. 减轻重量"], "answer": "B", "explanation": "把衣服展开增大了水与空气接触的表面积，可以加快水分蒸发。", "fillAnswer": "增大表面积，加快蒸发", "fillKeywords": ["增大表面积，加快蒸发"], "suitableForFill": true}, {"id": 107, "unit": "热", "lesson": "第2课 水的蒸发和凝结", "question": "刚从冰箱拿出的饮料瓶外壁出现水珠，这是因为？", "options": ["A. 饮料漏出来了", "B. 空气中的水蒸气遇冷凝结", "C. 瓶壁出汗", "D. 瓶子吸收水分"], "answer": "B", "explanation": "空气中的水蒸气遇到冷的饮料瓶外壁，放热凝结成小水珠。", "fillAnswer": "空气中的水蒸气遇冷凝结", "fillKeywords": ["空气中的水蒸气遇冷凝结"], "suitableForFill": false}, {"id": 108, "unit": "热", "lesson": "第3课 温度不同的物体相互接触", "question": "热传递的方向是？", "options": ["A. 从低温物体传向高温物体", "B. 从高温物体传向低温物体", "C. 双向同时等量传递", "D. 随机传递"], "answer": "B", "explanation": "热总是从温度高的物体传向温度低的物体，直到两者温度相等。", "fillAnswer": "从高温物体传向低温物体", "fillKeywords": ["从高温物体传向低温物体"], "suitableForFill": false}, {"id": 109, "unit": "热", "lesson": "第3课 温度不同的物体相互接触", "question": "两个温度不同的物体接触后最终会怎样？", "options": ["A. 高温物体更热", "B. 低温物体更冷", "C. 达到热平衡（温度相同）", "D. 温度不变"], "answer": "C", "explanation": "两个温度不同的物体相互接触，热传递持续进行，最终两者温度相同，达到热平衡。", "fillAnswer": "达到热平衡（温度相同）", "fillKeywords": ["达到热平衡（温度相同）"], "suitableForFill": false}, {"id": 110, "unit": "热", "lesson": "第3课 温度不同的物体相互接触", "question": "感知温度可以使用什么工具？", "options": ["A. 温度计", "B. 秒表", "C. 量筒", "D. 天平"], "answer": "A", "explanation": "温度计、热成像仪等是可以用来感知和测量温度的工具。", "fillAnswer": "温度计", "fillKeywords": ["温度计"], "suitableForFill": true}, {"id": 111, "unit": "热", "lesson": "第3课 温度不同的物体相互接触", "question": "热水杯放在冷水中，热水温度会怎样变化？", "options": ["A. 升高", "B. 降低", "C. 不变", "D. 先升高后降低"], "answer": "B", "explanation": "热从高温的热水传向低温的冷水，热水温度降低，冷水温度升高。", "fillAnswer": "降低", "fillKeywords": ["降低"], "suitableForFill": true}, {"id": 112, "unit": "热", "lesson": "第3课 温度不同的物体相互接触", "question": "测量体温时，体温计放在腋下几分钟后后读数，这利用了？", "options": ["A. 热传导", "B. 热对流", "C. 热辐射", "D. 热反射"], "answer": "A", "explanation": "体温计与皮肤接触，热量通过热传导从身体传到体温计，直到温度一致。", "fillAnswer": "热传导", "fillKeywords": ["热传导"], "suitableForFill": true}, {"id": 113, "unit": "热", "lesson": "第4课 热在金属中的传递", "question": "热在金属棒中的传递方向是？", "options": ["A. 从冷端传向热端", "B. 从热端传向冷端", "C. 从中间向两端", "D. 从两端向中间"], "answer": "B", "explanation": "热在金属中从温度高的一端传向温度低的一端。", "fillAnswer": "从热端传向冷端", "fillKeywords": ["从热端传向冷端"], "suitableForFill": true}, {"id": 114, "unit": "热", "lesson": "第4课 热在金属中的传递", "question": "热传递的三种方式不包括？", "options": ["A. 热传导", "B. 热对流", "C. 热辐射", "D. 热蒸发"], "answer": "D", "explanation": "热传递有三种方式：热传导、热对流和热辐射。热蒸发不是热传递方式。", "fillAnswer": "热蒸发", "fillKeywords": ["热蒸发"], "suitableForFill": true}, {"id": 115, "unit": "热", "lesson": "第4课 热在金属中的传递", "question": "加热金属片的中心，热会怎样传递？", "options": ["A. 只向上传递", "B. 只向下传递", "C. 从加热点向四周传递", "D. 不传递"], "answer": "C", "explanation": "热在金属片中从加热点向四周均匀传递，如同水波纹一样扩散。", "fillAnswer": "从加热点向四周传递", "fillKeywords": ["从加热点向四周传递"], "suitableForFill": true}, {"id": 116, "unit": "热", "lesson": "第4课 热在金属中的传递", "question": "热传导需要什么条件？", "options": ["A. 不需要任何条件", "B. 物体之间必须直接接触", "C. 必须在真空环境中", "D. 必须有光"], "answer": "B", "explanation": "热传导需要物体之间直接接触，热量通过分子碰撞从高温部分传向低温部分。", "fillAnswer": "物体之间必须直接接触", "fillKeywords": ["物体之间必须直接接触"], "suitableForFill": true}, {"id": 117, "unit": "热", "lesson": "第4课 热在金属中的传递", "question": "太阳的热量通过什么方式传到地球？", "options": ["A. 热传导", "B. 热对流", "C. 热辐射", "D. 热扩散"], "answer": "C", "explanation": "太阳与地球之间是真空，热传导和热对流都需要介质，太阳热量通过热辐射传到地球。", "fillAnswer": "热辐射", "fillKeywords": ["热辐射"], "suitableForFill": true}, {"id": 118, "unit": "热", "lesson": "第5课 热在水中的传递", "question": "液体和气体主要靠什么方式传热？", "options": ["A. 热传导", "B. 热对流", "C. 热辐射", "D. 热扩散"], "answer": "B", "explanation": "液体和气体主要靠热对流方式传热，热的水（气）上升、冷的水（气）下降。", "fillAnswer": "热对流", "fillKeywords": ["热对流"], "suitableForFill": true}, {"id": 119, "unit": "热", "lesson": "第5课 热在水中的传递", "question": "加热底部的水时，水的流动方向是？", "options": ["A. 热水上升、冷水下降", "B. 热水下降、冷水上升", "C. 水平流动", "D. 不流动"], "answer": "A", "explanation": "加热后底部热水密度减小而上升，上方冷水密度大而下沉。", "fillAnswer": "热水上升、冷水下降", "fillKeywords": ["热水上升、冷水下降"], "suitableForFill": false}, {"id": 120, "unit": "热", "lesson": "第5课 热在水中的传递", "question": "根据热对流原理，空调和暖气应分别安装在什么位置？", "options": ["A. 空调在上方、暖气在下方", "B. 空调在下方、暖气在上方", "C. 都在上方", "D. 都在下方"], "answer": "A", "explanation": "冷空气下沉，空调安在上方制冷效果好；热空气上升，暖气安在下方取暖效果好。", "fillAnswer": "空调在上方、暖气在下方", "fillKeywords": ["空调在上方、暖气在下方"], "suitableForFill": false}, {"id": 121, "unit": "热", "lesson": "第5课 热在水中的传递", "question": "烧水时，锅底的水先受热，然后？", "options": ["A. 停留在底部", "B. 上升，冷水下降补充", "C. 直接蒸发", "D. 温度不变"], "answer": "B", "explanation": "锅底的水先受热后密度变小而上升，上方较冷的水下沉补充，形成热对流循环。", "fillAnswer": "上升，冷水下降补充", "fillKeywords": ["上升，冷水下降补充"], "suitableForFill": true}, {"id": 122, "unit": "热", "lesson": "第5课 热在水中的传递", "question": "厨房里抽油烟机通常安装在高处，原理是？", "options": ["A. 油烟比空气重", "B. 热空气（含油烟）上升", "C. 美观需要", "D. 节省空间"], "answer": "B", "explanation": "烹饪产生的热油烟密度小会上升，抽油烟机装在高处利用热对流原理有效吸走油烟。", "fillAnswer": "热空气（含油烟）上升", "fillKeywords": ["热空气（含油烟）上升"], "suitableForFill": true}, {"id": 123, "unit": "热", "lesson": "第6课 哪个传热快", "question": "不同材料的导热性能是？", "options": ["A. 全部相同", "B. 不同", "C. 与颜色有关", "D. 与重量有关"], "answer": "B", "explanation": "不同材料的导热性能不同，有的导热快（良导体），有的导热慢（不良导体）。", "fillAnswer": "不同", "fillKeywords": ["不同"], "suitableForFill": true}, {"id": 124, "unit": "热", "lesson": "第6课 哪个传热快", "question": "铜、铝、铁的导热性能从好到差排序正确的是？", "options": ["A. 铁>铝>铜", "B. 铝>铜>铁", "C. 铜>铝>铁", "D. 铜>铁>铝"], "answer": "C", "explanation": "三种常见金属导热性能排序：铜>铝>铁，铜是导热性能最好的常见金属之一。", "fillAnswer": "铜>铝>铁", "fillKeywords": ["铜>铝>铁"], "suitableForFill": true}, {"id": 125, "unit": "热", "lesson": "第6课 哪个传热快", "question": "炒锅的锅身和锅柄应分别选用什么材料？", "options": ["A. 锅身用良导体，锅柄用不良导体", "B. 锅身用不良导体，锅柄用良导体", "C. 都用良导体", "D. 都用不良导体"], "answer": "A", "explanation": "锅身用良导体（如铁、铝）传热快便于烹饪，锅柄用不良导体（如木头、塑料）防烫手。", "fillAnswer": "锅身用良导体，锅柄用不良导体", "fillKeywords": ["锅身用良导体，锅柄用不良导体"], "suitableForFill": false}, {"id": 126, "unit": "热", "lesson": "第6课 哪个传热快", "question": "以下材料中，导热最慢的是？", "options": ["A. 铜", "B. 铝", "C. 铁", "D. 木头"], "answer": "D", "explanation": "木头是热的不良导体，导热性能远差于铜、铝、铁等金属材料。", "fillAnswer": "木头", "fillKeywords": ["木头"], "suitableForFill": true}, {"id": 127, "unit": "热", "lesson": "第6课 哪个传热快", "question": "冬天摸铁块比摸木头感觉更冷，是因为？", "options": ["A. 铁的温度更低", "B. 铁的导热更快", "C. 木头会发热", "D. 铁的颜色更深"], "answer": "B", "explanation": "铁是热的良导体，能快速带走手部热量，所以感觉更冷。", "fillAnswer": "铁的导热更快", "fillKeywords": ["铁的导热更快"], "suitableForFill": true}, {"id": 128, "unit": "热", "lesson": "第7课 做个保温杯", "question": "制作保温杯应选用什么材料？", "options": ["A. 热的良导体", "B. 热的不良导体", "C. 透明的材料", "D. 金属材料"], "answer": "B", "explanation": "保温杯应选用热的不良导体（如塑料、泡沫、真空等），减慢热量传递。", "fillAnswer": "热的不良导体", "fillKeywords": ["热的不良导体"], "suitableForFill": true}, {"id": 129, "unit": "热", "lesson": "第7课 做个保温杯", "question": "保温瓶内胆采用真空设计的主要作用是？", "options": ["A. 减轻重量", "B. 美观", "C. 隔绝热传导和热对流", "D. 增加强度"], "answer": "C", "explanation": "真空状态下没有介质进行热传导和热对流，可以有效阻止热量传递。", "fillAnswer": "隔绝热传导和热对流", "fillKeywords": ["隔绝热传导和热对流"], "suitableForFill": false}, {"id": 130, "unit": "热", "lesson": "第7课 做个保温杯", "question": "保温杯能否保冷？", "options": ["A. 只能保热不能保冷", "B. 只能保冷不能保热", "C. 既可以保冷也可以保热", "D. 都不能"], "answer": "C", "explanation": "保温杯的原理是阻止热量传递，无论内外温度谁高谁低，因此既可保冷也可保热。", "fillAnswer": "既可以保冷也可以保热", "fillKeywords": ["既可以保冷也可以保热"], "suitableForFill": true}, {"id": 131, "unit": "热", "lesson": "第7课 做个保温杯", "question": "保温杯的杯盖通常用什么材料？", "options": ["A. 金属", "B. 塑料或软木（热的不良导体）", "C. 玻璃", "D. 陶瓷"], "answer": "B", "explanation": "保温杯杯盖通常用塑料、软木等热的不良导体制成，以减少热量从杯口散失。", "fillAnswer": "塑料或软木（热的不良导体）", "fillKeywords": ["塑料或软木（热的不良导体）"], "suitableForFill": false}, {"id": 132, "unit": "热", "lesson": "第7课 做个保温杯", "question": "为什么羽绒服能保暖？", "options": ["A. 羽绒会发热", "B. 羽绒是热的不良导体，减少体热散失", "C. 羽绒能吸收阳光", "D. 羽绒重量大"], "answer": "B", "explanation": "羽绒是热的不良导体，内部含有大量不流动的空气，能有效阻止身体热量向外传递。", "fillAnswer": "羽绒是热的不良导体，减少体热散失", "fillKeywords": ["羽绒是热的不良导体，减少体热散失"], "suitableForFill": false}, {"id": 133, "unit": "热", "lesson": "第7课 做个保温杯", "question": "双层玻璃窗能保温的主要原因是？", "options": ["A. 玻璃本身保暖", "B. 两层玻璃间有空气层（热的不良导体）", "C. 玻璃能发热", "D. 玻璃颜色深"], "answer": "B", "explanation": "双层玻璃之间的空气层是热的不良导体，能有效阻止室内外热量传递。", "fillAnswer": "两层玻璃间有空气层（热的不良导体）", "fillKeywords": ["两层玻璃间有空气层（热的不良导体）"], "suitableForFill": false}];
-const STORAGE_KEY = 'sci_quiz_data_v1';
+// ==================== DATA ====================
+const CHOICE_DATA = [
+  {"id": 1, "unit": "第一单元 生物与环境", "lesson": "第1课 种子发芽实验", "question": "对比实验的基本要求是什么？", "options": ["A. 改变所有条件", "B. 只能改变一个条件，保持其他条件相同", "C. 不改变任何条件", "D. 至少改变两个条件"], "answer": "B", "explanation": "为了保证实验的准确性，对比实验时只能改变一个条件，必须保持其他条件相同。"},
+  {"id": 2, "unit": "第一单元 生物与环境", "lesson": "第1课 种子发芽实验", "question": "研究绿豆种子发芽实验时，为什么要用至少3粒种子？", "options": ["A. 为了让实验看起来更专业", "B. 为了减少偶然性，避免种子自身不能萌发影响结果", "C. 因为种子太便宜了", "D. 为了增加实验难度"], "answer": "B", "explanation": "用至少3粒种子做实验，是为了避免种子自身不能萌发的可能性，减少偶然性的发生，让实验更严谨。"},
+  {"id": 3, "unit": "第一单元 生物与环境", "lesson": "第1课 种子发芽实验", "question": "实验计划的正确步骤顺序是什么？", "options": ["A. 实施方案→设计方案→明确问题→作出假设→分析结果→得出结论", "B. 明确问题→作出假设→设计方案→实施方案→分析结果→得出结论", "C. 作出假设→明确问题→设计方案→实施方案→得出结论→分析结果", "D. 设计方案→明确问题→作出假设→分析结果→实施方案→得出结论"], "answer": "B", "explanation": "实验计划步骤：明确问题→作出假设→设计方案→实施方案→分析结果→得出结论。"},
+  {"id": 4, "unit": "第一单元 生物与环境", "lesson": "第1课 种子发芽实验", "question": "探究绿豆种子发芽是否需要土壤，实验结论是什么？", "options": ["A. 绿豆种子必须在土壤中才能发芽", "B. 土壤是绿豆种子发芽必需的条件", "C. 土壤不是绿豆种子发芽必需的条件", "D. 有土壤的种子发芽更快"], "answer": "C", "explanation": "实验证明，两个玻璃皿里的绿豆种子都发芽了，说明土壤不是绿豆种子发芽必需的条件。"},
+  {"id": 5, "unit": "第一单元 生物与环境", "lesson": "第2课 比较种子发芽实验", "question": "种子发芽必需的条件不包括以下哪一项？", "options": ["A. 适宜的温度", "B. 适量的水", "C. 充足的空气", "D. 阳光"], "answer": "D", "explanation": "种子发芽需要适宜的温度、适量的水和充足的空气。土壤和阳光不是种子萌发的必要条件。"},
+  {"id": 6, "unit": "第一单元 生物与环境", "lesson": "第2课 比较种子发芽实验", "question": "给种子浇太多水为什么会导致种子腐烂？", "options": ["A. 水中有细菌", "B. 种子会因为缺氧而腐烂", "C. 水温太低了", "D. 水会把种子冲走"], "answer": "B", "explanation": "水太多时，种子会因为缺氧而腐烂。"},
+  {"id": 7, "unit": "第一单元 生物与环境", "lesson": "第3课 绿豆苗的生长", "question": "空气的主要成分是什么？", "options": ["A. 氧气和二氧化碳", "B. 氮气和氧气", "C. 氮气和二氧化碳", "D. 氧气和水蒸气"], "answer": "B", "explanation": "空气是一种混合物质，氮气和氧气是空气的主要成分。"},
+  {"id": 8, "unit": "第一单元 生物与环境", "lesson": "第3课 绿豆苗的生长", "question": "植物总是朝着阳光的方向生长，这种现象叫做什么？", "options": ["A. 向水性", "B. 向地性", "C. 向光性", "D. 向肥性"], "answer": "C", "explanation": "植物会趋向有利于自身的环境生长，这种朝向阳光生长的特性叫做向光性。"},
+  {"id": 9, "unit": "第一单元 生物与环境", "lesson": "第3课 绿豆苗的生长", "question": "在光照条件下，植物通过光合作用吸收什么、释放什么？", "options": ["A. 吸收氧气，释放二氧化碳", "B. 吸收二氧化碳和水，释放氧气", "C. 吸收氮气，释放氧气", "D. 吸收氧气和水，释放二氧化碳"], "answer": "B", "explanation": "在光照条件下，植物吸收空气中的二氧化碳和水分，在绿色叶片中制造生存所需的养料，并释放出氧气。"},
+  {"id": 10, "unit": "第一单元 生物与环境", "lesson": "第3课 绿豆苗的生长", "question": "阳光下的绿豆苗和黑暗处的绿豆苗相比，有什么不同？", "options": ["A. 阳光下的绿豆苗茎更细长、黄色", "B. 黑暗处的绿豆苗茎更粗壮、绿色", "C. 阳光下的绿豆苗茎更粗壮矮小、绿色；黑暗处的茎细长、黄色", "D. 两者没有区别"], "answer": "C", "explanation": "阳光下的绿豆苗茎更粗壮、矮小，呈绿色；黑暗处的绿豆苗茎细长，黄色，较高。"},
+  {"id": 11, "unit": "第一单元 生物与环境", "lesson": "第4课 蚯蚓的选择", "question": "蚯蚓喜欢生活在什么样的环境中？", "options": ["A. 干燥、明亮的环境", "B. 潮湿、阴暗的环境", "C. 干燥、阴暗的环境", "D. 潮湿、明亮的环境"], "answer": "B", "explanation": "蚯蚓喜欢生活在潮湿、阴暗的环境里。"},
+  {"id": 12, "unit": "第一单元 生物与环境", "lesson": "第4课 蚯蚓的选择", "question": "探究蚯蚓对光照的选择实验中，需要改变的条件是什么？", "options": ["A. 蚯蚓数量", "B. 温度", "C. 有无光照", "D. 湿度"], "answer": "C", "explanation": "探究蚯蚓对光照的选择时，改变的条件是有无光照，不变的条件是蚯蚓数量、空气、温度、湿度。"},
+  {"id": 13, "unit": "第一单元 生物与环境", "lesson": "第5课 当环境改变了", "question": "当环境改变时，动物会有哪些特殊行为来适应新环境？", "options": ["A. 冬眠、迁徙、换毛等", "B. 只会冬眠", "C. 只会迁徙", "D. 不会做任何改变"], "answer": "A", "explanation": "当环境改变了，动物会有一些特殊的行为努力适应新环境，如冬眠、迁徙、换毛等。"},
+  {"id": 14, "unit": "第一单元 生物与环境", "lesson": "第5课 当环境改变了", "question": "丹顶鹤通过什么方式适应气温的变化？", "options": ["A. 冬眠", "B. 换毛", "C. 迁徙", "D. 改变体色"], "answer": "C", "explanation": "丹顶鹤是我国的珍稀动物，会通过迁徙来适应气温的变化。春季迁往东北繁殖地，入秋后迁回南方过冬。"},
+  {"id": 15, "unit": "第一单元 生物与环境", "lesson": "第5课 当环境改变了", "question": "在野外遇到掉队的小鸟，正确的做法是什么？", "options": ["A. 带回家养起来", "B. 不打扰就是最好的帮助", "C. 给它喂食", "D. 把它送到动物园"], "answer": "B", "explanation": "在野外遇到掉队的鸟不可以带回家，不打扰就是最好的帮助。"},
+  {"id": 16, "unit": "第一单元 生物与环境", "lesson": "第6课 食物链和食物网", "question": "食物链中箭头的方向表示什么？", "options": ["A. 谁吃谁的关系", "B. 谁被谁吃的关系（能量流动方向）", "C. 生物的大小关系", "D. 生物的数量关系"], "answer": "B", "explanation": "我们一般用箭头表示食物链中谁被谁吃的关系，即能量流动方向。"},
+  {"id": 17, "unit": "第一单元 生物与环境", "lesson": "第6课 食物链和食物网", "question": "一条食物链至少要有几种生物？通常从哪里开始？", "options": ["A. 至少2种，从消费者开始", "B. 至少3种，从绿色植物开始", "C. 至少4种，从肉食动物开始", "D. 至少5种，从分解者开始"], "answer": "B", "explanation": "一条食物链至少要有3种生物，通常从绿色植物开始，到凶猛的肉食动物终止。"},
+  {"id": 18, "unit": "第一单元 生物与环境", "lesson": "第6课 食物链和食物网", "question": "在食物链中，能自己制造食物的生物叫什么？", "options": ["A. 消费者", "B. 分解者", "C. 生产者", "D. 捕食者"], "answer": "C", "explanation": "食物链中能自己制造食物的生物叫生产者，直接或间接消费别人制造的食物的生物叫消费者。"},
+  {"id": 19, "unit": "第一单元 生物与环境", "lesson": "第6课 食物链和食物网", "question": "在食物链中，数量最多和数量最少的分别是什么？", "options": ["A. 消费者最多，生产者最少", "B. 生产者最多，顶级消费者最少", "C. 生产者最少，消费者最多", "D. 两者数量一样"], "answer": "B", "explanation": "生产者的数量最多，顶级消费者的数量最少。"},
+  {"id": 20, "unit": "第一单元 生物与环境", "lesson": "第7课 设计和制作生态瓶", "question": "地球上最大的生态系统是什么？", "options": ["A. 海洋", "B. 森林", "C. 生物圈", "D. 草原"], "answer": "C", "explanation": "地球的生物圈就是最大的生态系统。"},
+  {"id": 21, "unit": "第一单元 生物与环境", "lesson": "第7课 设计和制作生态瓶", "question": "生态瓶里的小鱼增多会导致什么现象？", "options": ["A. 小鱼浮到水面的次数减少", "B. 耗氧量增大，小鱼浮到水面次数增多", "C. 氧气量增加", "D. 没有任何变化"], "answer": "B", "explanation": "生态瓶里的小鱼增多，耗氧量增大，小鱼浮到水面的次数会增多，甚至会因缺氧而死亡。"},
+  {"id": 22, "unit": "第一单元 生物与环境", "lesson": "第7课 设计和制作生态瓶", "question": "以下关于种群和群落的说法，正确的是？", "options": ["A. 种群是不同种生物的集合", "B. 群落是同种生物的所有个体", "C. 种群指同种生物的所有个体，群落指各种生物种群的集合", "D. 种群和群落是同一个概念"], "answer": "C", "explanation": "种群指同一时间生活在一定自然区域内同种生物的所有个体；群落指相同时间聚集在同一区域内各种生物种群的集合。"},
+  {"id": 23, "unit": "第二单元 船的研究", "lesson": "第1课 船的历史", "question": "船的发展历程按时间顺序排列正确的是？", "options": ["A. 帆船→独木舟→蒸汽船→轮船→潜艇", "B. 独木舟→摇橹木船→帆船→蒸汽船→轮船→潜艇", "C. 蒸汽船→独木舟→帆船→轮船→潜艇", "D. 轮船→蒸汽船→帆船→独木舟→潜艇"], "answer": "B", "explanation": "船的发展历程：独木舟→摇橹木船→帆船→蒸汽船→轮船→潜艇。"},
+  {"id": 24, "unit": "第二单元 船的研究", "lesson": "第1课 船的历史", "question": "船首采用什么形状可以减小船在水中行驶的阻力？", "options": ["A. 方形", "B. 圆形", "C. 流线型（尖形）", "D. 扁平形"], "answer": "C", "explanation": "船首采用流线型（尖形），可以减小船在行驶中的阻力。"},
+  {"id": 25, "unit": "第二单元 船的研究", "lesson": "第2课 用浮的材料造船", "question": "竹筏相比独木舟有什么优点？", "options": ["A. 更容易浸水", "B. 更稳定、载重量更大", "C. 更不牢固", "D. 载重量更小"], "answer": "B", "explanation": "竹筏通过加大船体，增加底面积，比独木舟更稳定、载重量更大。"},
+  {"id": 26, "unit": "第二单元 船的研究", "lesson": "第2课 用浮的材料造船", "question": "以下哪种材料属于可以用来造船的浮的材料？", "options": ["A. 橡皮", "B. 铝箔纸", "C. 钢铁", "D. 竹子和木头"], "answer": "D", "explanation": "浮的材料，比如竹子、木头可以制作船。橡皮、铝箔纸、钢铁属于沉的材料。"},
+  {"id": 27, "unit": "第二单元 船的研究", "lesson": "第3课 用沉的材料造船", "question": "物体在水中受到的竖直向上托起的力叫什么？", "options": ["A. 重力", "B. 浮力", "C. 摩擦力", "D. 弹力"], "answer": "B", "explanation": "物体在水中会受到竖直向上托起的力，像这样的力是浮力。"},
+  {"id": 28, "unit": "第二单元 船的研究", "lesson": "第3课 用沉的材料造船", "question": "为什么把橡皮泥做成船型后更容易浮在水面上？", "options": ["A. 重量变轻了", "B. 浸入水中的体积增大，受到的浮力增大", "C. 橡皮泥的性质改变了", "D. 水的密度变大了"], "answer": "B", "explanation": "相同质量的橡皮泥做成船型后，浸入水中的体积增大，在水中受到的浮力增大，越容易浮在水面。"},
+  {"id": 29, "unit": "第二单元 船的研究", "lesson": "第3课 用沉的材料造船", "question": "工程设计的过程正确顺序是什么？", "options": ["A. 设计→问题→制作→测试→完善", "B. 制作→测试→设计→问题→完善", "C. 问题→设计→制作→测试→完善", "D. 完善→测试→制作→设计→问题"], "answer": "C", "explanation": "工程设计的过程：问题→设计→制作→测试→完善。"},
+  {"id": 30, "unit": "第二单元 船的研究", "lesson": "第4课 增加船的载重量", "question": "船的载重量与什么因素有关？", "options": ["A. 船的颜色", "B. 船只的体积，体积越大载重量越大", "C. 船的材料颜色", "D. 船的形状是否好看"], "answer": "B", "explanation": "船的载重量与船只的体积有关，相同重量和相同大小的材料，制作的船型体积越大，船的载重量就越大。"},
+  {"id": 31, "unit": "第二单元 船的研究", "lesson": "第4课 增加船的载重量", "question": "为了防止弹珠滚动导致船侧翻，可以采用什么方法？", "options": ["A. 把弹珠堆在一起", "B. 把船舱分格来均匀放置货物", "C. 减少弹珠数量", "D. 加快船的速度"], "answer": "B", "explanation": "弹珠滚动容易导致船侧翻，为了均匀放置货物，可以船舱分格来增加船的稳定性。"},
+  {"id": 32, "unit": "第二单元 船的研究", "lesson": "第5课 给船装上动力", "question": "船可以通过什么装置来控制方向？", "options": ["A. 船帆", "B. 船桨", "C. 船舵", "D. 锚"], "answer": "C", "explanation": "船可以通过船舵来控制方向。"},
+  {"id": 33, "unit": "第二单元 船的研究", "lesson": "第5课 给船装上动力", "question": "潜水艇是如何实现上浮和下沉的？", "options": ["A. 改变艇身颜色", "B. 通过进水增加重力下沉，排水减小重力上浮", "C. 通过改变速度", "D. 通过改变形状"], "answer": "B", "explanation": "可以通过进水、排水改变潜水艇的重力：进水后重力增加，潜水艇下沉；排水后重力减小，潜水艇上浮。"},
+  {"id": 34, "unit": "第二单元 船的研究", "lesson": "第6、7课 设计制作与测试小船", "question": "设计小船时需要考虑的因素不包括以下哪一项？", "options": ["A. 船的大小和形状", "B. 载重量和稳固性", "C. 动力系统和材料成本", "D. 船的颜色是否鲜艳"], "answer": "D", "explanation": "设计小船时需要考虑的因素：船的大小、船的形状、船体材料、载重量、稳固性、动力系统、材料成本。"},
+  {"id": 35, "unit": "第三单元 环境与我们", "lesson": "第1课 地球——宇宙的奇迹", "question": "以下哪项不是地球为生命存在提供的必要条件？", "options": ["A. 有液态的水和大气层", "B. 有完整的臭氧层抵御紫外线", "C. 与太阳距离适中，温度适宜", "D. 火星上有大量的氧气"], "answer": "D", "explanation": "地球为生命存在提供了液态水、大气层、臭氧层、适宜的温度等条件。火星大气基本不含氧气，不能提供生命必要条件。"},
+  {"id": 36, "unit": "第三单元 环境与我们", "lesson": "第1课 地球——宇宙的奇迹", "question": "八大行星中，唯有哪个行星的大气中有大量的氧气？", "options": ["A. 火星", "B. 金星", "C. 地球", "D. 木星"], "answer": "C", "explanation": "八大行星中唯有地球的大气中有大量的氧气，地球距离太阳不远不近，保证地球上有液态水。"},
+  {"id": 37, "unit": "第三单元 环境与我们", "lesson": "第2课 我们面临的环境问题", "question": "以下哪种不属于地球面临的环境问题？", "options": ["A. 大气污染和水污染", "B. 全球变暖", "C. 固体废弃物污染", "D. 地震"], "answer": "D", "explanation": "地球面临着多种环境问题，包括：大气污染、水资源短缺、水污染、固体废弃物污染、全球变暖、光污染、噪声污染等。地震属于自然灾害，不属于人类活动引发的环境问题。"},
+  {"id": 38, "unit": "第三单元 环境与我们", "lesson": "第2课 我们面临的环境问题", "question": "二氧化碳排放过多会导致什么环境问题？", "options": ["A. 酸雨", "B. 全球变暖、冰川融化、海平面上升", "C. 雾霾", "D. 臭氧层空洞"], "answer": "B", "explanation": "二氧化碳会导致全球变暖从而出现冰川融化、海平面上升。"},
+  {"id": 39, "unit": "第三单元 环境与我们", "lesson": "第2课 我们面临的环境问题", "question": "二氧化硫会造成什么环境问题？", "options": ["A. 全球变暖", "B. 水体富营养化", "C. 酸雨，进而毁坏建筑", "D. 噪声污染"], "answer": "C", "explanation": "二氧化硫会造成酸雨进而毁坏建筑。"},
+  {"id": 40, "unit": "第三单元 环境与我们", "lesson": "第3课 珍惜水资源", "question": "地球上人类难以利用的淡水资源中，占比最大的是什么？", "options": ["A. 河流水", "B. 地下水", "C. 山区、两极地区的冰与永久积雪（69.7%）", "D. 淡水湖水"], "answer": "C", "explanation": "地球上可供利用的淡水资源中，有69.7%是人类难以利用的山区、两极地区的冰与永久积雪。"},
+  {"id": 41, "unit": "第三单元 环境与我们", "lesson": "第3课 珍惜水资源", "question": "以下哪种不属于有效的节水措施？", "options": ["A. 用淋浴代替盆浴", "B. 用洗米水浇花", "C. 采用滴灌等先进灌溉技术", "D. 让水龙头一直开着流水"], "answer": "D", "explanation": "节约用水措施包括及时关闭水龙头、用淋浴代替盆浴、用洗米水浇花、采用滴灌技术等。"},
+  {"id": 42, "unit": "第三单元 环境与我们", "lesson": "第4课 解决垃圾问题", "question": "过期药品属于哪类垃圾？", "options": ["A. 可回收垃圾", "B. 厨余垃圾", "C. 有害垃圾", "D. 其他垃圾"], "answer": "C", "explanation": "有害垃圾包括：过期药品、废电池、水银温度计、废灯管等。"},
+  {"id": 43, "unit": "第三单元 环境与我们", "lesson": "第4课 解决垃圾问题", "question": "废纸制品和塑料制品属于哪类垃圾？", "options": ["A. 有害垃圾", "B. 厨余垃圾", "C. 可回收垃圾", "D. 其他垃圾"], "answer": "C", "explanation": "可回收垃圾包括：纸制品、金属制品、塑料制品、玻璃制品。"},
+  {"id": 44, "unit": "第三单元 环境与我们", "lesson": "第4课 解决垃圾问题", "question": "利用微生物将生活垃圾中的有机质分解转化为养分的方法叫什么？", "options": ["A. 填埋法", "B. 焚烧法", "C. 堆肥法", "D. 回收法"], "answer": "C", "explanation": "堆肥法是利用微生物，将生活垃圾中有机质分解、腐熟转化为养分和腐殖质的无害化处理方法。"},
+  {"id": 45, "unit": "第三单元 环境与我们", "lesson": "第5课 合理利用能源", "question": "目前我国的电能来源中占比最大的是什么？", "options": ["A. 水电", "B. 太阳能发电", "C. 核电", "D. 火电（煤燃烧发出的电）"], "answer": "D", "explanation": "我国的电能主要有水电、太阳能发电、风电、核电和火电。目前火电所占的比例最大。"},
+  {"id": 46, "unit": "第三单元 环境与我们", "lesson": "第5课 合理利用能源", "question": "温室效应是如何产生的？", "options": ["A. 氧气过多", "B. 人类过度消耗化石能源增加的二氧化碳使地表附近大气温度上升", "C. 氮气增加", "D. 水蒸气过多"], "answer": "B", "explanation": "温室效应：人类过度消耗化石能源增加的二氧化碳，使地表附近的大气温度上升，被称作温室效应。"},
+  {"id": 47, "unit": "第三单元 环境与我们", "lesson": "第5课 合理利用能源", "question": "以下哪种属于可再生能源？", "options": ["A. 煤", "B. 石油", "C. 天然气", "D. 太阳能"], "answer": "D", "explanation": "可再生能源包括太阳能、风能、地热能、海洋能等非化石能源形式。煤、石油、天然气是不可再生能源。"},
+  {"id": 48, "unit": "第三单元 环境与我们", "lesson": "第6课 让资源再生", "question": "以下哪种资源属于可再生资源？", "options": ["A. 煤", "B. 石油", "C. 天然气", "D. 纸"], "answer": "D", "explanation": "有些资源被消耗就不可再生，如煤、石油、天然气等。有些资源是可再生的，如塑料、玻璃、金属、织物和纸。"},
+  {"id": 49, "unit": "第三单元 环境与我们", "lesson": "第6课 让资源再生", "question": "一张再生纸的制作正确过程是什么？", "options": ["A. 搅拌→撕碎→平铺→挤压吸水→通风晾干", "B. 撕碎→搅拌→平铺→挤压吸水→通风晾干", "C. 平铺→撕碎→搅拌→通风晾干→挤压吸水", "D. 撕碎→平铺→搅拌→通风晾干→挤压吸水"], "answer": "B", "explanation": "一张再生纸的制作过程：撕碎→搅拌→平铺→挤压吸水→通风晾干。"},
+  {"id": 50, "unit": "第三单元 环境与我们", "lesson": "第6课 让资源再生", "question": "谁改进了造纸术？", "options": ["A. 张衡", "B. 毕昇", "C. 东汉蔡伦", "D. 沈括"], "answer": "C", "explanation": "东汉蔡伦改进了造纸术。"},
+  {"id": 51, "unit": "第三单元 环境与我们", "lesson": "第7课 分析一个实际的环境问题", "question": "面对环境问题，我们应该怎么做？", "options": ["A. 只从自身角度考虑", "B. 需要学会协调和放弃，从自身角色角度提出方案，也要换位思考", "C. 完全放弃自己的利益", "D. 什么都不做"], "answer": "B", "explanation": "为了达成可行的解决办法，需要学会协调和放弃。既要从自身角色角度提出方案，也要换位思考。"},
+  {"id": 52, "unit": "第四单元 热", "lesson": "第1课 温度与水的变化", "question": "标准大气压下，水的沸点是多少？", "options": ["A. 90℃", "B. 100℃", "C. 110℃", "D. 0℃"], "answer": "B", "explanation": "标准大气压下，水的沸点是100℃。水沸腾时剧烈冒气泡、有水蒸气产生。"},
+  {"id": 53, "unit": "第四单元 热", "lesson": "第1课 温度与水的变化", "question": "标准大气压下，水的凝固点是多少？", "options": ["A. 100℃", "B. 50℃", "C. 0℃", "D. -10℃"], "answer": "C", "explanation": "水结冰时的温度叫水的凝固点，标准大气压下水的凝固点是0℃。"},
+  {"id": 54, "unit": "第四单元 热", "lesson": "第1课 温度与水的变化", "question": "关于加热过程中水的温度变化，以下说法正确的是？", "options": ["A. 水温一直上升到沸腾后继续上升", "B. 水温上升到100℃沸腾后，继续加热温度保持不变", "C. 水温上升到100℃沸腾后温度会下降", "D. 水温不变"], "answer": "B", "explanation": "加热过程中，水吸热温度上升直至100℃沸腾，继续加热温度保持在100℃。停止加热，水温会下降。"},
+  {"id": 55, "unit": "第四单元 热", "lesson": "第1课 温度与水的变化", "question": "物质通常以哪三种形态存在？", "options": ["A. 固态、液态、气态", "B. 固态、半固态、液态", "C. 液态、气态、等离子态", "D. 固态、液态、胶态"], "answer": "A", "explanation": "物质通常以固态、液态、气态的形态存在，物态变化取决于温度等。"},
+  {"id": 56, "unit": "第四单元 热", "lesson": "第2课 水的蒸发和凝结", "question": "水的蒸发过程是吸热还是放热？", "options": ["A. 吸热", "B. 放热", "C. 既不吸热也不放热", "D. 有时吸热有时放热"], "answer": "A", "explanation": "水的蒸发过程吸收热量，水温越高，水蒸发越快。"},
+  {"id": 57, "unit": "第四单元 热", "lesson": "第2课 水的蒸发和凝结", "question": "水蒸气凝结成水的过程是吸热还是放热？", "options": ["A. 吸热", "B. 放热", "C. 既不吸热也不放热", "D. 取决于温度"], "answer": "B", "explanation": "水蒸气凝结成水的过程放出热量。温度越低，凝结越快。"},
+  {"id": 58, "unit": "第四单元 热", "lesson": "第2课 水的蒸发和凝结", "question": "水沸腾时看到的白气是什么？", "options": ["A. 水蒸气", "B. 水蒸气凝结成的小水滴", "C. 二氧化碳", "D. 烟"], "answer": "B", "explanation": "水蒸气肉眼看不见，所以水沸腾时看到的白气不是水蒸气，而是水蒸气凝结的小水滴。"},
+  {"id": 59, "unit": "第四单元 热", "lesson": "第2课 水的蒸发和凝结", "question": "云是怎样形成的？", "options": ["A. 水在高空中直接变成固体", "B. 水蒸气在高空中遇冷凝结成小水珠或凝华成小冰晶", "C. 地面上的水直接升到天空", "D. 风吹起来的"], "answer": "B", "explanation": "云：水蒸气在高空中遇冷凝结成小水珠或凝华成小冰晶便形成了云。"},
+  {"id": 60, "unit": "第四单元 热", "lesson": "第2课 水的蒸发和凝结", "question": "霜是怎样形成的？", "options": ["A. 雨水冻结", "B. 水蒸气遇到0℃以下的物体凝华成固态小冰晶", "C. 露水冻结", "D. 雪融化后再冻结"], "answer": "B", "explanation": "霜：地面附近的水蒸气遇到冷的物体（温度在0℃以下），凝华成固态的小冰晶，便形成了霜。"},
+  {"id": 61, "unit": "第四单元 热", "lesson": "第3课 温度不同的物体相互接触", "question": "热在物体之间传递的方向是怎样的？", "options": ["A. 从温度低的物体传向温度高的物体", "B. 从温度高的物体传向温度低的物体", "C. 从体积大的物体传向体积小的物体", "D. 从质量大的物体传向质量小的物体"], "answer": "B", "explanation": "热通常从温度高的物体传向温度低的物体。"},
+  {"id": 62, "unit": "第四单元 热", "lesson": "第3课 温度不同的物体相互接触", "question": "两个温度不同的物体相互接触，最终会怎样？", "options": ["A. 各自保持原来的温度", "B. 温度高的更高，温度低的更低", "C. 最终温度相同，达到热平衡", "D. 温度低的变高，温度高的不变"], "answer": "C", "explanation": "两个温度不同的物体相互接触，最终温度相同，达到热平衡。"},
+  {"id": 63, "unit": "第四单元 热", "lesson": "第4课 热在金属中的传递", "question": "热传递有哪三种方式？", "options": ["A. 热传导、热辐射、热散发", "B. 热传导、热对流、热辐射", "C. 热对流、热辐射、热挥发", "D. 热传导、热对流、热挥发"], "answer": "B", "explanation": "热传递有热传导、热对流、热辐射三种传递方式。"},
+  {"id": 64, "unit": "第四单元 热", "lesson": "第4课 热在金属中的传递", "question": "太阳的热量以什么方式传递到地球？", "options": ["A. 热传导", "B. 热对流", "C. 热辐射", "D. 热交换"], "answer": "C", "explanation": "太阳的热量以热辐射的形式传递到地球。热辐射是物体以电磁波的形式向外发射热能的过程。"},
+  {"id": 65, "unit": "第四单元 热", "lesson": "第4课 热在金属中的传递", "question": "用火加热金属条的中部，金属条上的蜡会怎样熔化？", "options": ["A. 只有中部熔化", "B. 从中部受热部分开始，向两端依次熔化", "C. 从两端开始向中部熔化", "D. 全部同时熔化"], "answer": "B", "explanation": "用火加热金属条的中部，金属条上的蜡从中部受热部分开始熔化，然后向两端依次熔化。"},
+  {"id": 66, "unit": "第四单元 热", "lesson": "第5课 热在水中的传递", "question": "热在液体和气体中的主要传递方式是什么？", "options": ["A. 热传导", "B. 热对流", "C. 热辐射", "D. 热交换"], "answer": "B", "explanation": "热在液体和气体中的主要传递方式是热对流。"},
+  {"id": 67, "unit": "第四单元 热", "lesson": "第5课 热在水中的传递", "question": "加热试管中的水时，热水和冷水的流动方向是怎样的？", "options": ["A. 热水向下流动，冷水向上流动", "B. 热水向上流动，冷水向下流动，形成对流", "C. 两者都不动", "D. 两者混合不动"], "answer": "B", "explanation": "加热后的热水向上流动，冷水向下流动，形成对流，使整杯水的温度趋于相同。"},
+  {"id": 68, "unit": "第四单元 热", "lesson": "第5课 热在水中的传递", "question": "空调和暖气分别应该安装在房间的什么位置？", "options": ["A. 空调在上方，暖气在下方", "B. 空调在下方，暖气在上方", "C. 都安装在上方", "D. 都安装在下方"], "answer": "A", "explanation": "冷空气下降，空调应安装在房间上方；热空气上升，暖气应安装在房间下方。"},
+  {"id": 69, "unit": "第四单元 热", "lesson": "第6课 哪个传热快", "question": "以下哪种材料属于热的良导体？", "options": ["A. 塑料", "B. 木头", "C. 陶瓷", "D. 铜"], "answer": "D", "explanation": "热的良导体有铜、铝、铁等金属材料。热的不良导体有塑料、木头、陶瓷、空气等材料。"},
+  {"id": 70, "unit": "第四单元 热", "lesson": "第6课 哪个传热快", "question": "铜、铝、铁三种材料的导热性能排序正确的是？", "options": ["A. 铁＞铝＞铜", "B. 铝＞铜＞铁", "C. 铜＞铝＞铁", "D. 铜＞铁＞铝"], "answer": "C", "explanation": "铜、铝、铁三种材料的导热性能排序：铜＞铝＞铁。"},
+  {"id": 71, "unit": "第四单元 热", "lesson": "第6课 哪个传热快", "question": "为什么锅身用金属（热的良导体），锅柄用塑料或木头（热的不良导体）？", "options": ["A. 锅身需要快速传热，锅柄需要防止烫伤", "B. 两者都需要快速传热", "C. 锅身需要保温，锅柄需要散热", "D. 没有特别原因"], "answer": "A", "explanation": "锅身需要用热的良导体，因为传热性能好；锅柄需要用热的不良导体，因为传热性能差，防止烫伤。"},
+  {"id": 72, "unit": "第四单元 热", "lesson": "第7课 做个保温杯", "question": "制作保温杯时应选择什么材料？", "options": ["A. 热的良导体", "B. 热的不良导体", "C. 金属材料", "D. 任何材料都可以"], "answer": "B", "explanation": "制作保温杯时，应选择热的不良导体。传热性能越差，隔绝内部与外界接触，保温效果越好。"},
+  {"id": 73, "unit": "第四单元 热", "lesson": "第7课 做个保温杯", "question": "保温瓶内胆中间为真空，主要隔绝了什么？", "options": ["A. 只有热传导", "B. 只有热对流", "C. 热传导和热对流", "D. 热辐射"], "answer": "C", "explanation": "保温瓶内胆中间为真空，无热传导与热对流。真空可以隔绝热传导和热对流。"},
+  {"id": 74, "unit": "第四单元 热", "lesson": "第7课 做个保温杯", "question": "保温瓶内胆内壁镀银的作用是什么？", "options": ["A. 增加热传导", "B. 减少热辐射", "C. 增加热对流", "D. 美观"], "answer": "B", "explanation": "保温瓶内胆内壁镀银，减少热辐射。"},
+  {"id": 75, "unit": "第四单元 热", "lesson": "第7课 做个保温杯", "question": "保温杯既可以保冷也可以保热，以下说法正确的是？", "options": ["A. 保温杯只能保热不能保冷", "B. 保温杯只能保冷不能保热", "C. 保冷是减慢杯内热量散失，保热是隔绝外界热量进入", "D. 保冷和保热原理完全不同"], "answer": "C", "explanation": "保温杯既可以保冷（减慢杯内热量散失），也可以保热（隔绝外界热量进入）。"}
+];
 
-let currentQuiz = { questions: [], currentIndex: 0, answers: [], unit: '' };
+const FILL_DATA = [{"id": 1, "unit": "第一单元《生物与环境》", "lesson": "第 1 课时\t种子发芽实验", "question": "许多植物的新生命是从______发芽开始的。", "answer": "种子"}, {"id": 2, "unit": "第一单元《生物与环境》", "lesson": "第 1 课时\t种子发芽实验", "question": "为了______，对比实验时只能改变一个条件，必须保持其他条件相同。", "answer": "保证实验的准确性"}, {"id": 3, "unit": "第一单元《生物与环境》", "lesson": "第 1 课时\t种子发芽实验", "question": "为了保证实验的准确性，对比实验时只能改变______，必须保持其他条件相同。", "answer": "一个条件"}, {"id": 4, "unit": "第一单元《生物与环境》", "lesson": "第 1 课时\t种子发芽实验", "question": "为了保证实验的准确性，对比实验时只能改变一个条件，必须保持______。", "answer": "其他条件相同"}, {"id": 5, "unit": "第一单元《生物与环境》", "lesson": "第 1 课时\t种子发芽实验", "question": "研究绿豆种子发芽需要的条件时，用至少 3 粒种子做实验，是为了避免______的可能性，减少偶然性的发生，可以让实验更严谨。", "answer": "种子自身不能萌发"}, {"id": 6, "unit": "第一单元《生物与环境》", "lesson": "第 1 课时\t种子发芽实验", "question": "研究绿豆种子发芽需要的条件时，用至少 3 粒种子做实验，是为了避免种子自身不能萌发的可能性，______的发生，可以让实验更严谨。", "answer": "减少偶然性"}, {"id": 7, "unit": "第一单元《生物与环境》", "lesson": "第 1 课时\t种子发芽实验", "question": "研究绿豆种子发芽需要的条件时，用至少 3 粒种子做实验，是为了避免种子自身不能萌发的可能性，减少偶然性的发生，可以让实验______。", "answer": "更严谨"}, {"id": 8, "unit": "第一单元《生物与环境》", "lesson": "第 1 课时\t种子发芽实验", "question": "实验计划步骤：______。", "answer": "明确问题-作出假设-设计方案-实施方案-分析结果-得出结论"}, {"id": 9, "unit": "第一单元《生物与环境》", "lesson": "第 2 课时 比较种子发芽实验", "question": "种子发芽需要______、适量的水和充足的空气。", "answer": "适宜的温度"}, {"id": 10, "unit": "第一单元《生物与环境》", "lesson": "第 2 课时 比较种子发芽实验", "question": "种子发芽需要适宜的温度、______和充足的空气。", "answer": "适量的水"}, {"id": 11, "unit": "第一单元《生物与环境》", "lesson": "第 2 课时 比较种子发芽实验", "question": "种子发芽需要适宜的温度、适量的水和______。", "answer": "充足的空气"}, {"id": 12, "unit": "第一单元《生物与环境》", "lesson": "第 2 课时 比较种子发芽实验", "question": "______和阳光不是种子萌发的必要条件。", "answer": "土壤"}, {"id": 13, "unit": "第一单元《生物与环境》", "lesson": "第 2 课时 比较种子发芽实验", "question": "土壤和______不是种子萌发的必要条件。", "answer": "阳光"}, {"id": 14, "unit": "第一单元《生物与环境》", "lesson": "第 2 课时 比较种子发芽实验", "question": "水太多种子会因为______而腐烂。", "answer": "缺氧"}, {"id": 15, "unit": "第一单元《生物与环境》", "lesson": "第 3 课时 绿豆苗的生长", "question": "空气是一种______物质，氮气和氧气是空气的主要成分。", "answer": "混合"}, {"id": 16, "unit": "第一单元《生物与环境》", "lesson": "第 3 课时 绿豆苗的生长", "question": "空气是一种混合物质，______和氧气是空气的主要成分。", "answer": "氮气"}, {"id": 17, "unit": "第一单元《生物与环境》", "lesson": "第 3 课时 绿豆苗的生长", "question": "空气是一种混合物质，氮气和______是空气的主要成分。", "answer": "氧气"}, {"id": 18, "unit": "第一单元《生物与环境》", "lesson": "第 3 课时 绿豆苗的生长", "question": "植物会______的环境生长-向光性。", "answer": "趋向有利于自身"}, {"id": 19, "unit": "第一单元《生物与环境》", "lesson": "第 3 课时 绿豆苗的生长", "question": "植物会趋向有利于自身的环境生长-______。", "answer": "向光性"}, {"id": 20, "unit": "第一单元《生物与环境》", "lesson": "第 3 课时 绿豆苗的生长", "question": "植物的生长需要合适的环境条件。当环境改变的时候，植物具有一定的______。相对的，环境也会影响植物。", "answer": "适应环境的能力"}, {"id": 21, "unit": "第一单元《生物与环境》", "lesson": "第 3 课时 绿豆苗的生长", "question": "芭蕉、香蕉树______，增加蒸腾作用，适应雨水多的环境", "answer": "叶片宽大"}, {"id": 22, "unit": "第一单元《生物与环境》", "lesson": "第 3 课时 绿豆苗的生长", "question": "芭蕉、香蕉树叶片宽大，______蒸腾作用，适应雨水多的环境", "answer": "增加"}, {"id": 23, "unit": "第一单元《生物与环境》", "lesson": "第 3 课时 绿豆苗的生长", "question": "芭蕉、香蕉树叶片宽大，增加蒸腾作用，适应______的环境", "answer": "雨水多"}, {"id": 24, "unit": "第一单元《生物与环境》", "lesson": "第 3 课时 绿豆苗的生长", "question": "松树、仙人掌______，减少蒸腾作用，适应干旱环境", "answer": "针刺叶"}, {"id": 25, "unit": "第一单元《生物与环境》", "lesson": "第 3 课时 绿豆苗的生长", "question": "松树、仙人掌针刺叶，______蒸腾作用，适应干旱环境", "answer": "减少"}, {"id": 26, "unit": "第一单元《生物与环境》", "lesson": "第 3 课时 绿豆苗的生长", "question": "松树、仙人掌针刺叶，减少蒸腾作用，适应______环境", "answer": "干旱"}, {"id": 27, "unit": "第一单元《生物与环境》", "lesson": "第 3 课时 绿豆苗的生长", "question": "植物的叶可以进行______。在光照的条件下，植物吸收空气中的二氧化碳和水分，在绿色叶片中制造生存所需的养 料，并释放出氧气。", "answer": "光合作用"}, {"id": 28, "unit": "第一单元《生物与环境》", "lesson": "第 3 课时 绿豆苗的生长", "question": "植物的叶可以进行光合作用。在光照的条件下，植物吸收空气中的______，在绿色叶片中制造生存所需的养 料，并释放出氧气。", "answer": "二氧化碳和水分"}, {"id": 29, "unit": "第一单元《生物与环境》", "lesson": "第 3 课时 绿豆苗的生长", "question": "植物的叶可以进行光合作用。在光照的条件下，植物吸收空气中的二氧化碳和水分，在绿色叶片中制造生存所需的养 料，并释放出______。", "answer": "氧气"}, {"id": 30, "unit": "第一单元《生物与环境》", "lesson": "第 3 课时 绿豆苗的生长", "question": "阳光下的绿豆苗茎______；黑暗处的绿豆苗茎细长，黄色，较高。", "answer": "更粗壮、矮小，呈绿色"}, {"id": 31, "unit": "第一单元《生物与环境》", "lesson": "第 3 课时 绿豆苗的生长", "question": "阳光下的绿豆苗茎更粗壮、矮小，呈绿色；黑暗处的绿豆苗______。", "answer": "茎细长，黄色，较高"}, {"id": 32, "unit": "第一单元《生物与环境》", "lesson": "第 3 课时 绿豆苗的生长", "question": "绿豆苗的健康生长需要______，不需要土壤。", "answer": "阳光、空气、水、适宜的温度"}, {"id": 33, "unit": "第一单元《生物与环境》", "lesson": "第 3 课时 绿豆苗的生长", "question": "绿豆苗的健康生长需要阳光、空气、水、适宜的温度，不需要______。", "answer": "土壤"}, {"id": 34, "unit": "第一单元《生物与环境》", "lesson": "第 4 课时 蚯蚓的选择", "question": "蚯蚓喜欢生活在______的环境里。", "answer": "潮湿、阴暗"}, {"id": 35, "unit": "第一单元《生物与环境》", "lesson": "第 4 课时 蚯蚓的选择", "question": "用______和模拟实验的方法研究蚯蚓适宜生活的环境时，", "answer": "对比实验"}, {"id": 36, "unit": "第一单元《生物与环境》", "lesson": "第 4 课时 蚯蚓的选择", "question": "用对比实验和______的方法研究蚯蚓适宜生活的环境时，", "answer": "模拟实验"}, {"id": 37, "unit": "第一单元《生物与环境》", "lesson": "第 4 课时 蚯蚓的选择", "question": "探究蚯蚓对潮湿环境的选择，实验用 10 条蚯蚓（增加样本多样性，减少实验误差），蚯蚓放在潮湿和干燥的交界处。3.动物与植物一样，也需要生长在一定的环境中，当环境改变后它们也会努力去______的变化。", "answer": "适应环境"}, {"id": 38, "unit": "第一单元《生物与环境》", "lesson": "第 4 课时 蚯蚓的选择", "question": "青蛙的______，使它们不显眼而不被捕食者发现", "answer": "体色总是和周围环境相似"}, {"id": 39, "unit": "第一单元《生物与环境》", "lesson": "第 4 课时 蚯蚓的选择", "question": "企鹅和北极狼都生活在冰天雪地的环境中，因此它们有厚厚的______帮助保暖", "answer": "皮毛"}, {"id": 40, "unit": "第一单元《生物与环境》", "lesson": "第 4 课时 蚯蚓的选择", "question": "企鹅和北极狼都生活在冰天雪地的环境中，因此它们有厚厚的皮毛帮助______", "answer": "保暖"}, {"id": 41, "unit": "第一单元《生物与环境》", "lesson": "第 4 课时 蚯蚓的选择", "question": "天鹅有光滑的______，可以使它们的身体能很快将水甩干，而且脚上有蹼方便在水中游泳", "answer": "羽毛"}, {"id": 42, "unit": "第一单元《生物与环境》", "lesson": "第 4 课时 蚯蚓的选择", "question": "天鹅有光滑的羽毛，可以使它们的身体能很快将水甩干，而且______方便在水中游泳", "answer": "脚上有蹼"}, {"id": 43, "unit": "第一单元《生物与环境》", "lesson": "第 5 课时 当环境改变了", "question": "1.当环境改变了，动物会有一些特殊的行为努力______，如冬眠、迁徙、换毛等。", "answer": "适应新环境"}, {"id": 44, "unit": "第一单元《生物与环境》", "lesson": "第 5 课时 当环境改变了", "question": "1.当环境改变了，动物会有一些特殊的行为努力适应新环境，如______等。", "answer": "冬眠、迁徙、换毛"}, {"id": 45, "unit": "第一单元《生物与环境》", "lesson": "第 5 课时 当环境改变了", "question": "青蛙春天从蝌蚪发育成青蛙， 夏天捕食昆虫， 秋天挖洞，冬天______。", "answer": "冬 眠"}, {"id": 46, "unit": "第一单元《生物与环境》", "lesson": "第 5 课时 当环境改变了", "question": "丹顶鹤是我国的珍稀动物，会通过______。春季气候回暖，丹顶鹤离开过冬地，迁往东北繁殖地；3 月末 4 月初，繁殖地气候宜人，丹顶鹤开始配对和筑巢；入秋后，气温降低、食物减少，丹顶鹤又迁徙回温暖的南方过冬。", "answer": "迁徙来适应气温的变化"}, {"id": 47, "unit": "第一单元《生物与环境》", "lesson": "第 5 课时 当环境改变了", "question": "丹顶鹤是我国的珍稀动物，会通过迁徙来适应气温的变化。春季气候回暖，丹顶鹤离开过冬地，迁往东北繁殖地；3 月末 4 月初，繁殖地气候宜人，丹顶鹤开始______；入秋后，气温降低、食物减少，丹顶鹤又迁徙回温暖的南方过冬。", "answer": "配对和筑巢"}, {"id": 48, "unit": "第一单元《生物与环境》", "lesson": "第 5 课时 当环境改变了", "question": "人类可以通过建立______来保护动植物。", "answer": "自然保护区"}, {"id": 49, "unit": "第一单元《生物与环境》", "lesson": "第 5 课时 当环境改变了", "question": "在野外遇到掉队的鸟______， 不打扰就是最好的帮助。", "answer": "不可以带回家"}, {"id": 50, "unit": "第一单元《生物与环境》", "lesson": "第 6 课时 食物链和食物网", "question": "生物的生存除了需要一定的自然条件外，它们彼此之间是______，互相影响的。", "answer": "相互依赖"}, {"id": 51, "unit": "第一单元《生物与环境》", "lesson": "第 6 课时 食物链和食物网", "question": "生物的生存除了需要一定的自然条件外，它们彼此之间是相互依赖，______的。", "answer": "互相影响"}, {"id": 52, "unit": "第一单元《生物与环境》", "lesson": "第 6 课时 食物链和食物网", "question": "生物之间，这种像“链条”一样的“______”的食物关系叫作食物链。", "answer": "吃与被吃"}, {"id": 53, "unit": "第一单元《生物与环境》", "lesson": "第 6 课时 食物链和食物网", "question": "生物之间，这种像“链条”一样的“吃与被吃”的______叫作食物链。", "answer": "食物关系"}, {"id": 54, "unit": "第一单元《生物与环境》", "lesson": "第 6 课时 食物链和食物网", "question": "生物之间，这种像“链条”一样的“吃与被吃”的食物关系叫作______。", "answer": "食物链"}, {"id": 55, "unit": "第一单元《生物与环境》", "lesson": "第 6 课时 食物链和食物网", "question": "生物之间复杂的食物关系形成一个网状结构，叫作______。；物种越丰富，食物网越稳定。", "answer": "食物网"}, {"id": 56, "unit": "第一单元《生物与环境》", "lesson": "第 6 课时 食物链和食物网", "question": "生物之间复杂的食物关系形成一个网状结构，叫作食物网。；物种越______，食物网越稳定。", "answer": "丰富"}, {"id": 57, "unit": "第一单元《生物与环境》", "lesson": "第 6 课时 食物链和食物网", "question": "生物之间复杂的食物关系形成一个网状结构，叫作食物网。；物种越丰富，食物网越______。", "answer": "稳定"}, {"id": 58, "unit": "第一单元《生物与环境》", "lesson": "第 6 课时 食物链和食物网", "question": "一条食物链至少要有 3 种生物，通常从绿色植物开始，到凶猛的肉食动物终止。______不出现在食物链中。", "answer": "分解者"}, {"id": 59, "unit": "第一单元《生物与环境》", "lesson": "第 6 课时 食物链和食物网", "question": "植物通过______获得生长所需的物质和能量，植物又通过直接或间接被其它动物食用，使植物体内的有机物、能量 通过食物链在不同动物中传递。", "answer": "光合作用"}, {"id": 60, "unit": "第一单元《生物与环境》", "lesson": "第 6 课时 食物链和食物网", "question": "植物通过光合作用获得生长所需的______，植物又通过直接或间接被其它动物食用，使植物体内的有机物、能量 通过食物链在不同动物中传递。", "answer": "物质和能量"}, {"id": 61, "unit": "第一单元《生物与环境》", "lesson": "第 6 课时 食物链和食物网", "question": "植物通过光合作用获得生长所需的物质和能量，植物又通过______，使植物体内的有机物、能量 通过食物链在不同动物中传递。", "answer": "直接或间接被其它动物食用"}, {"id": 62, "unit": "第一单元《生物与环境》", "lesson": "第 6 课时 食物链和食物网", "question": "植物通过光合作用获得生长所需的物质和能量，植物又通过直接或间接被其它动物食用，使植物体内的有机物、能量 通过______在不同动物中传递。", "answer": "食物链"}, {"id": 63, "unit": "第一单元《生物与环境》", "lesson": "第 6 课时 食物链和食物网", "question": "植物通过光合作用获得生长所需的物质和能量，植物又通过直接或间接被其它动物食用，使植物体内的有机物、能量 通过食物链在不同动物中______。", "answer": "传递"}, {"id": 64, "unit": "第一单元《生物与环境》", "lesson": "第 6 课时 食物链和食物网", "question": "食物链中能自己制造食物的生物叫______，直接或间接消费别人制造的食物的生物叫消费者。", "answer": "生产者"}, {"id": 65, "unit": "第一单元《生物与环境》", "lesson": "第 6 课时 食物链和食物网", "question": "食物链中能自己制造食物的生物叫生产者，直接或间接消费别人制造的食物的生物叫______。", "answer": "消费者"}, {"id": 66, "unit": "第一单元《生物与环境》", "lesson": "第 7 课时 设计和制作生态瓶", "question": "群落里的______与环境中的非生物相互联系相互影响，构成了一个整体，我们把这个整体叫作生态系统。地球的生 物圈就是最大的生态系统。", "answer": "各种生物"}, {"id": 67, "unit": "第一单元《生物与环境》", "lesson": "第 7 课时 设计和制作生态瓶", "question": "群落里的各种生物与______相互联系相互影响，构成了一个整体，我们把这个整体叫作生态系统。地球的生 物圈就是最大的生态系统。", "answer": "环境中的非生物"}, {"id": 68, "unit": "第一单元《生物与环境》", "lesson": "第 7 课时 设计和制作生态瓶", "question": "群落里的各种生物与环境中的非生物相互联系相互影响，构成了一个整体，我们把这个整体叫作______。地球的生 物圈就是最大的生态系统。", "answer": "生态系统"}, {"id": 69, "unit": "第一单元《生物与环境》", "lesson": "第 7 课时 设计和制作生态瓶", "question": "群落里的各种生物与环境中的非生物相互联系相互影响，构成了一个整体，我们把这个整体叫作生态系统。______ 物圈就是最大的生态系统。", "answer": "地球的生"}, {"id": 70, "unit": "第一单元《生物与环境》", "lesson": "第 7 课时 设计和制作生态瓶", "question": "群落里的各种生物与环境中的非生物相互联系相互影响，构成了一个整体，我们把这个整体叫作生态系统。地球的生 ______就是最大的生态系统。", "answer": "物圈"}, {"id": 71, "unit": "第一单元《生物与环境》", "lesson": "第 7 课时 设计和制作生态瓶", "question": "生态系统中的植物为动物提供了______和氧气，动物的粪便为植物的生长提供了需要的营养。", "answer": "食物"}, {"id": 72, "unit": "第一单元《生物与环境》", "lesson": "第 7 课时 设计和制作生态瓶", "question": "生态系统中的植物为动物提供了食物和______，动物的粪便为植物的生长提供了需要的营养。", "answer": "氧气"}, {"id": 73, "unit": "第一单元《生物与环境》", "lesson": "第 7 课时 设计和制作生态瓶", "question": "生态系统中的植物为动物提供了食物和氧气，动物的粪便为植物的生长提供了______。", "answer": "需要的营养"}, {"id": 74, "unit": "第一单元《生物与环境》", "lesson": "第 7 课时 设计和制作生态瓶", "question": "制作生态瓶的参考步骤：先在桶底装入一层淘洗干净的沙（或加______），再装入大半桶自然水域中的水。在桶里种 上自己准备的水草，植物存活后，再放入小动物。", "answer": "小石子"}, {"id": 75, "unit": "第一单元《生物与环境》", "lesson": "第 7 课时 设计和制作生态瓶", "question": "制作生态瓶的参考步骤：先在桶底装入一层淘洗干净的沙（或加小石子），再装入大半桶______。在桶里种 上自己准备的水草，植物存活后，再放入小动物。", "answer": "自然水域中的水"}, {"id": 76, "unit": "第一单元《生物与环境》", "lesson": "第 7 课时 设计和制作生态瓶", "question": "制作生态瓶的参考步骤：先在桶底装入一层淘洗干净的沙（或加小石子），再装入大半桶自然水域中的水。在桶里种 上自己准备的______，植物存活后，再放入小动物。", "answer": "水草"}, {"id": 77, "unit": "第一单元《生物与环境》", "lesson": "第 7 课时 设计和制作生态瓶", "question": "制作生态瓶的参考步骤：先在桶底装入一层淘洗干净的沙（或加小石子），再装入大半桶自然水域中的水。在桶里种 上自己准备的水草，植物存活后，再放入______。", "answer": "小动物"}, {"id": 78, "unit": "第一单元《生物与环境》", "lesson": "第 7 课时 设计和制作生态瓶", "question": "生物与生物之间是______、相互作用和相互制约的。", "answer": "相互依存"}, {"id": 79, "unit": "第一单元《生物与环境》", "lesson": "第 7 课时 设计和制作生态瓶", "question": "生物与生物之间是相互依存、______和相互制约的。", "answer": "相互作用"}, {"id": 80, "unit": "第一单元《生物与环境》", "lesson": "第 7 课时 设计和制作生态瓶", "question": "生物与生物之间是相互依存、相互作用和______的。", "answer": "相互制约"}, {"id": 81, "unit": "第一单元《生物与环境》", "lesson": "第 7 课时 设计和制作生态瓶", "question": "生态瓶里的水量______，动植物的生存空间减小，氧气量减少，生态瓶中小鱼浮到水面的次数增多", "answer": "减少"}, {"id": 82, "unit": "第一单元《生物与环境》", "lesson": "第 7 课时 设计和制作生态瓶", "question": "生态瓶里的水量减少，动植物的生存空间减小，氧气量减少，生态瓶中小鱼浮到水面的______", "answer": "次数增多"}, {"id": 83, "unit": "第一单元《生物与环境》", "lesson": "第 7 课时 设计和制作生态瓶", "question": "生态瓶里的水体______，产生的氧气量增多，小鱼浮到水面的次数会减少。", "answer": "增多"}, {"id": 84, "unit": "第一单元《生物与环境》", "lesson": "第 7 课时 设计和制作生态瓶", "question": "生态瓶里的水体增多，产生的氧气量增多，小鱼浮到水面的______。", "answer": "次数会减少"}, {"id": 85, "unit": "第一单元《生物与环境》", "lesson": "第 7 课时 设计和制作生态瓶", "question": "生态瓶里的小鱼增多，耗氧量______，小鱼浮到水面的次数会增多。如果小鱼增加两倍或四倍，那么小鱼浮到水面的次 数会越来越多，甚至会因缺氧而死亡。", "answer": "增大"}, {"id": 86, "unit": "第一单元《生物与环境》", "lesson": "第 7 课时 设计和制作生态瓶", "question": "生态瓶里的小鱼增多，耗氧量增大，小鱼浮到水面的______。如果小鱼增加两倍或四倍，那么小鱼浮到水面的次 数会越来越多，甚至会因缺氧而死亡。", "answer": "次数会增多"}, {"id": 87, "unit": "第一单元《生物与环境》", "lesson": "第 7 课时 设计和制作生态瓶", "question": "生态瓶里的小鱼增多，耗氧量增大，小鱼浮到水面的次数会增多。如果小鱼增加两倍或四倍，那么小鱼浮到水面的次 ______，甚至会因缺氧而死亡。", "answer": "数会越来越多"}, {"id": 88, "unit": "第一单元《生物与环境》", "lesson": "第 7 课时 设计和制作生态瓶", "question": "生态瓶里的小鱼增多，耗氧量增大，小鱼浮到水面的次数会增多。如果小鱼增加两倍或四倍，那么小鱼浮到水面的次 数会越来越多，甚至会______。", "answer": "因缺氧而死亡"}, {"id": 89, "unit": "第一单元《生物与环境》", "lesson": "第 7 课时 设计和制作生态瓶", "question": "生态瓶里的植物不是越多越好，多到一定程度，既影响______，又会减小动物的活动空间，对生态系统也会 产生不良影响。", "answer": "植物对光的吸收"}, {"id": 90, "unit": "第一单元《生物与环境》", "lesson": "第 7 课时 设计和制作生态瓶", "question": "生态瓶里的植物不是越多越好，多到一定程度，既影响植物对光的吸收，又会______，对生态系统也会 产生不良影响。", "answer": "减小动物的活动空间"}, {"id": 91, "unit": "第一单元《生物与环境》", "lesson": "第 7 课时 设计和制作生态瓶", "question": "生态瓶里的植物不是越多越好，多到一定程度，既影响植物对光的吸收，又会减小动物的活动空间，对生态系统也会 产生______。", "answer": "不良影响"}, {"id": 92, "unit": "第一单元《生物与环境》", "lesson": "第 7 课时 设计和制作生态瓶", "question": "______指同一时间生活在一定自然区域内，同种生物的所有个体【比如一群大象】", "answer": "种群"}, {"id": 93, "unit": "第一单元《生物与环境》", "lesson": "第 7 课时 设计和制作生态瓶", "question": "种群指同一时间生活在一定自然区域内，______【比如一群大象】", "answer": "同种生物的所有个体"}, {"id": 94, "unit": "第一单元《生物与环境》", "lesson": "第 7 课时 设计和制作生态瓶", "question": "______指相同时间聚集在同一区域或环境内各种生物种群的集合【比如绿豆苗+周围的蚜虫、瓢虫、蜘蛛等生物】", "answer": "群落"}, {"id": 95, "unit": "第一单元《生物与环境》", "lesson": "第 7 课时 设计和制作生态瓶", "question": "群落指相同时间聚集在同一区域或环境内______种群的集合【比如绿豆苗+周围的蚜虫、瓢虫、蜘蛛等生物】", "answer": "各种生物"}, {"id": 96, "unit": "第二单元 船的研究", "lesson": "第 1 课 船的历史", "question": "船的发展历程：______。", "answer": "独木舟-摇橹木船-帆船-蒸汽船-轮船-潜艇"}, {"id": 97, "unit": "第二单元 船的研究", "lesson": "第 1 课 船的历史", "question": "独木舟存在______，不稳定等缺点。我们可以采用增宽船体等方法使其保持稳定。", "answer": "装载量小"}, {"id": 98, "unit": "第二单元 船的研究", "lesson": "第 1 课 船的历史", "question": "独木舟存在装载量小，______等缺点。我们可以采用增宽船体等方法使其保持稳定。", "answer": "不稳定"}, {"id": 99, "unit": "第二单元 船的研究", "lesson": "第 1 课 船的历史", "question": "独木舟存在装载量小，不稳定等缺点。我们可以采用______等方法使其保持稳定。", "answer": "增宽船体"}, {"id": 100, "unit": "第二单元 船的研究", "lesson": "第 1 课 船的历史", "question": "船在水中行驶时，会受到______。船首采用流线型（尖形），可以减小船在行驶中的阻力。", "answer": "水的阻力"}, {"id": 101, "unit": "第二单元 船的研究", "lesson": "第 1 课 船的历史", "question": "船在水中行驶时，会受到水的阻力。船首采用______，可以减小船在行驶中的阻力。", "answer": "流线型（尖形）"}, {"id": 102, "unit": "第二单元 船的研究", "lesson": "第 1 课 船的历史", "question": "船在水中行驶时，会受到水的阻力。船首采用流线型（尖形），可以______船在行驶中的阻力。", "answer": "减小"}, {"id": 103, "unit": "第二单元 船的研究", "lesson": "第 1 课 船的历史", "question": "随着船的不断发展，______ 力】、功能方面都发生了变化", "answer": "船的材料【木制-钢铁】、构造、载重量【小-大】、安全系数、动力【人工-风力-蒸汽-内燃机-电"}, {"id": 104, "unit": "第二单元 船的研究", "lesson": "第 1 课 船的历史", "question": "随着船的不断发展，船的材料【木制-钢铁】、构造、载重量【小-大】、安全系数、动力【人工-风力-蒸汽-内燃机-电 ______方面都发生了变化", "answer": "力】、功能"}, {"id": 105, "unit": "第二单元 船的研究", "lesson": "第 2 课 用浮的材料造船", "question": "用螺母测试船的载重量，注意______螺母。为了防止侧翻，应将螺母均匀地摆放。", "answer": "不能让水浸湿"}, {"id": 106, "unit": "第二单元 船的研究", "lesson": "第 2 课 用浮的材料造船", "question": "用螺母测试船的载重量，注意不能让水浸湿螺母。为了防止侧翻，应将螺母______地摆放。", "answer": "均匀"}, {"id": 107, "unit": "第二单元 船的研究", "lesson": "第 2 课 用浮的材料造船", "question": "竹筏通过______，增加底面积，比独木舟更稳定、载重量更大。", "answer": "加大船体"}, {"id": 108, "unit": "第二单元 船的研究", "lesson": "第 2 课 用浮的材料造船", "question": "竹筏通过加大船体，______，比独木舟更稳定、载重量更大。", "answer": "增加底面积"}, {"id": 109, "unit": "第二单元 船的研究", "lesson": "第 2 课 用浮的材料造船", "question": "竹筏的不足之处：______。", "answer": "容易浸水、不牢固、载重量有限"}, {"id": 110, "unit": "第二单元 船的研究", "lesson": "第 2 课 用浮的材料造船", "question": "改进方法：用______、优化船体的尺度和线型，把船的体积做得更大、给船安装“橹”或“帆”。", "answer": "防水材料造船"}, {"id": 111, "unit": "第二单元 船的研究", "lesson": "第 2 课 用浮的材料造船", "question": "改进方法：用防水材料造船、优化船体的尺度和线型，把船的______、给船安装“橹”或“帆”。", "answer": "体积做得更大"}, {"id": 112, "unit": "第二单元 船的研究", "lesson": "第 2 课 用浮的材料造船", "question": "改进方法：用防水材料造船、优化船体的尺度和线型，把船的体积做得更大、给船______。", "answer": "安装“橹”或“帆”"}, {"id": 113, "unit": "第二单元 船的研究", "lesson": "第 2 课 用浮的材料造船", "question": "摇橹木船和明代宝船______的问题，而且出现了“摇橹”“风帆”等动力系统。", "answer": "解决了容易浸水"}, {"id": 114, "unit": "第二单元 船的研究", "lesson": "第 2 课 用浮的材料造船", "question": "摇橹木船和明代宝船解决了容易浸水的问题，而且出现了______等动力系统。", "answer": "“摇橹”“风帆”"}, {"id": 115, "unit": "第二单元 船的研究", "lesson": "第 2 课 用浮的材料造船", "question": "浮的材料，比如______可以制作船。", "answer": "竹子、木头"}, {"id": 116, "unit": "第二单元 船的研究", "lesson": "第 3 课 用沉的材料造船", "question": "有的材料在水中是浮的，有的材料在水中是沉的。沉的材料，比如______可以制作船。", "answer": "橡皮、铝箔纸、钢铁"}, {"id": 117, "unit": "第二单元 船的研究", "lesson": "第 3 课 用沉的材料造船", "question": "物体在水中会受到______托起的力，像这样的力是浮力。", "answer": "竖直向上"}, {"id": 118, "unit": "第二单元 船的研究", "lesson": "第 3 课 用沉的材料造船", "question": "物体在水中会受到竖直向上托起的力，像这样的力是______。", "answer": "浮力"}, {"id": 119, "unit": "第二单元 船的研究", "lesson": "第 3 课 用沉的材料造船", "question": "相同质量的橡皮泥和铝箔纸，把它们做成船型后，浸入水中的______，在水中受到的浮力增大，越容易浮在水面。", "answer": "体积增大"}, {"id": 120, "unit": "第二单元 船的研究", "lesson": "第 3 课 用沉的材料造船", "question": "相同质量的橡皮泥和铝箔纸，把它们做成船型后，浸入水中的体积增大，在水中受到的______，越容易浮在水面。", "answer": "浮力增大"}, {"id": 121, "unit": "第二单元 船的研究", "lesson": "第 3 课 用沉的材料造船", "question": "渡船的底部特别宽阔，可以提高船的______。双体船是一种带有两个平行船体的船，这样做的优点是提高船的稳定性。", "answer": "稳定性"}, {"id": 122, "unit": "第二单元 船的研究", "lesson": "第 3 课 用沉的材料造船", "question": "渡船的底部特别宽阔，可以______。双体船是一种带有两个平行船体的船，这样做的优点是提高船的稳定性。", "answer": "提高船的稳定性"}, {"id": 123, "unit": "第二单元 船的研究", "lesson": "第 3 课 用沉的材料造船", "question": "工程设计的过程：______。", "answer": "问题-设计-制作-测试-完善"}, {"id": 124, "unit": "第二单元 船的研究", "lesson": "第 4 课 增加船的载重量", "question": "船的载重量与______有关， 相同重量和相同大小的材料， 制作的船型体积越大， 船的载重量就越大。", "answer": "船只的体积"}, {"id": 125, "unit": "第二单元 船的研究", "lesson": "第 4 课 增加船的载重量", "question": "船的载重量与船只的体积有关， ______和相同大小的材料， 制作的船型体积越大， 船的载重量就越大。", "answer": "相同重量"}, {"id": 126, "unit": "第二单元 船的研究", "lesson": "第 4 课 增加船的载重量", "question": "船的载重量与船只的体积有关， 相同重量和______的材料， 制作的船型体积越大， 船的载重量就越大。", "answer": "相同大小"}, {"id": 127, "unit": "第二单元 船的研究", "lesson": "第 4 课 增加船的载重量", "question": "船的载重量与船只的体积有关， 相同重量和相同大小的材料， 制作的船型体积______， 船的载重量就越大。", "answer": "越大"}, {"id": 128, "unit": "第二单元 船的研究", "lesson": "第 4 课 增加船的载重量", "question": "船的载重量与船只的体积有关， 相同重量和相同大小的材料， 制作的船型体积______， 船的载重量就越大。", "answer": "越大"}, {"id": 129, "unit": "第二单元 船的研究", "lesson": "第 4 课 增加船的载重量", "question": "船舱中______有利于增加船的载重量。弹珠滚动容易导致船侧翻， 为了均匀放置货物，可以船舱分格来增加船的稳定性。", "answer": "合理放置重物"}, {"id": 130, "unit": "第二单元 船的研究", "lesson": "第 4 课 增加船的载重量", "question": "船舱中合理放置重物有利于增加船的载重量。弹珠滚动容易导致船侧翻， 为了均匀放置货物，可以______来增加船的稳定性。", "answer": "船舱分格"}, {"id": 131, "unit": "第二单元 船的研究", "lesson": "第 5 课 给船装上动力", "question": "船可以通过______来控制方向。", "answer": "船舵"}, {"id": 132, "unit": "第二单元 船的研究", "lesson": "第 5 课 给船装上动力", "question": "船可以通过船舵来______。", "answer": "控制方向"}, {"id": 133, "unit": "第二单元 船的研究", "lesson": "第 5 课 给船装上动力", "question": "可以利用______等作为船的动力。", "answer": "风力、蒸汽动力、机械动力"}, {"id": 134, "unit": "第二单元 船的研究", "lesson": "第 5 课 给船装上动力", "question": "船身设计成为______可以减少水的阻力。", "answer": "流线型"}, {"id": 135, "unit": "第二单元 船的研究", "lesson": "第 5 课 给船装上动力", "question": "潜艇常用的动力有______和核动力。", "answer": "柴油动力"}, {"id": 136, "unit": "第二单元 船的研究", "lesson": "第 5 课 给船装上动力", "question": "潜艇常用的动力有柴油动力和______。", "answer": "核动力"}, {"id": 137, "unit": "第二单元 船的研究", "lesson": "第 5 课 给船装上动力", "question": "可以通过______改变潜水艇的重力：进水，重力增加，潜水艇下沉；排水，重力减小，潜水艇上浮。", "answer": "进水、排水"}, {"id": 138, "unit": "第二单元 船的研究", "lesson": "第 5 课 给船装上动力", "question": "可以通过进水、排水改变潜水艇的______：进水，重力增加，潜水艇下沉；排水，重力减小，潜水艇上浮。", "answer": "重力"}, {"id": 139, "unit": "第二单元 船的研究", "lesson": "第 5 课 给船装上动力", "question": "可以通过______、排水改变潜水艇的重力：进水，重力增加，潜水艇下沉；排水，重力减小，潜水艇上浮。", "answer": "进水"}, {"id": 140, "unit": "第二单元 船的研究", "lesson": "第 5 课 给船装上动力", "question": "可以通过进水、排水改变潜水艇的重力：进水，重力增加，潜水艇______；排水，重力减小，潜水艇上浮。", "answer": "下沉"}, {"id": 141, "unit": "第二单元 船的研究", "lesson": "第 5 课 给船装上动力", "question": "可以通过进水、______改变潜水艇的重力：进水，重力增加，潜水艇下沉；排水，重力减小，潜水艇上浮。", "answer": "排水"}, {"id": 142, "unit": "第二单元 船的研究", "lesson": "第 5 课 给船装上动力", "question": "可以通过进水、排水改变潜水艇的重力：进水，重力增加，潜水艇下沉；排水，重力减小，潜水艇______。", "answer": "上浮"}, {"id": 143, "unit": "第二单元 船的研究", "lesson": "第 5 课 给船装上动力", "question": "设计我们的小船时需要考虑的因素：______。", "answer": "船的大小、船的形状、船体材料、载重量、稳固性、动力系统、材料成本"}, {"id": 144, "unit": "第二单元 船的研究", "lesson": "第 5 课 给船装上动力", "question": "制作时要按照______进行，工程设计一般会经历“问题－设计－制作－测试－评估改进”等过程。", "answer": "设计图"}, {"id": 145, "unit": "第二单元 船的研究", "lesson": "第 5 课 给船装上动力", "question": "制作时要按照设计图进行，工程设计一般会经历“______”等过程。", "answer": "问题－设计－制作－测试－评估改进"}, {"id": 146, "unit": "第二单元 船的研究", "lesson": "第 5 课 给船装上动力", "question": "在设计小船的活动中，要建立______和成本的意识。当造船费用一样时，比哪组性能更好；当船性能一样时，比哪组的 造船价格低。", "answer": "质量"}, {"id": 147, "unit": "第二单元 船的研究", "lesson": "第 5 课 给船装上动力", "question": "在设计小船的活动中，要建立质量和______的意识。当造船费用一样时，比哪组性能更好；当船性能一样时，比哪组的 造船价格低。", "answer": "成本"}, {"id": 148, "unit": "第二单元 船的研究", "lesson": "第 5 课 给船装上动力", "question": "在设计小船的活动中，要建立质量和成本的意识。当造船费用一样时，比哪组______更好；当船性能一样时，比哪组的 造船价格低。", "answer": "性能"}, {"id": 149, "unit": "第二单元 船的研究", "lesson": "第 5 课 给船装上动力", "question": "在设计小船的活动中，要建立质量和成本的意识。当造船费用一样时，比哪组性能更好；当船性能一样时，比哪组的 造船______。", "answer": "价格低"}, {"id": 150, "unit": "第二单元 船的研究", "lesson": "第 5 课 给船装上动力", "question": "设计图要标注______和结构，要考虑设计的合理性和可靠性以及成本。", "answer": "材料"}, {"id": 151, "unit": "第二单元 船的研究", "lesson": "第 5 课 给船装上动力", "question": "设计图要标注材料和______，要考虑设计的合理性和可靠性以及成本。", "answer": "结构"}, {"id": 152, "unit": "第二单元 船的研究", "lesson": "第 5 课 给船装上动力", "question": "设计图要标注材料和结构，要考虑设计的______和可靠性以及成本。", "answer": "合理性"}, {"id": 153, "unit": "第二单元 船的研究", "lesson": "第 5 课 给船装上动力", "question": "设计图要标注材料和结构，要考虑设计的合理性和______以及成本。", "answer": "可靠性"}, {"id": 154, "unit": "第二单元 船的研究", "lesson": "第 5 课 给船装上动力", "question": "设计图要标注材料和结构，要考虑设计的合理性和可靠性以及______。", "answer": "成本"}, {"id": 155, "unit": "第三单元 环境与我们", "lesson": "第 1 课 地球－宇宙的奇迹", "question": "有______、有大气层", "answer": "液态的水"}, {"id": 156, "unit": "第三单元 环境与我们", "lesson": "第 1 课 地球－宇宙的奇迹", "question": "有液态的水、有______", "answer": "大气层"}, {"id": 157, "unit": "第三单元 环境与我们", "lesson": "第 1 课 地球－宇宙的奇迹", "question": "大气中______于二氧化碳等气体", "answer": "氧气的含量高"}, {"id": 158, "unit": "第三单元 环境与我们", "lesson": "第 1 课 地球－宇宙的奇迹", "question": "有完整的______可抵御紫外线的伤害", "answer": "臭氧层"}, {"id": 159, "unit": "第三单元 环境与我们", "lesson": "第 1 课 地球－宇宙的奇迹", "question": "有完整的臭氧层可______的伤害", "answer": "抵御紫外线"}, {"id": 160, "unit": "第三单元 环境与我们", "lesson": "第 1 课 地球－宇宙的奇迹", "question": "与各______，引力适宜", "answer": "星球距离适中"}, {"id": 161, "unit": "第三单元 环境与我们", "lesson": "第 1 课 地球－宇宙的奇迹", "question": "与各星球距离适中，______", "answer": "引力适宜"}, {"id": 162, "unit": "第三单元 环境与我们", "lesson": "第 1 课 地球－宇宙的奇迹", "question": "地表温度______ ，温度适宜", "answer": "昼夜温差不大"}, {"id": 163, "unit": "第三单元 环境与我们", "lesson": "第 1 课 地球－宇宙的奇迹", "question": "有______，使雨水能够积蓄在地球表面", "answer": "岩石和土壤"}, {"id": 164, "unit": "第三单元 环境与我们", "lesson": "第 1 课 地球－宇宙的奇迹", "question": "有岩石和土壤，使______在地球表面", "answer": "雨水能够积蓄"}, {"id": 165, "unit": "第三单元 环境与我们", "lesson": "第 1 课 地球－宇宙的奇迹", "question": "火星大气基本不含氧气，气候会短期内______，不能提供生命必要条件。火星大气中也基本没有氧气。", "answer": "反复地剧烈变动"}, {"id": 166, "unit": "第三单元 环境与我们", "lesson": "第 1 课 地球－宇宙的奇迹", "question": "八大行星中唯有地球的大气中有______，地球距离太阳不远不近，保证地球上有液态水。", "answer": "大量的氧气"}, {"id": 167, "unit": "第三单元 环境与我们", "lesson": "第 1 课 地球－宇宙的奇迹", "question": "八大行星中唯有地球的大气中有大量的氧气，地球距离太阳______，保证地球上有液态水。", "answer": "不远不近"}, {"id": 168, "unit": "第三单元 环境与我们", "lesson": "第 1 课 地球－宇宙的奇迹", "question": "八大行星中唯有地球的大气中有大量的氧气，地球距离太阳不远不近，保证地球上有______。", "answer": "液态水"}, {"id": 169, "unit": "第三单元 环境与我们", "lesson": "第 1 课 地球－宇宙的奇迹", "question": "海洋为人类生存提供了______等多种资源。", "answer": "生物、矿产、能源、空间"}, {"id": 170, "unit": "第三单元 环境与我们", "lesson": "第 1 课 地球－宇宙的奇迹", "question": "海洋生物对维持海洋生态系统起着重要作用，同时也是大气中______之一。 5.设计空间站：考虑温度、呼吸、饮食、避免过度辐射、重力等条件", "answer": "二氧化碳的主要吸收者"}, {"id": 171, "unit": "第三单元 环境与我们", "lesson": "第 1 课 地球－宇宙的奇迹", "question": "海洋生物对维持海洋生态系统起着重要作用，同时也是大气中二氧化碳的主要吸收者之一。 5.设计空间站：考虑______等条件", "answer": "温度、呼吸、饮食、避免过度辐射、重力"}, {"id": 172, "unit": "第三单元 环境与我们", "lesson": "第 2 课 我们面临的环境问题", "question": "有些环境问题是由______引发的。地球面临着多种环境问题，包括：大气污染、水资源短缺、水污染、固体废弃物 污染、全球变暖、光污染、噪声污染等。", "answer": "人类活动"}, {"id": 173, "unit": "第三单元 环境与我们", "lesson": "第 2 课 我们面临的环境问题", "question": "有些环境问题是由人类活动引发的。地球面临着多种环境问题，包括：______ 污染、全球变暖、光污染、噪声污染等。", "answer": "大气污染、水资源短缺、水污染、固体废弃物"}, {"id": 174, "unit": "第三单元 环境与我们", "lesson": "第 2 课 我们面临的环境问题", "question": "有些环境问题是由人类活动引发的。地球面临着多种环境问题，包括：大气污染、水资源短缺、水污染、固体废弃物 ______等。", "answer": "污染、全球变暖、光污染、噪声污染"}, {"id": 175, "unit": "第三单元 环境与我们", "lesson": "第 2 课 我们面临的环境问题", "question": "______和赤潮会促使藻类大量繁殖，遮挡阳光，导致水下植物无法进行光合作用，氧气缺乏，从而导致大量水 生生物死亡。", "answer": "水体富营养化"}, {"id": 176, "unit": "第三单元 环境与我们", "lesson": "第 2 课 我们面临的环境问题", "question": "水体富营养化和______会促使藻类大量繁殖，遮挡阳光，导致水下植物无法进行光合作用，氧气缺乏，从而导致大量水 生生物死亡。", "answer": "赤潮"}, {"id": 177, "unit": "第三单元 环境与我们", "lesson": "第 2 课 我们面临的环境问题", "question": "水体富营养化和赤潮会促使______，遮挡阳光，导致水下植物无法进行光合作用，氧气缺乏，从而导致大量水 生生物死亡。", "answer": "藻类大量繁殖"}, {"id": 178, "unit": "第三单元 环境与我们", "lesson": "第 2 课 我们面临的环境问题", "question": "水体富营养化和赤潮会促使藻类大量繁殖，______，导致水下植物无法进行光合作用，氧气缺乏，从而导致大量水 生生物死亡。", "answer": "遮挡阳光"}, {"id": 179, "unit": "第三单元 环境与我们", "lesson": "第 2 课 我们面临的环境问题", "question": "水体富营养化和赤潮会促使藻类大量繁殖，遮挡阳光，导致水下植物无法进行光合作用，______，从而导致大量水 生生物死亡。", "answer": "氧气缺乏"}, {"id": 180, "unit": "第三单元 环境与我们", "lesson": "第 2 课 我们面临的环境问题", "question": "水体富营养化和赤潮会促使藻类大量繁殖，遮挡阳光，导致水下植物无法进行光合作用，氧气缺乏，从而导致大量水 ______。", "answer": "生生物死亡"}, {"id": 181, "unit": "第三单元 环境与我们", "lesson": "第 3 课 珍惜水资源", "question": "地球上可供利用的______，其中有 69.7%是人类难以利用的山区、两极地区的冰与永久积雪", "answer": "淡水资源总量少且短缺"}, {"id": 182, "unit": "第三单元 环境与我们", "lesson": "第 3 课 珍惜水资源", "question": "我国______，且分布很不均匀", "answer": "人均水资源占有量更少"}, {"id": 183, "unit": "第三单元 环境与我们", "lesson": "第 3 课 珍惜水资源", "question": "我国人均水资源占有量更少，且______", "answer": "分布很不均匀"}, {"id": 184, "unit": "第三单元 环境与我们", "lesson": "第 3 课 珍惜水资源", "question": "______、水资源的浪费2、主要节水措施：", "answer": "水污染严重"}, {"id": 185, "unit": "第三单元 环境与我们", "lesson": "第 3 课 珍惜水资源", "question": "水污染严重、______2、主要节水措施：", "answer": "水资源的浪费"}, {"id": 186, "unit": "第三单元 环境与我们", "lesson": "第 4 课 解决垃圾问题", "question": "1.垃圾来源 ：______", "answer": "城市生活垃圾、工业垃圾、农业垃圾"}, {"id": 187, "unit": "第三单元 环境与我们", "lesson": "第 4 课 解决垃圾问题", "question": "2、生活垃圾四大类：【垃圾分类有利于______】", "answer": "资源回收和后续处理"}, {"id": 188, "unit": "第三单元 环境与我们", "lesson": "第 4 课 解决垃圾问题", "question": "______：纸制品、金属制品、塑料制品、玻璃制品", "answer": "可回收垃圾"}, {"id": 189, "unit": "第三单元 环境与我们", "lesson": "第 4 课 解决垃圾问题", "question": "______：剩菜剩饭、骨头、树叶", "answer": "厨余垃圾"}, {"id": 190, "unit": "第三单元 环境与我们", "lesson": "第 4 课 解决垃圾问题", "question": "______：过期药品、废电池、水银温度计、废灯管", "answer": "有害垃圾"}, {"id": 191, "unit": "第三单元 环境与我们", "lesson": "第 4 课 解决垃圾问题", "question": "3、解决垃圾问题的方法：______（避免产生额外垃圾）、资源化（将回收的垃圾再利用）、无害化", "answer": "减量化"}, {"id": 192, "unit": "第三单元 环境与我们", "lesson": "第 4 课 解决垃圾问题", "question": "3、解决垃圾问题的方法：减量化（避免产生额外垃圾）、______（将回收的垃圾再利用）、无害化", "answer": "资源化"}, {"id": 193, "unit": "第三单元 环境与我们", "lesson": "第 4 课 解决垃圾问题", "question": "3、解决垃圾问题的方法：减量化（避免产生额外垃圾）、资源化（将回收的垃圾再利用）、______", "answer": "无害化"}, {"id": 194, "unit": "第三单元 环境与我们", "lesson": "第 4 课 解决垃圾问题", "question": "4、无害化处理：______（利用微生物，将生活垃圾中有机质分解、腐熟转化为养分和腐殖质）。", "answer": "填埋法、焚烧法、堆肥法"}, {"id": 195, "unit": "第三单元 环境与我们", "lesson": "第 4 课 解决垃圾问题", "question": "5、生活中减少垃圾的方法：______", "answer": "减少食物浪费、少买不必要的衣服、用布袋取代塑料袋、减少一次性餐具的使用。"}, {"id": 196, "unit": "第三单元 环境与我们", "lesson": "第 4 课 解决垃圾问题", "question": "我国的电能主要有______", "answer": "水电、太阳能发电、风电、核电和火电（煤燃烧发出的电）。目前火电所占的比例最大。"}, {"id": 197, "unit": "第三单元 环境与我们", "lesson": "第 4 课 解决垃圾问题", "question": "______：人类过度消耗化石能源增加的二氧化碳，使地表附近的大气温度上升，被称作温室效应。", "answer": "温室效应"}, {"id": 198, "unit": "第三单元 环境与我们", "lesson": "第 4 课 解决垃圾问题", "question": "温室效应：人类过度消耗______增加的二氧化碳，使地表附近的大气温度上升，被称作温室效应。", "answer": "化石能源"}, {"id": 199, "unit": "第三单元 环境与我们", "lesson": "第 4 课 解决垃圾问题", "question": "温室效应：人类过度消耗化石能源增加的______，使地表附近的大气温度上升，被称作温室效应。", "answer": "二氧化碳"}, {"id": 200, "unit": "第三单元 环境与我们", "lesson": "第 4 课 解决垃圾问题", "question": "温室效应：人类过度消耗化石能源增加的二氧化碳，使地表附近的大气______，被称作温室效应。", "answer": "温度上升"}, {"id": 201, "unit": "第三单元 环境与我们", "lesson": "第 4 课 解决垃圾问题", "question": "能源问题是人类对______和现有能源资源日趋减少的矛盾，还包括化石能源在使用过程中对环境的污染问题。", "answer": "能源需求的增长"}, {"id": 202, "unit": "第三单元 环境与我们", "lesson": "第 4 课 解决垃圾问题", "question": "能源问题是人类对能源需求的增长和______的矛盾，还包括化石能源在使用过程中对环境的污染问题。", "answer": "现有能源资源日趋减少"}, {"id": 203, "unit": "第三单元 环境与我们", "lesson": "第 4 课 解决垃圾问题", "question": "能源问题是人类对能源需求的增长和现有能源资源日趋减少的矛盾，还包括化石能源在使用过程中______。", "answer": "对环境的污染问题"}, {"id": 204, "unit": "第三单元 环境与我们", "lesson": "第 4 课 解决垃圾问题", "question": "解决能源问题的方法：______。", "answer": "节约用电、节约燃料、开发新能源、提高能源转换率"}, {"id": 205, "unit": "第三单元 环境与我们", "lesson": "第 4 课 解决垃圾问题", "question": "可再生能源：______等非化石能源形式", "answer": "太阳能、风能、地热能、海洋能"}, {"id": 206, "unit": "第四单元 热", "lesson": "第 1 课 温度与水的变化", "question": "不可再生能源：______", "answer": "煤、石油、天然气"}, {"id": 207, "unit": "第四单元 热", "lesson": "第 1 课 温度与水的变化", "question": "温室效应的模拟实验中，密封袋______。", "answer": "模拟温室气体"}, {"id": 208, "unit": "第四单元 热", "lesson": "第 1 课 温度与水的变化", "question": "物质通常以______的形态存在，物态变化取决于温度等。", "answer": "固态、液态、气态"}, {"id": 209, "unit": "第四单元 热", "lesson": "第 1 课 温度与水的变化", "question": "物质通常以固态、液态、气态的形态存在，物态变化取决于______等。", "answer": "温度"}, {"id": 210, "unit": "第四单元 热", "lesson": "第 1 课 温度与水的变化", "question": "热是能量的一种表现形式，______导致了物体温度变化。水沸腾需要吸热，水结冰需要释放热量。", "answer": "热量变化"}, {"id": 211, "unit": "第四单元 热", "lesson": "第 1 课 温度与水的变化", "question": "热是能量的一种表现形式，热量变化导致了物体______。水沸腾需要吸热，水结冰需要释放热量。", "answer": "温度变化"}, {"id": 212, "unit": "第四单元 热", "lesson": "第 1 课 温度与水的变化", "question": "热是能量的一种表现形式，热量变化导致了物体温度变化。______需要吸热，水结冰需要释放热量。", "answer": "水沸腾"}, {"id": 213, "unit": "第四单元 热", "lesson": "第 1 课 温度与水的变化", "question": "热是能量的一种表现形式，热量变化导致了物体温度变化。水沸腾需要______，水结冰需要释放热量。", "answer": "吸热"}, {"id": 214, "unit": "第四单元 热", "lesson": "第 1 课 温度与水的变化", "question": "热是能量的一种表现形式，热量变化导致了物体温度变化。水沸腾需要吸热，水______需要释放热量。", "answer": "结冰"}, {"id": 215, "unit": "第四单元 热", "lesson": "第 1 课 温度与水的变化", "question": "热是能量的一种表现形式，热量变化导致了物体温度变化。水沸腾需要吸热，水结冰需要______。", "answer": "释放热量"}, {"id": 216, "unit": "第四单元 热", "lesson": "第 6 课 让资源再生", "question": "地球上的有些资源被消耗就______，如煤、石油、天然气等。有些资源是可再生的，如塑料、玻璃、金属、织物和 纸。纸的再生利用有利于节约资源，节约能源，减少污染。", "answer": "不可再生"}, {"id": 217, "unit": "第四单元 热", "lesson": "第 6 课 让资源再生", "question": "地球上的有些资源被消耗就不可再生，如煤、石油、天然气等。有些资源是______，如塑料、玻璃、金属、织物和 纸。纸的再生利用有利于节约资源，节约能源，减少污染。", "answer": "可再生的"}, {"id": 218, "unit": "第四单元 热", "lesson": "第 6 课 让资源再生", "question": "地球上的有些资源被消耗就不可再生，如煤、石油、天然气等。有些资源是可再生的，如______、玻璃、金属、织物和 纸。纸的再生利用有利于节约资源，节约能源，减少污染。", "answer": "塑料"}, {"id": 219, "unit": "第四单元 热", "lesson": "第 6 课 让资源再生", "question": "地球上的有些资源被消耗就不可再生，如煤、石油、天然气等。有些资源是可再生的，如塑料、______、金属、织物和 纸。纸的再生利用有利于节约资源，节约能源，减少污染。", "answer": "玻璃"}, {"id": 220, "unit": "第四单元 热", "lesson": "第 6 课 让资源再生", "question": "地球上的有些资源被消耗就不可再生，如煤、石油、天然气等。有些资源是可再生的，如塑料、玻璃、______、织物和 纸。纸的再生利用有利于节约资源，节约能源，减少污染。", "answer": "金属"}, {"id": 221, "unit": "第四单元 热", "lesson": "第 6 课 让资源再生", "question": "地球上的有些资源被消耗就不可再生，如煤、石油、天然气等。有些资源是可再生的，如塑料、玻璃、金属、______和 纸。纸的再生利用有利于节约资源，节约能源，减少污染。", "answer": "织物"}, {"id": 222, "unit": "第四单元 热", "lesson": "第 6 课 让资源再生", "question": "地球上的有些资源被消耗就不可再生，如煤、石油、天然气等。有些资源是可再生的，如塑料、玻璃、金属、织物和 纸。纸的再生利用有利于______。", "answer": "节约资源，节约能源，减少污染"}, {"id": 223, "unit": "第四单元 热", "lesson": "第 6 课 让资源再生", "question": "一张再生纸的制作过程：______", "answer": "撕碎→搅拌→平铺→挤压吸水→通风晾干"}, {"id": 224, "unit": "第四单元 热", "lesson": "第 6 课 让资源再生", "question": "______：指人们生产和消费过程中产生的废物作为资源加以回收利用，使一些废弃物变废为宝。", "answer": "资源再生"}, {"id": 225, "unit": "第四单元 热", "lesson": "第 6 课 让资源再生", "question": "东汉______改进了造纸术。", "answer": "蔡伦"}, {"id": 226, "unit": "第四单元 热", "lesson": "第 7 课 分析一个实际的环境问题", "question": "环境问题是很复杂的，依据人们居住的地域和所从事工作的不同，在看待某个污染问题时，人们会持有______。", "answer": "不同的态度"}, {"id": 227, "unit": "第四单元 热", "lesson": "第 7 课 分析一个实际的环境问题", "question": "为了达成可行的解决办法，需要学会______。既要从“自身角色”角度提出方案，也要换位思考。人们的行为可 能破坏环境，也能够通过努力改善环境。", "answer": "协调和放弃"}, {"id": 228, "unit": "第四单元 热", "lesson": "第 7 课 分析一个实际的环境问题", "question": "为了达成可行的解决办法，需要学会协调和放弃。既要从“自身角色”角度提出方案，也要______。人们的行为可 能破坏环境，也能够通过努力改善环境。", "answer": "换位思考"}, {"id": 229, "unit": "第四单元 热", "lesson": "第 7 课 分析一个实际的环境问题", "question": "为了达成可行的解决办法，需要学会协调和放弃。既要从“自身角色”角度提出方案，也要换位思考。人们的行为可 能______，也能够通过努力改善环境。", "answer": "破坏环境"}, {"id": 230, "unit": "第四单元 热", "lesson": "第 7 课 分析一个实际的环境问题", "question": "为了达成可行的解决办法，需要学会协调和放弃。既要从“自身角色”角度提出方案，也要换位思考。人们的行为可 能破坏环境，也能够通过努力______。", "answer": "改善环境"}, {"id": 231, "unit": "第四单元 热", "lesson": "第 7 课 分析一个实际的环境问题", "question": "加热过程，水吸热温度上升直至温度______ 100℃沸腾，继续加热，温度保持在 100℃。停止加热，水温度会下降，因为无热量供给。", "answer": "达到"}, {"id": 232, "unit": "第四单元 热", "lesson": "第 7 课 分析一个实际的环境问题", "question": "加热过程，水吸热温度上升直至温度达到 ______，继续加热，温度保持在 100℃。停止加热，水温度会下降，因为无热量供给。", "answer": "100℃沸腾"}, {"id": 233, "unit": "第四单元 热", "lesson": "第 7 课 分析一个实际的环境问题", "question": "加热过程，水吸热温度上升直至温度达到 100℃沸腾，继续加热，温度______ 100℃。停止加热，水温度会下降，因为无热量供给。", "answer": "保持在"}, {"id": 234, "unit": "第四单元 热", "lesson": "第 7 课 分析一个实际的环境问题", "question": "加热过程，水吸热温度上升直至温度达到 ______沸腾，继续加热，温度保持在 100℃。停止加热，水温度会下降，因为无热量供给。", "answer": "100℃"}, {"id": 235, "unit": "第四单元 热", "lesson": "第 7 课 分析一个实际的环境问题", "question": "加热过程，水吸热温度上升直至温度达到 100℃沸腾，继续加热，温度保持在 100℃。停止加热，水温度会下降，因为______。", "answer": "无热量供给"}, {"id": 236, "unit": "第四单元 热", "lesson": "第 7 课 分析一个实际的环境问题", "question": "水沸腾时的温度，叫水的______，标准大气压下，水的沸点是 100℃。", "answer": "沸点"}, {"id": 237, "unit": "第四单元 热", "lesson": "第 7 课 分析一个实际的环境问题", "question": "水沸腾时的温度，叫水的沸点，______下，水的沸点是 100℃。", "answer": "标准大气压"}, {"id": 238, "unit": "第四单元 热", "lesson": "第 7 课 分析一个实际的环境问题", "question": "水沸腾时的温度，叫水的沸点，标准大气压下，水的沸点是 ______。", "answer": "100℃"}, {"id": 239, "unit": "第四单元 热", "lesson": "第 7 课 分析一个实际的环境问题", "question": "沸腾时______。", "answer": "剧烈冒气泡、有水蒸气产生"}, {"id": 240, "unit": "第四单元 热", "lesson": "第 7 课 分析一个实际的环境问题", "question": "水结冰时，温度不断下降直至达到 ______，处于冰水混合状态。完全结冰后，温度下降到 0℃以下。", "answer": "0℃时开始结冰"}, {"id": 241, "unit": "第四单元 热", "lesson": "第 7 课 分析一个实际的环境问题", "question": "水结冰时，温度不断下降直至达到 0℃时开始结冰，处于______。完全结冰后，温度下降到 0℃以下。", "answer": "冰水混合状态"}, {"id": 242, "unit": "第四单元 热", "lesson": "第 7 课 分析一个实际的环境问题", "question": "水结冰时，温度不断下降直至达到 0℃时开始结冰，处于冰水混合状态。______后，温度下降到 0℃以下。", "answer": "完全结冰"}, {"id": 243, "unit": "第四单元 热", "lesson": "第 7 课 分析一个实际的环境问题", "question": "水结冰时，温度不断下降直至达到 0℃时开始结冰，处于冰水混合状态。完全结冰后，______到 0℃以下。", "answer": "温度下降"}, {"id": 244, "unit": "第四单元 热", "lesson": "第 7 课 分析一个实际的环境问题", "question": "水结冰时的温度，叫水的凝固点，______下，水的凝固点是 0℃。水从液态变成固态，称为凝固。", "answer": "标准大气压"}, {"id": 245, "unit": "第四单元 热", "lesson": "第 7 课 分析一个实际的环境问题", "question": "水结冰时的温度，叫水的凝固点，标准大气压下，水的______ 0℃。水从液态变成固态，称为凝固。", "answer": "凝固点是"}, {"id": 246, "unit": "第四单元 热", "lesson": "第 7 课 分析一个实际的环境问题", "question": "水结冰时的温度，叫水的凝固点，标准大气压下，水的凝固点是 ______。水从液态变成固态，称为凝固。", "answer": "0℃"}, {"id": 247, "unit": "第四单元 热", "lesson": "第 7 课 分析一个实际的环境问题", "question": "水结冰时的温度，叫水的凝固点，标准大气压下，水的凝固点是 0℃。水从______，称为凝固。", "answer": "液态变成固态"}, {"id": 248, "unit": "第四单元 热", "lesson": "第 7 课 分析一个实际的环境问题", "question": "水结冰时的温度，叫水的______点，标准大气压下，水的凝固点是 0℃。水从液态变成固态，称为凝固。", "answer": "凝固"}, {"id": 249, "unit": "第四单元 热", "lesson": "第 2 课 水的蒸发和凝结", "question": "水的蒸发过程______，水温越高，水蒸发越快。", "answer": "吸收热量"}, {"id": 250, "unit": "第四单元 热", "lesson": "第 2 课 水的蒸发和凝结", "question": "水的蒸发过程吸收热量，______，水蒸发越快。", "answer": "水温越高"}, {"id": 251, "unit": "第四单元 热", "lesson": "第 2 课 水的蒸发和凝结", "question": "水蒸气凝结成水的过程______。温度越低，凝结越快。", "answer": "放出热量"}, {"id": 252, "unit": "第四单元 热", "lesson": "第 2 课 水的蒸发和凝结", "question": "凝结现象：洗澡后镜子出现水雾、做饭时锅盖上的水珠、饮料从冰箱拿出后表面出现水珠等。 4.水蒸气肉眼看不见，所以水沸腾时看到的“白气 ”不是水蒸气，而是______。", "answer": "水蒸气凝结的小水滴"}, {"id": 253, "unit": "第四单元 热", "lesson": "第 2 课 水的蒸发和凝结", "question": "盐可以______，加速降温，烧杯外壁的水珠变多【装有冰的烧杯外壁有水珠是因为空气中的水蒸气遇冷的烧杯", "answer": "加速冰的融化"}, {"id": 254, "unit": "第四单元 热", "lesson": "第 2 课 水的蒸发和凝结", "question": "盐可以加速冰的融化，加速降温，烧杯______变多【装有冰的烧杯外壁有水珠是因为空气中的水蒸气遇冷的烧杯", "answer": "外壁的水珠"}, {"id": 255, "unit": "第四单元 热", "lesson": "第 2 课 水的蒸发和凝结", "question": "盐可以加速冰的融化，加速降温，烧杯外壁的水珠变多【装有冰的烧杯外壁有水珠是因为______的烧杯", "answer": "空气中的水蒸气遇冷"}, {"id": 256, "unit": "第四单元 热", "lesson": "第 2 课 水的蒸发和凝结", "question": "自然界中水的形态多种多样，常见的有______等，他们的形成都与水蒸气的凝结有关。", "answer": "云、雾、雨、露、霜、雪"}, {"id": 257, "unit": "第四单元 热", "lesson": "第 2 课 水的蒸发和凝结", "question": "自然界中水的形态多种多样，常见的有云、雾、雨、露、霜、雪等，他们的形成都与水蒸气的______有关。", "answer": "凝结"}, {"id": 258, "unit": "第四单元 热", "lesson": "第 2 课 水的蒸发和凝结", "question": "云：水蒸气在高空中______或凝华成小冰晶便形成了云。", "answer": "遇冷凝结成小水珠"}, {"id": 259, "unit": "第四单元 热", "lesson": "第 2 课 水的蒸发和凝结", "question": "云：水蒸气在高空中遇冷凝结成小水珠或______便形成了云。", "answer": "凝华成小冰晶"}, {"id": 260, "unit": "第四单元 热", "lesson": "第 2 课 水的蒸发和凝结", "question": "雾：水蒸气______并附着在空气中的浮尘上便形成了雾。", "answer": "遇冷凝结成小水珠"}, {"id": 261, "unit": "第四单元 热", "lesson": "第 2 课 水的蒸发和凝结", "question": "露：水蒸气遇到温度较低的叶子、花草等,______并附着在它们表面,便形成了露。", "answer": "凝结成小水珠"}, {"id": 262, "unit": "第四单元 热", "lesson": "第 2 课 水的蒸发和凝结", "question": "霜：地面附近的水蒸气遇到冷的物体(温度在 0℃以下)，______,便形成了霜。", "answer": "凝华成固态的小冰晶"}, {"id": 263, "unit": "第四单元 热", "lesson": "第 2 课 水的蒸发和凝结", "question": "雪：水蒸气在空中______,小冰晶汇聚到一起形成雪降落下来。", "answer": "遇冷凝华成小冰晶"}, {"id": 264, "unit": "第四单元 热", "lesson": "第 3 课 温度不同的物体相互接触", "question": "刚从冰箱里取出的牛奶，要使它变成热的，我们会把它浸在热水中。热会从热水转移到牛奶。 实验结论：______", "answer": "热通常从温度高的物体传向温度低的物体。"}, {"id": 265, "unit": "第四单元 热", "lesson": "第 3 课 温度不同的物体相互接触", "question": "热水跟冷水接触，最终二者温度相同，然后跟空气进行热量传递，一起______。 实验结论：两个温度不同的物体相互接触，最终温度相同，达到热平衡。", "answer": "下降到室温"}, {"id": 266, "unit": "第四单元 热", "lesson": "第 3 课 温度不同的物体相互接触", "question": "热水跟冷水接触，最终二者______，然后跟空气进行热量传递，一起下降到室温。 实验结论：两个温度不同的物体相互接触，最终温度相同，达到热平衡。", "answer": "温度相同"}, {"id": 267, "unit": "第四单元 热", "lesson": "第 3 课 温度不同的物体相互接触", "question": "热水跟冷水接触，最终二者温度相同，然后跟空气进行热量传递，一起下降到室温。 实验结论：两个温度不同的物体相互接触，最终温度相同，达到______。", "answer": "热平衡"}, {"id": 268, "unit": "第四单元 热", "lesson": "第 3 课 温度不同的物体相互接触", "question": "在实验中，我们测量物体的温度通常使用______，生活中还有更多可以感知温度的方法，比如使用热成像仪、感温纸 带、感温粉末。", "answer": "温度计"}, {"id": 269, "unit": "第四单元 热", "lesson": "第 3 课 温度不同的物体相互接触", "question": "在实验中，我们测量物体的温度通常使用温度计，生活中还有更多可以感知温度的方法，比如使用______ 带、感温粉末。", "answer": "热成像仪、感温纸"}, {"id": 270, "unit": "第四单元 热", "lesson": "第 3 课 温度不同的物体相互接触", "question": "在实验中，我们测量物体的温度通常使用温度计，生活中还有更多可以感知温度的方法，比如使用热成像仪、感温纸 ______", "answer": "带、感温粉末。"}, {"id": 271, "unit": "第四单元 热", "lesson": "第 4 课 热在金属中的传递", "question": "热传递有一定的方向性，热总是______，或从一个高温物体传递给一个低温物体。热 传递的方向与物体的体积、质量等无关。", "answer": "从温度较高的一端传向温度较低的一端"}, {"id": 272, "unit": "第四单元 热", "lesson": "第 4 课 热在金属中的传递", "question": "热传递有一定的方向性，热总是从温度较高的一端传向温度较低的一端，或从一个高温物体传递给一个低温物体。热 ______", "answer": "传递的方向与物体的体积、质量等无关。"}, {"id": 273, "unit": "第四单元 热", "lesson": "第 4 课 热在金属中的传递", "question": "热传递有______三种传递方式。", "answer": "热传导、热对流、热辐射"}, {"id": 274, "unit": "第四单元 热", "lesson": "第 4 课 热在金属中的传递", "question": "(1)热传导：通过______，是固体热传递的主要方式。 (2)热对流：靠气体和液体的流动来传热的方式。", "answer": "直接接触传热"}, {"id": 275, "unit": "第四单元 热", "lesson": "第 4 课 热在金属中的传递", "question": "(1)热传导：通过直接接触传热，是______。 (2)热对流：靠气体和液体的流动来传热的方式。", "answer": "固体热传递的主要方式"}, {"id": 276, "unit": "第四单元 热", "lesson": "第 4 课 热在金属中的传递", "question": "(1)热传导：通过直接接触传热，是固体热传递的主要方式。 (2)热对流：靠______来传热的方式。", "answer": "气体和液体的流动"}, {"id": 277, "unit": "第四单元 热", "lesson": "第 4 课 热在金属中的传递", "question": "(3)热辐射：物体以______的形式向外发射热能的过程。太阳的热量以热辐射的形式传递到地球。 3.用火加热金属条的中部，金属条上的蜡从中部受热部分开始熔化，然后向两端依次熔化。", "answer": "电磁波"}, {"id": 278, "unit": "第四单元 热", "lesson": "第 4 课 热在金属中的传递", "question": "(3)热辐射：物体以电磁波的形式向外发射热能的过程。______以热辐射的形式传递到地球。 3.用火加热金属条的中部，金属条上的蜡从中部受热部分开始熔化，然后向两端依次熔化。", "answer": "太阳的热量"}, {"id": 279, "unit": "第四单元 热", "lesson": "第 4 课 热在金属中的传递", "question": "(3)______：物体以电磁波的形式向外发射热能的过程。太阳的热量以热辐射的形式传递到地球。 3.用火加热金属条的中部，金属条上的蜡从中部受热部分开始熔化，然后向两端依次熔化。", "answer": "热辐射"}, {"id": 280, "unit": "第四单元 热", "lesson": "第 4 课 热在金属中的传递", "question": "(3)热辐射：物体以电磁波的形式向外发射热能的过程。太阳的热量以热辐射的形式传递到地球。 3.用火加热金属条的中部，金属条上的蜡从中部受热部分开始熔化，然后______。", "answer": "向两端依次熔化"}, {"id": 281, "unit": "第四单元 热", "lesson": "第 4 课 热在金属中的传递", "question": "4.热在金属片中的传递：从加热点（热源中心）向______。", "answer": "四周各个方向逐渐传递"}, {"id": 282, "unit": "第四单元 热", "lesson": "第 5 课 热在水中的传递", "question": "热在______中的主要传递方式是热对流。", "answer": "液体和气体"}, {"id": 283, "unit": "第四单元 热", "lesson": "第 5 课 热在水中的传递", "question": "热在液体和气体中的主要传递方式是______。", "answer": "热对流"}, {"id": 284, "unit": "第四单元 热", "lesson": "第 5 课 热在水中的传递", "question": "加热试管中的水：滴加红墨水的目的是______，加热后的热水向上流动，冷水向下流动，形成对流。使整 杯水的温度趋于相同。", "answer": "方便观察水的流动"}, {"id": 285, "unit": "第四单元 热", "lesson": "第 5 课 热在水中的传递", "question": "加热试管中的水：滴加红墨水的目的是方便观察水的流动，加热后的______，冷水向下流动，形成对流。使整 杯水的温度趋于相同。", "answer": "热水向上流动"}, {"id": 286, "unit": "第四单元 热", "lesson": "第 5 课 热在水中的传递", "question": "加热试管中的水：滴加红墨水的目的是方便观察水的流动，加热后的热水向上流动，______，形成对流。使整 杯水的温度趋于相同。", "answer": "冷水向下流动"}, {"id": 287, "unit": "第四单元 热", "lesson": "第 5 课 热在水中的传递", "question": "加热试管中的水：滴加红墨水的目的是方便观察水的流动，加热后的热水向上流动，冷水向下流动，形成______。使整 杯水的温度趋于相同。", "answer": "对流"}, {"id": 288, "unit": "第四单元 热", "lesson": "第 5 课 热在水中的传递", "question": "加热试管中的水：滴加红墨水的目的是方便观察水的流动，加热后的热水向上流动，冷水向下流动，形成对流。使整 杯水的______。", "answer": "温度趋于相同"}, {"id": 289, "unit": "第四单元 热", "lesson": "第 5 课 热在水中的传递", "question": "热可以在______传递，固体、气体、液体都可以传递热。", "answer": "物体间和物体内"}, {"id": 290, "unit": "第四单元 热", "lesson": "第 5 课 热在水中的传递", "question": "热可以在物体间和物体内传递，______都可以传递热。", "answer": "固体、气体、液体"}, {"id": 291, "unit": "第四单元 热", "lesson": "第 5 课 热在水中的传递", "question": "______，热水/热空气上升。所以，空调安装在房间上方，因为冷空气下降，向下流动。", "answer": "冷水/冷空气下降"}, {"id": 292, "unit": "第四单元 热", "lesson": "第 5 课 热在水中的传递", "question": "冷水/冷空气下降，______。所以，空调安装在房间上方，因为冷空气下降，向下流动。", "answer": "热水/热空气上升"}, {"id": 293, "unit": "第四单元 热", "lesson": "第 5 课 热在水中的传递", "question": "冷水/冷空气下降，热水/热空气上升。所以，______安装在房间上方，因为冷空气下降，向下流动。", "answer": "空调"}, {"id": 294, "unit": "第四单元 热", "lesson": "第 5 课 热在水中的传递", "question": "冷水/冷空气下降，热水/热空气上升。所以，空调安装在房间______，因为冷空气下降，向下流动。", "answer": "上方"}, {"id": 295, "unit": "第四单元 热", "lesson": "第 5 课 热在水中的传递", "question": "冷水/______，热水/热空气上升。所以，空调安装在房间上方，因为冷空气下降，向下流动。", "answer": "冷空气下降"}, {"id": 296, "unit": "第四单元 热", "lesson": "第 5 课 热在水中的传递", "question": "______安装在房间下方，因为热空气上升，向上流动。", "answer": "暖气"}, {"id": 297, "unit": "第四单元 热", "lesson": "第 5 课 热在水中的传递", "question": "暖气安装在房间______，因为热空气上升，向上流动。", "answer": "下方"}, {"id": 298, "unit": "第四单元 热", "lesson": "第 5 课 热在水中的传递", "question": "暖气安装在房间下方，因为______，向上流动。", "answer": "热空气上升"}, {"id": 299, "unit": "第四单元 热", "lesson": "第 6 课 哪个传热快", "question": "不同材料制成的物体，______是不一样的。", "answer": "导热性能"}, {"id": 300, "unit": "第四单元 热", "lesson": "第 6 课 哪个传热快", "question": "热的良导体有______等金属材料。热的不良导体有塑料、木头、陶瓷、空气等材料。", "answer": "铜、铝、铁"}, {"id": 301, "unit": "第四单元 热", "lesson": "第 6 课 哪个传热快", "question": "热的良导体有铜、铝、铁等金属材料。热的不良导体有______等材料。", "answer": "塑料、木头、陶瓷、空气"}, {"id": 302, "unit": "第四单元 热", "lesson": "第 6 课 哪个传热快", "question": "比较木勺、塑料勺、金属勺哪个传热快：三种勺子中，______，塑料勺传热慢一些，木勺传热最慢。", "answer": "金属勺传热最快"}, {"id": 303, "unit": "第四单元 热", "lesson": "第 6 课 哪个传热快", "question": "比较木勺、塑料勺、金属勺哪个传热快：三种勺子中，金属勺传热最快，塑料勺传热慢一些，______。", "answer": "木勺传热最慢"}, {"id": 304, "unit": "第四单元 热", "lesson": "第 6 课 哪个传热快", "question": "铜、铝、铁三种材料的导热性能排序：______。", "answer": "铜＞铝＞铁"}, {"id": 305, "unit": "第四单元 热", "lesson": "第 6 课 哪个传热快", "question": "______需要用热的良导体，因为传热性能好；锅柄需要用热的不良导体，因为传热性能差，防止烫伤。", "answer": "锅身"}, {"id": 306, "unit": "第四单元 热", "lesson": "第 6 课 哪个传热快", "question": "锅身需要用______，因为传热性能好；锅柄需要用热的不良导体，因为传热性能差，防止烫伤。", "answer": "热的良导体"}, {"id": 307, "unit": "第四单元 热", "lesson": "第 6 课 哪个传热快", "question": "锅身需要用热的良导体，因为______；锅柄需要用热的不良导体，因为传热性能差，防止烫伤。", "answer": "传热性能好"}, {"id": 308, "unit": "第四单元 热", "lesson": "第 6 课 哪个传热快", "question": "锅身需要用热的良导体，因为传热性能好；______需要用热的不良导体，因为传热性能差，防止烫伤。", "answer": "锅柄"}, {"id": 309, "unit": "第四单元 热", "lesson": "第 6 课 哪个传热快", "question": "锅身需要用热的良导体，因为传热性能好；锅柄需要用______，因为传热性能差，防止烫伤。", "answer": "热的不良导体"}, {"id": 310, "unit": "第四单元 热", "lesson": "第 6 课 哪个传热快", "question": "锅身需要用热的良导体，因为传热性能好；锅柄需要用热的不良导体，因为______，防止烫伤。", "answer": "传热性能差"}, {"id": 311, "unit": "第四单元 热", "lesson": "第 7 课 做个保温杯", "question": "______制作保温杯时，应选择热的不良导体。 传热性能越差， 隔绝内部与外界接触，保温效果越好。", "answer": "热的良导体散热快，热的不良导体散热慢。"}, {"id": 312, "unit": "第四单元 热", "lesson": "第 7 课 做个保温杯", "question": "热的良导体散热快，热的______散热慢。制作保温杯时，应选择热的不良导体。 传热性能越差， 隔绝内部与外界接触，保温效果越好。", "answer": "不良导体"}, {"id": 313, "unit": "第四单元 热", "lesson": "第 7 课 做个保温杯", "question": "热的良导体散热快，热的不良导体散热慢。制作保温杯时，应选择热的不良导体。 传热性能______， 隔绝内部与外界接触，保温效果越好。", "answer": "越差"}, {"id": 314, "unit": "第四单元 热", "lesson": "第 7 课 做个保温杯", "question": "热的良导体散热快，热的不良导体散热慢。制作保温杯时，应选择热的不良导体。 传热性能越差， 隔绝内部与外界接触，______。", "answer": "保温效果越好"}, {"id": 315, "unit": "第四单元 热", "lesson": "第 7 课 做个保温杯", "question": "使杯中热水凉得更慢的方法：（1）给杯子加一个______。（2）用热的不良导体将杯子包起来。", "answer": "密封的盖"}, {"id": 316, "unit": "第四单元 热", "lesson": "第 7 课 做个保温杯", "question": "使杯中热水凉得更慢的方法：（1）给杯子加一个密封的盖。（2）用热的______将杯子包起来。", "answer": "不良导体"}, {"id": 317, "unit": "第四单元 热", "lesson": "第 7 课 做个保温杯", "question": "保温瓶内胆原理：（1）木塞是热的不良导体，______。（2）内胆中 间为真空，无热传导与热对流。（3）内壁镀银，减少热辐射。", "answer": "隔绝内部物质与外界空气的接触，减少热传导与热对流"}, {"id": 318, "unit": "第四单元 热", "lesson": "第 7 课 做个保温杯", "question": "保温瓶内胆原理：（1）木塞是热的不良导体，隔绝内部物质与外界空气的接触，减少热传导与热对流。（2）内胆中 间为真空，______。（3）内壁镀银，减少热辐射。", "answer": "无热传导与热对流"}, {"id": 319, "unit": "第四单元 热", "lesson": "第 7 课 做个保温杯", "question": "保温瓶内胆原理：（1）木塞是热的不良导体，隔绝内部物质与外界空气的接触，减少热传导与热对流。（2）内胆中 间为真空，无热传导与热对流。（3）内壁镀银，______。", "answer": "减少热辐射"}];
+
+// ==================== GLOBAL STATE ====================
+let currentMode = 'choice'; // 'choice' or 'fill'
+let currentFilter = '全部';
+let currentQuestions = [];
+let currentShuffled = null;
 let timerInterval = null;
-let timeLeft = 10;
-let timerRunning = false;
+let timerSeconds = 0;
 
-function getData() {
-  const raw = localStorage.getItem(STORAGE_KEY);
-  if (raw) return JSON.parse(raw);
-  return { wrongMap: {}, correctSet: {}, totalCorrect: 0, totalWrong: 0, totalDone: 0, recentDone: [], defaultTime: 10 };
+const CHOICE_LS_KEY = 'science_quiz_5th_v2';
+const FILL_LS_KEY = 'science_fill_5th_v1';
+
+// ==================== STATE ====================
+function getLSKey() { return currentMode === 'choice' ? CHOICE_LS_KEY : FILL_LS_KEY; }
+function getActiveQuestions() { return currentMode === 'choice' ? CHOICE_DATA : FILL_DATA; }
+
+function loadState() {
+  try {
+    const key = getLSKey();
+    const raw = localStorage.getItem(key);
+    if (raw) {
+      const s = JSON.parse(raw);
+      return {
+        answers: s.answers || {},
+        wrongs: s.wrongs || [],
+        records: s.records || [],
+        removeCorrect: s.removeCorrect || false,
+        timerOn: s.timerOn || false
+      };
+    }
+  } catch(e) {}
+  return { answers: {}, wrongs: [], records: [], removeCorrect: false, timerOn: false };
 }
 
-function saveData(data) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+let state = loadState();
+
+function saveState() {
+  localStorage.setItem(getLSKey(), JSON.stringify(state));
 }
 
-function renderHome() {
-  const data = getData();
-  document.getElementById('totalDone').textContent = data.totalDone;
-  document.getElementById('wrongCount').textContent = Object.keys(data.wrongMap).length;
-  document.getElementById('timeInput').value = data.defaultTime || 10;
-  if (data.totalDone > 0) {
-    document.getElementById('correctRate').textContent = Math.round(data.totalCorrect / data.totalDone * 100) + '%';
-  } else {
-    document.getElementById('correctRate').textContent = '-';
+function getAnsweredQuestions() {
+  return new Set(Object.keys(state.answers));
+}
+
+// ==================== MODE SWITCHING ====================
+function switchMode(mode) {
+  if (currentMode === mode) return;
+  stopTimer();
+  timerSeconds = 0;
+  updateTimerDisplay();
+
+  currentMode = mode;
+  currentFilter = '全部';
+  currentShuffled = null;
+  state = loadState();
+
+  // Update mode buttons
+  const btnChoice = document.getElementById('btn-choice-mode');
+  const btnFill = document.getElementById('btn-fill-mode');
+  btnChoice.className = 'mode-btn' + (mode === 'choice' ? ' active' : '');
+  btnFill.className = 'mode-btn' + (mode === 'fill' ? ' fill-active' : '');
+
+  // Hide panels
+  hideResult();
+  hideWrongBook();
+  hideRecords();
+
+  buildUnitSelector();
+  updateToolbarButtons();
+  refreshQuiz();
+  updateStats();
+
+  // Resume timer if was on
+  if (state.timerOn) startTimer();
+}
+
+// ==================== UNIT / QUESTIONS ====================
+
+function getAllQuestions() {
+  const data = getActiveQuestions();
+  return data.map((q, i) => ({
+    ...q,
+    _key: currentMode === 'choice'
+      ? (q.unit + '|||' + q.question)
+      : ('fill_' + q.id)
+  }));
+}
+
+let allQuestionsCache = [];
+
+function refreshAllQuestionsCache() {
+  allQuestionsCache = getAllQuestions();
+}
+
+function getUnits() {
+  refreshAllQuestionsCache();
+  const units = new Set(allQuestionsCache.map(q => q.unit));
+  return ['全部', ...units];
+}
+
+function buildUnitSelector() {
+  refreshAllQuestionsCache();
+  const units = getUnits();
+  const container = document.getElementById('unit-selector');
+  container.innerHTML = units.map(u => {
+    const cls = (u === currentFilter) ? 'unit-btn active' : 'unit-btn';
+    const label = u === '全部' ? (currentMode === 'choice' ? '全部单元混合测试' : '全部填空题') : u;
+    return `<button class="${cls}" onclick="selectUnit('${u.replace(/'/g, "\'")}')">${label}</button>`;
+  }).join('');
+}
+
+function selectUnit(unit) {
+  currentFilter = unit;
+  currentShuffled = null;
+  buildUnitSelector();
+  refreshQuiz();
+  hideResult();
+  hideWrongBook();
+  hideRecords();
+  updateToolbarButtons();
+}
+
+function getUnitQuestions(unit) {
+  const all = allQuestionsCache;
+  if (unit === '全部') return [...all];
+  return all.filter(q => q.unit === unit);
+}
+
+function refreshQuiz() {
+  refreshAllQuestionsCache();
+  let questions = getUnitQuestions(currentFilter);
+
+  if (state.removeCorrect) {
+    questions = questions.filter(q => !state.answers[q._key] || !isAnswerCorrect(q, state.answers[q._key]));
   }
 
-  const btn = document.getElementById('btnWrongBook');
-  btn.style.display = Object.keys(data.wrongMap).length > 0 ? 'block' : 'none';
+  if (currentShuffled) {
+    const orderMap = new Map(currentShuffled.map((q, i) => [q._key, i]));
+    questions.sort((a, b) => (orderMap.get(a._key) || 999) - (orderMap.get(b._key) || 999));
+    questions = questions.filter(q => orderMap.has(q._key));
+  }
 
-  const units = [...new Set(ALL_QUESTIONS.map(q => q.unit))];
-  const grid = document.getElementById('unitGrid');
-  grid.innerHTML = units.map(u => {
-    const total = ALL_QUESTIONS.filter(q => q.unit === u).length;
-    const done = ALL_QUESTIONS.filter(q => q.unit === u && (data.correctSet || {})[q.id]).length;
-    const remaining = total - done;
-    return `<div class="unit-card" onclick="startQuiz('${u}')">
-      <div class="name">${u}</div>
-      <div class="count">${remaining} / ${total} 题</div>
+  currentQuestions = questions;
+  if (currentMode === 'choice') renderChoiceQuiz();
+  else renderFillQuiz();
+  updateProgress();
+}
+
+// ==================== RENDER - CHOICE MODE ====================
+function renderChoiceQuiz() {
+  const area = document.getElementById('quiz-area');
+  const answered = getAnsweredQuestions();
+
+  if (currentQuestions.length === 0) {
+    area.innerHTML = `<div class="empty-state"><div class="icon">🎉</div><p>全部题目已完成！</p><button class="btn btn-primary" onclick="resetCurrent()">重新开始</button></div>`;
+    document.getElementById('progress-fill').style.width = '100%';
+    return;
+  }
+
+  area.innerHTML = currentQuestions.map(q => {
+    const userAnswer = state.answers[q._key];
+    const isAnswered = userAnswer !== undefined;
+    let cardClass = 'quiz-card';
+    if (isAnswered) {
+      cardClass += (userAnswer === q.answer) ? ' correct' : ' wrong';
+    }
+
+    let optionsHTML = q.options.map(opt => {
+      const letter = opt.charAt(0);
+      let optClass = 'option-item';
+      if (isAnswered) optClass += ' disabled';
+      if (isAnswered && letter === userAnswer) optClass += (userAnswer === q.answer) ? ' correct-answer' : ' wrong-answer';
+      if (isAnswered && letter === q.answer && userAnswer !== q.answer) optClass += ' correct-answer';
+      return `<div class="${optClass}" onclick="answerQuestion('${q._key.replace(/'/g, "\'")}', '${letter}')">
+        <span class="option-letter">${letter}</span>${opt.substring(2).trim()}
+      </div>`;
+    }).join('');
+
+    const explClass = isAnswered ? 'explanation show' : 'explanation';
+
+    return `<div class="${cardClass}" id="card-${q._key.replace(/[^a-zA-Z0-9]/g, '_')}">
+      <div class="quiz-meta">
+        <span>${q.lesson || ''}</span><span>第${q.id}题</span>
+      </div>
+      <div class="quiz-question">${q.id}. ${q.question}</div>
+      <div class="options-list">${optionsHTML}</div>
+      <div class="${explClass}">💡 ${q.explanation}</div>
     </div>`;
   }).join('');
 }
 
-function pickQuestions(unit, count) {
-  const data = getData();
-  
-  let pool;
-  if (unit === 'all') {
-    pool = [...ALL_QUESTIONS];
-  } else if (unit === 'wrong') {
-    const wrongIds = Object.keys(data.wrongMap).map(Number);
-    pool = ALL_QUESTIONS.filter(q => wrongIds.includes(q.id));
-    if (pool.length === 0) return [];
-    pool.sort((a, b) => (data.wrongMap[b.id] || 0) - (data.wrongMap[a.id] || 0));
-    count = Math.min(count, pool.length);
-  } else {
-    pool = ALL_QUESTIONS.filter(q => q.unit === unit);
-  }
-  
-  const correctIds = new Set(Object.keys(data.correctSet || {}).map(Number));
-  pool = pool.filter(q => !correctIds.has(q.id));
-  
-  if (pool.length === 0) return [];
-  if (count >= pool.length) {
-    const arr = [...pool];
-    for (let i = arr.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [arr[i], arr[j]] = [arr[j], arr[i]];
-    }
-    return arr;
-  }
-  
-  const wrongIds = new Set(Object.keys(data.wrongMap).map(Number));
-  const wrongPool = pool.filter(q => wrongIds.has(q.id));
-  const normalPool = pool.filter(q => !wrongIds.has(q.id));
-  
-  let weightedWrong = [];
-  wrongPool.forEach(q => {
-    const weight = Math.min(data.wrongMap[q.id] || 1, 3);
-    for (let i = 0; i < weight; i++) weightedWrong.push(q);
-  });
-  
-  const recentSet = new Set((data.recentDone || []).slice(-30));
-  let normalWeighted = [];
-  normalPool.forEach(q => {
-    const weight = recentSet.has(q.id) ? 0.5 : 1;
-    normalWeighted.push({ q, weight });
-  });
-  
-  const selected = [];
-  const usedIds = new Set();
-  
-  function addRandom(arr, n) {
-    const candidates = arr.filter(x => !usedIds.has(x.id || x.q.id));
-    if (candidates.length === 0) return;
-    const totalWeight = candidates.reduce((s, x) => s + (x.weight || 1), 0);
-    for (let k = 0; k < n && candidates.length > 0; k++) {
-      let r = Math.random() * totalWeight;
-      let idx = 0;
-      for (let i = 0; i < candidates.length; i++) {
-        r -= (candidates[i].weight || 1);
-        if (r <= 0) { idx = i; break; }
-      }
-      const picked = candidates.splice(idx, 1)[0];
-      usedIds.add(picked.id || picked.q.id);
-      selected.push(picked.q || picked);
-    }
-  }
-  
-  const wrongCount = Math.min(Math.ceil(count * 0.6), weightedWrong.length);
-  addRandom(weightedWrong.map(q => ({ q, weight: 1 })), wrongCount);
-  addRandom(normalWeighted, count - selected.length);
-  
-  if (selected.length < count) {
-    const allPool = pool.filter(q => !usedIds.has(q.id));
-    addRandom(allPool.map(q => ({ q, weight: 1 })), count - selected.length);
-  }
-  
-  return selected.slice(0, count);
-}
+// ==================== RENDER - FILL MODE ====================
+function renderFillQuiz() {
+  const area = document.getElementById('quiz-area');
+  const answered = getAnsweredQuestions();
 
-function startQuiz(unit) {
-  clearTimer();
-  const count = 10;
-  const questions = pickQuestions(unit, count);
-  if (questions.length === 0) {
-    const data = getData();
-    const unitNames = [...new Set(ALL_QUESTIONS.map(q => q.unit))];
-    const correctIds = new Set(Object.keys(data.correctSet || {}).map(Number));
-    const remainingUnits = unitNames.filter(u => {
-      const total = ALL_QUESTIONS.filter(q => q.unit === u).length;
-      const done = ALL_QUESTIONS.filter(q => q.unit === u && correctIds.has(q.id)).length;
-      return done < total;
-    });
-    if (unit === 'all') {
-      alert('全部133题已答完！可以清空学习记录重新开始。');
-    } else if (remainingUnits.length > 0) {
-      alert('「' + unit + '」的题目已全部答完！\n\n还有以下单元未完成：\n' + remainingUnits.join('\n'));
-    } else {
-      alert('所有分类的题目已全部答完！可以清空学习记录重新开始。');
-    }
+  if (currentQuestions.length === 0) {
+    area.innerHTML = `<div class="empty-state"><div class="icon">🎉</div><p>全部填空题已完成！</p><button class="btn btn-primary" onclick="resetCurrent()">重新开始</button></div>`;
+    document.getElementById('progress-fill').style.width = '100%';
     return;
   }
-  currentQuiz = { questions, currentIndex: 0, answers: [], unit };
-  document.getElementById('homePage').classList.add('hidden');
-  document.getElementById('resultPage').classList.add('hidden');
-  document.getElementById('quizPage').classList.remove('hidden');
-  renderQuestion();
-}
 
-function startWrongQuiz() {
-  const data = getData();
-  const wrongIds = Object.keys(data.wrongMap);
-  if (wrongIds.length === 0) { alert('没有错题'); return; }
-  const questions = pickQuestions('wrong', wrongIds.length);
-  currentQuiz = { questions, currentIndex: 0, answers: [], unit: '错题强化' };
-  document.getElementById('homePage').classList.add('hidden');
-  document.getElementById('resultPage').classList.add('hidden');
-  document.getElementById('quizPage').classList.remove('hidden');
-  renderQuestion();
-}
-
-function renderQuestion() {
-  const q = currentQuiz.questions[currentQuiz.currentIndex];
-  const total = currentQuiz.questions.length;
-  const idx = currentQuiz.currentIndex + 1;
-  
-  document.getElementById('progressText').textContent = `第 ${idx}/${total} 题`;
-  document.getElementById('btnNext').classList.remove('show');
-  
-  const unitLabel = currentQuiz.unit === 'all' ? q.unit : '';
-  document.getElementById('quizCard').innerHTML = `
-    <div class="unit-tag">${unitLabel || q.unit}</div>
-    <div class="question">${q.question}</div>
-    <div class="lesson-tag">${q.lesson}</div>
-    <div class="options" id="optionsContainer">
-      ${q.options.map((opt, i) => {
-        const letter = String.fromCharCode(65 + i);
-        return `<div class="option" onclick="selectAnswer(${i})" data-index="${i}">
-          <span class="letter">${letter}</span>
-          <span class="text">${opt.substring(2).trim()}</span>
-        </div>`;
-      }).join('')}
-    </div>
-    <div class="explanation" id="explanation">
-      <div class="exp-label">知识点解析：</div>
-      ${q.explanation || ''}
-    </div>
-  `;
-  
-  startTimer();
-}
-
-function startTimer() {
-  clearTimer();
-  const data = getData();
-  timeLeft = data.defaultTime || 10;
-  const timerEl = document.getElementById('timer');
-  timerEl.textContent = timeLeft + 's';
-  timerEl.classList.remove('warn');
-  timerRunning = true;
-  
-  timerInterval = setInterval(() => {
-    timeLeft--;
-    timerEl.textContent = timeLeft + 's';
-    if (timeLeft <= 3) timerEl.classList.add('warn');
-    if (timeLeft <= 0) { clearTimer(); handleTimeout(); }
-  }, 1000);
-}
-
-function clearTimer() {
-  timerRunning = false;
-  if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
-}
-
-function handleTimeout() {
-  const q = currentQuiz.questions[currentQuiz.currentIndex];
-  const correctIdx = q.answer.charCodeAt(0) - 65;
-  document.querySelectorAll('#optionsContainer .option').forEach(el => {
-    el.classList.add('disabled');
-    if (parseInt(el.dataset.index) === correctIdx) el.classList.add('correct');
-  });
-  document.getElementById('explanation').classList.add('show');
-  document.getElementById('btnNext').classList.add('show');
-  document.getElementById('timer').textContent = '超时';
-  currentQuiz.answers.push({ questionId: q.id, correct: false, timeout: true });
-  updateStorage(q.id, false);
-}
-
-function selectAnswer(idx) {
-  if (!timerRunning) return;
-  clearTimer();
-  
-  const q = currentQuiz.questions[currentQuiz.currentIndex];
-  const correctIdx = q.answer.charCodeAt(0) - 65;
-  const isCorrect = idx === correctIdx;
-  
-  document.querySelectorAll('#optionsContainer .option').forEach(el => {
-    el.classList.add('disabled');
-    if (parseInt(el.dataset.index) === correctIdx) el.classList.add('correct');
-    if (parseInt(el.dataset.index) === idx && !isCorrect) el.classList.add('wrong');
-  });
-  
-  document.getElementById('explanation').classList.add('show');
-  document.getElementById('btnNext').classList.add('show');
-  document.getElementById('timer').textContent = isCorrect ? '✓' : '✗';
-  
-  currentQuiz.answers.push({ questionId: q.id, correct: isCorrect, timeout: false });
-  updateStorage(q.id, isCorrect);
-}
-
-function updateStorage(qId, isCorrect) {
-  const data = getData();
-  data.totalDone++;
-  if (isCorrect) {
-    data.totalCorrect++;
-    data.correctSet[qId] = true;
-    if (data.wrongMap[qId]) {
-      data.wrongConsecutive = data.wrongConsecutive || {};
-      data.wrongConsecutive[qId] = (data.wrongConsecutive[qId] || 0) + 1;
-      if (data.wrongConsecutive[qId] >= 3) delete data.wrongMap[qId], delete data.wrongConsecutive[qId];
+  area.innerHTML = currentQuestions.map(q => {
+    const userAnswer = state.answers[q._key];
+    const isAnswered = userAnswer !== undefined;
+    let cardClass = 'quiz-card';
+    if (isAnswered) {
+      const correct = isAnswerCorrect(q, userAnswer);
+      cardClass += correct ? ' correct' : ' wrong';
     }
-  } else {
-    data.totalWrong++;
-    data.wrongMap[qId] = (data.wrongMap[qId] || 0) + 1;
-  }
-  data.recentDone = (data.recentDone || []).concat(qId).slice(-100);
-  saveData(data);
+
+    const disabledAttr = isAnswered ? ' disabled' : '';
+    const inputClass = isAnswered
+      ? (isAnswerCorrect(q, userAnswer) ? ' correct-input' : ' wrong-input')
+      : '';
+
+    const answerDisplayClass = isAnswered ? 'fill-answer-display show' : 'fill-answer-display';
+    const isCorrect = isAnswered && isAnswerCorrect(q, userAnswer);
+
+    let answerDisplayHTML = '';
+    if (isAnswered) {
+      if (isCorrect) {
+        answerDisplayHTML = `<div class="${answerDisplayClass}"><span class="correct-ans">✅ 正确！答案：${q.answer}</span></div>`;
+      } else {
+        answerDisplayHTML = `<div class="${answerDisplayClass}"><span class="wrong-ans">❌ 你的答案：${userAnswer}</span><br><span class="correct-ans">正确答案：${q.answer}</span></div>`;
+      }
+    }
+
+    return `<div class="${cardClass}" id="card-${q._key.replace(/[^a-zA-Z0-9]/g, '_')}">
+      <div class="quiz-meta">
+        <span>${q.lesson || ''}</span><span>第${q.id}题</span>
+      </div>
+      <div class="quiz-question">${q.id}. ${q.question}</div>
+      <div class="fill-input-row">
+        <input type="text" class="fill-input ${inputClass}" id="input-${q._key.replace(/[^a-zA-Z0-9]/g, '_')}"
+          placeholder="请输入答案..." ${disabledAttr}
+          onkeydown="if(event.key==='Enter') submitFill('${q._key.replace(/'/g, "\'")}')">
+        <button class="fill-submit-btn" id="btn-${q._key.replace(/[^a-zA-Z0-9]/g, '_')}"
+          ${disabledAttr} onclick="submitFill('${q._key.replace(/'/g, "\'")}')">提交</button>
+      </div>
+      ${answerDisplayHTML}
+    </div>`;
+  }).join('');
 }
 
-function nextQuestion() {
-  currentQuiz.currentIndex++;
-  if (currentQuiz.currentIndex >= currentQuiz.questions.length) showResult();
-  else renderQuestion();
+// ==================== FUZZY MATCHING ====================
+function normalizeAnswer(text) {
+  // Remove all whitespace, punctuation marks commonly used in Chinese
+  return text.replace(/[\s，,。.、；;：:！!？?（）()【】《》""'']/g, '').trim().toLowerCase();
+}
+
+function isAnswerCorrect(question, userAnswer) {
+  if (currentMode === 'choice') {
+    return userAnswer === question.answer;
+  }
+  // Fill mode: fuzzy matching
+  const normUser = normalizeAnswer(userAnswer || '');
+  const normAnswer = normalizeAnswer(question.answer);
+
+  // Exact match after normalization
+  if (normUser === normAnswer) return true;
+
+  // If answer is short (<= 5 chars), require exact normalized match
+  if (normAnswer.length <= 5) return false;
+
+  // For longer answers, check if user answer contains the key phrase or vice versa
+  // and the length difference isn't too large
+  if (normUser.length >= Math.floor(normAnswer.length * 0.6) &&
+      normUser.length <= Math.ceil(normAnswer.length * 1.5)) {
+    if (normAnswer.includes(normUser) || normUser.includes(normAnswer)) return true;
+  }
+
+  return false;
+}
+
+function submitFill(key) {
+  if (state.answers[key] !== undefined) return;
+
+  const inputId = 'input-' + key.replace(/[^a-zA-Z0-9]/g, '_');
+  const input = document.getElementById(inputId);
+  if (!input) return;
+
+  const userAnswer = input.value.trim();
+  if (!userAnswer) return;
+
+  const q = allQuestionsCache.find(q => q._key === key);
+  if (!q) return;
+
+  state.answers[key] = userAnswer;
+  const isCorrect = isAnswerCorrect(q, userAnswer);
+
+  // Record wrong
+  if (!isCorrect) {
+    const existing = state.wrongs.find(w => w._key === key);
+    if (!existing) {
+      state.wrongs.push({
+        _key: key,
+        id: q.id,
+        unit: q.unit,
+        lesson: q.lesson,
+        question: q.question,
+        answer: q.answer,
+        userAnswer: userAnswer,
+        date: new Date().toISOString()
+      });
+    } else {
+      existing.userAnswer = userAnswer;
+      existing.date = new Date().toISOString();
+    }
+  }
+
+  saveState();
+
+  // Refresh this card
+  const cardId = 'card-' + key.replace(/[^a-zA-Z0-9]/g, '_');
+  const card = document.getElementById(cardId);
+  if (card) {
+    card.classList.add(isCorrect ? 'correct' : 'wrong');
+    input.disabled = true;
+    input.classList.add(isCorrect ? 'correct-input' : 'wrong-input');
+    const btn = document.getElementById('btn-' + key.replace(/[^a-zA-Z0-9]/g, '_'));
+    if (btn) btn.disabled = true;
+
+    // Show answer
+    const answerDiv = card.querySelector('.fill-answer-display');
+    if (answerDiv) {
+      answerDiv.classList.add('show');
+      if (isCorrect) {
+        answerDiv.innerHTML = '<span class="correct-ans">✅ 正确！答案：' + q.answer + '</span>';
+      } else {
+        answerDiv.innerHTML = '<span class="wrong-ans">❌ 你的答案：' + userAnswer + '</span><br><span class="correct-ans">正确答案：' + q.answer + '</span>';
+      }
+    }
+  }
+
+  updateProgress();
+
+  if (isCorrect && state.removeCorrect) {
+    setTimeout(refreshQuiz, 600);
+  }
+
+  checkCompletion();
+}
+
+// ==================== CHOICE ANSWER ====================
+function answerQuestion(key, letter) {
+  if (state.answers[key] !== undefined) return;
+
+  const q = allQuestionsCache.find(q => q._key === key);
+  if (!q) return;
+
+  state.answers[key] = letter;
+  const isCorrect = (letter === q.answer);
+
+  if (!isCorrect) {
+    const existing = state.wrongs.find(w => w._key === key);
+    if (!existing) {
+      state.wrongs.push({
+        _key: key,
+        id: q.id,
+        unit: q.unit,
+        lesson: q.lesson,
+        question: q.question,
+        options: q.options,
+        answer: q.answer,
+        explanation: q.explanation,
+        userAnswer: letter,
+        date: new Date().toISOString()
+      });
+    } else {
+      existing.userAnswer = letter;
+      existing.date = new Date().toISOString();
+    }
+  }
+
+  saveState();
+
+  const cardId = 'card-' + key.replace(/[^a-zA-Z0-9]/g, '_');
+  const card = document.getElementById(cardId);
+  if (card) {
+    const options = card.querySelectorAll('.option-item');
+    options.forEach(opt => {
+      opt.classList.add('disabled');
+      const optLetter = opt.querySelector('.option-letter').textContent;
+      if (optLetter === letter) {
+        opt.classList.add(isCorrect ? 'correct-answer' : 'wrong-answer');
+      }
+      if (optLetter === q.answer && !isCorrect) {
+        opt.classList.add('correct-answer');
+      }
+    });
+    card.classList.add(isCorrect ? 'correct' : 'wrong');
+    const expl = card.querySelector('.explanation');
+    if (expl) expl.classList.add('show');
+  }
+
+  updateProgress();
+
+  if (isCorrect && state.removeCorrect) {
+    setTimeout(refreshQuiz, 600);
+  }
+
+  checkCompletion();
+}
+
+// ==================== PROGRESS & STATS ====================
+function updateProgress() {
+  refreshAllQuestionsCache();
+  const total = getUnitQuestions(currentFilter).length;
+  const answered = getAnsweredQuestions();
+  let unitAnswered = 0;
+  for (const q of getUnitQuestions(currentFilter)) {
+    if (answered.has(q._key)) unitAnswered++;
+  }
+  const pct = total > 0 ? Math.round(unitAnswered / total * 100) : 0;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  updateStats();
+}
+
+function updateStats() {
+  refreshAllQuestionsCache();
+  const all = allQuestionsCache;
+  const answered = getAnsweredQuestions();
+  let correct = 0;
+  for (const q of all) {
+    const ua = state.answers[q._key];
+    if (ua !== undefined && isAnswerCorrect(q, ua)) correct++;
+  }
+  document.getElementById('stat-total').textContent = '总题数: ' + all.length;
+  document.getElementById('stat-correct').textContent = '正确: ' + correct;
+  const acc = answered.size > 0 ? Math.round(correct / answered.size * 100) + '%' : '-';
+  document.getElementById('stat-accuracy').textContent = '正确率: ' + acc;
+}
+
+function checkCompletion() {
+  const questions = getUnitQuestions(currentFilter);
+  const answered = getAnsweredQuestions();
+  const allDone = questions.every(q => answered.has(q._key));
+  if (allDone && questions.length > 0) {
+    showResult();
+  }
 }
 
 function showResult() {
-  clearTimer();
-  document.getElementById('quizPage').classList.add('hidden');
-  document.getElementById('resultPage').classList.remove('hidden');
-  
-  const answers = currentQuiz.answers;
-  const correct = answers.filter(a => a.correct).length;
-  const wrongs = answers.filter(a => !a.correct);
-  
-  let html = `<div class="result-card">
-    <div class="score">${Math.round(correct/answers.length*100)}%</div>
-    <div class="score-label">正确率 · ${correct}/${answers.length}</div>
-    <div class="stats">
-      <div><span style="color:#4caf50;font-weight:700">${correct}</span> 正确</div>
-      <div><span style="color:#e53935;font-weight:700">${wrongs.length}</span> 错误</div>
-    </div>`;
-  
-  if (wrongs.length > 0) {
-    html += `<div class="result-detail"><h4>错题回顾</h4>`;
-    wrongs.forEach(w => {
-      const q = ALL_QUESTIONS.find(qq => qq.id === w.questionId);
-      if (q) {
-        html += `<div class="wrong-item">
-          <div class="q">${w.timeout ? '⏰ 超时 · ' : ''}${q.question}</div>
-          <div class="a">正确答案：${q.options[q.answer.charCodeAt(0)-65]}</div>
-        </div>`;
-      }
-    });
-    html += `</div>`;
+  const questions = getUnitQuestions(currentFilter);
+  const answered = getAnsweredQuestions();
+  let correct = 0;
+  let wrong = 0;
+  for (const q of questions) {
+    const ua = state.answers[q._key];
+    if (ua === undefined) continue;
+    if (isAnswerCorrect(q, ua)) correct++;
+    else wrong++;
   }
-  
-  html += `<div class="btn-row">
-    <button class="btn-again" onclick="retryQuiz()">再来一轮</button>
-    <button class="btn-home" onclick="goHome()">返回首页</button>
-  </div></div>`;
-  
-  document.getElementById('resultContent').innerHTML = html;
+  const totalAnswered = correct + wrong;
+  const score = totalAnswered > 0 ? Math.round(correct / totalAnswered * 100) : 0;
+
+  state.records.push({
+    unit: currentFilter,
+    mode: currentMode,
+    total: totalAnswered,
+    correct: correct,
+    wrong: wrong,
+    score: score,
+    date: new Date().toISOString()
+  });
+  saveState();
+
+  const modeLabel = currentMode === 'choice' ? '选择题' : '填空题';
+  const unitLabel = currentFilter === '全部' ? (currentMode === 'choice' ? '全部单元' : '全部填空题') : currentFilter;
+
+  const panel = document.getElementById('result-panel');
+  panel.style.display = 'block';
+  panel.innerHTML = `
+    <div class="result-panel">
+      <h2>${unitLabel} - ${modeLabel}测试完成！</h2>
+      <div class="score">${score}分</div>
+      <div class="stats">正确 ${correct} 题 / 错误 ${wrong} 题 / 共 ${totalAnswered} 题</div>
+      <button class="btn btn-primary" onclick="resetCurrent()">重新测试本单元</button>
+      <button class="btn btn-outline" style="margin-left:8px" onclick="showWrongBook()">查看错题本</button>
+    </div>
+  `;
+  document.getElementById('quiz-area').innerHTML = '';
+  document.getElementById('progress-fill').style.width = '100%';
 }
 
-function retryQuiz() {
-  if (currentQuiz.unit === '错题强化') startWrongQuiz();
-  else startQuiz(currentQuiz.unit);
+function hideResult() {
+  document.getElementById('result-panel').style.display = 'none';
 }
 
-function goHome() {
-  clearTimer();
-  document.getElementById('quizPage').classList.add('hidden');
-  document.getElementById('resultPage').classList.add('hidden');
-  document.getElementById('homePage').classList.remove('hidden');
-  renderHome();
+function resetCurrent() {
+  const questions = getUnitQuestions(currentFilter);
+  for (const q of questions) {
+    delete state.answers[q._key];
+  }
+  saveState();
+  currentShuffled = null;
+  hideResult();
+  hideWrongBook();
+  hideRecords();
+  refreshQuiz();
+  stopTimer();
+  timerSeconds = 0;
+  updateTimerDisplay();
+  if (state.timerOn) startTimer();
 }
 
-function setTimeLimit(val) {
-  const v = Math.max(5, Math.min(120, parseInt(val) || 10));
-  const data = getData();
-  data.defaultTime = v;
-  saveData(data);
-  document.getElementById('timeInput').value = v;
+// ==================== SHUFFLE ====================
+function shuffleQuestions() {
+  let questions = getUnitQuestions(currentFilter);
+  if (state.removeCorrect) {
+    questions = questions.filter(q => !state.answers[q._key] || !isAnswerCorrect(q, state.answers[q._key]));
+  }
+  currentShuffled = [...questions].sort(() => Math.random() - 0.5);
+  currentQuestions = [...currentShuffled];
+  if (currentMode === 'choice') renderChoiceQuiz();
+  else renderFillQuiz();
 }
 
-function resetData() {
-  if (confirm('确定要清空所有学习记录和错题吗？此操作不可恢复。')) {
-    localStorage.removeItem(STORAGE_KEY);
-    renderHome();
+// ==================== REMOVE CORRECT ====================
+function toggleRemoveCorrect() {
+  state.removeCorrect = !state.removeCorrect;
+  saveState();
+  updateToolbarButtons();
+  refreshQuiz();
+}
+
+// ==================== TIMER ====================
+function toggleTimer() {
+  state.timerOn = !state.timerOn;
+  saveState();
+  if (state.timerOn) {
+    startTimer();
+  } else {
+    stopTimer();
+  }
+  updateToolbarButtons();
+}
+
+function startTimer() {
+  stopTimer();
+  document.getElementById('timer-display').style.display = 'inline';
+  timerInterval = setInterval(() => {
+    timerSeconds++;
+    updateTimerDisplay();
+  }, 1000);
+}
+
+function stopTimer() {
+  if (timerInterval) clearInterval(timerInterval);
+  timerInterval = null;
+  document.getElementById('timer-display').style.display = 'none';
+}
+
+function updateTimerDisplay() {
+  const m = Math.floor(timerSeconds / 60);
+  const s = timerSeconds % 60;
+  document.getElementById('timer-display').textContent =
+    String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+}
+
+// ==================== WRONG BOOK ====================
+function showWrongBook() {
+  hideResult();
+  hideRecords();
+  const area = document.getElementById('wrong-book-area');
+
+  if (state.wrongs.length === 0) {
+    area.style.display = 'block';
+    area.innerHTML = `<div class="empty-state"><div class="icon">📖</div><p>错题本为空，继续加油！</p></div>`;
+    return;
+  }
+
+  area.style.display = 'block';
+  area.innerHTML = `<h3 style="margin-bottom:12px">错题本（${state.wrongs.length} 题）</h3>
+    <button class="btn btn-danger" style="margin-bottom:12px" onclick="clearWrongBook()">清空错题本</button>
+    ${state.wrongs.map((w, i) => `
+    <div class="wrong-item">
+      <div class="quiz-meta"><span>${w.lesson || ''}</span><span>${w.unit}</span></div>
+      <div class="question">${i+1}. ${w.question}</div>
+      <div class="answer-info">
+        <div>你的答案：<span style="color:var(--danger);font-weight:600">${w.userAnswer}</span></div>
+        <div>正确答案：<span style="color:var(--success);font-weight:600">${w.answer}</span></div>
+        ${w.explanation ? '<div style="margin-top:4px">💡 ' + w.explanation + '</div>' : ''}
+      </div>
+    </div>`).join('')}`;
+
+  document.getElementById('quiz-area').innerHTML = '';
+}
+
+function hideWrongBook() {
+  document.getElementById('wrong-book-area').style.display = 'none';
+}
+
+function clearWrongBook() {
+  if (confirm('确定要清空错题本吗？')) {
+    state.wrongs = [];
+    saveState();
+    showWrongBook();
   }
 }
 
-renderHome();
+// ==================== RECORDS ====================
+function showRecords() {
+  hideResult();
+  hideWrongBook();
+  const area = document.getElementById('records-area');
+
+  if (state.records.length === 0) {
+    area.style.display = 'block';
+    area.innerHTML = `<div class="empty-state"><div class="icon">📊</div><p>暂无学习记录</p></div>`;
+    return;
+  }
+
+  area.style.display = 'block';
+  area.innerHTML = `<h3 style="margin-bottom:12px">学习记录</h3>
+    <button class="btn btn-danger" style="margin-bottom:12px" onclick="clearRecords()">清空记录</button>
+    <div style="overflow-x:auto">
+    <table class="record-table">
+      <thead><tr><th>序号</th><th>模式</th><th>单元</th><th>总题数</th><th>正确</th><th>错误</th><th>得分</th><th>日期</th></tr></thead>
+      <tbody>${state.records.map((r, i) => {
+        const d = new Date(r.date);
+        const dateStr = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+        return `<tr>
+          <td>${i+1}</td>
+          <td>${r.mode === 'fill' ? '填空题' : '选择题'}</td>
+          <td>${r.unit === '全部' ? (r.mode === 'fill' ? '全部填空题' : '全部混合') : r.unit}</td>
+          <td>${r.total}</td>
+          <td style="color:var(--success)">${r.correct}</td>
+          <td style="color:var(--danger)">${r.wrong}</td>
+          <td style="font-weight:600">${r.score}</td>
+          <td>${dateStr}</td>
+        </tr>`;
+      }).join('')}</tbody>
+    </table></div>`;
+
+  document.getElementById('quiz-area').innerHTML = '';
+}
+
+function hideRecords() {
+  document.getElementById('records-area').style.display = 'none';
+}
+
+function clearRecords() {
+  if (confirm('确定要清空所有学习记录吗？')) {
+    state.records = [];
+    saveState();
+    showRecords();
+  }
+}
+
+// ==================== TOOLBAR ====================
+function updateToolbarButtons() {
+  const btnRemove = document.getElementById('btn-remove-correct');
+  const btnTimer = document.getElementById('btn-timer');
+
+  if (state.removeCorrect) {
+    btnRemove.classList.add('active');
+    btnRemove.textContent = '答对排除 ✓';
+  } else {
+    btnRemove.classList.remove('active');
+    btnRemove.textContent = '答对排除';
+  }
+
+  if (state.timerOn) {
+    btnTimer.classList.add('active');
+    btnTimer.textContent = '计时器 ✓';
+  } else {
+    btnTimer.classList.remove('active');
+    btnTimer.textContent = '计时器';
+  }
+}
+
+// ==================== INIT ====================
+function init() {
+  currentMode = 'choice';
+  state = loadState();
+  refreshAllQuestionsCache();
+  buildUnitSelector();
+  updateToolbarButtons();
+  refreshQuiz();
+  updateStats();
+
+  if (state.timerOn) {
+    startTimer();
+  }
+}
+
+init();
 </script>
 </body>
 </html>
