@@ -1224,7 +1224,6 @@ let timerInterval = null;
 let quizFinished = false;
 let wrongMap = {};
 let masteredSet = {};
-let autoAdvanceTimer = null;
 let choiceIndex = 0;
 let fillIndex = 0;
 
@@ -1360,7 +1359,6 @@ function renderUnitSelector() {
 
 function startQuiz(unit) {
   stopTimer();
-  clearAutoAdvance();
   currentUnit = unit;
   quizFinished = false;
   answeredCount = 0;
@@ -1450,7 +1448,6 @@ function startWrongQuiz() {
 
 function shuffleQuestions() {
   if (quizFinished) return;
-  clearAutoAdvance();
   for (let i = currentQuestions.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [currentQuestions[i], currentQuestions[j]] = [currentQuestions[j], currentQuestions[i]];
@@ -1530,7 +1527,6 @@ function renderNavButtons() {
 }
 
 function goToPrevQuestion() {
-  clearAutoAdvance();
   const idx = getCurrentIndex();
   if (idx > 0) {
     setCurrentIndex(idx - 1);
@@ -1539,19 +1535,11 @@ function goToPrevQuestion() {
 }
 
 function goToNextQuestion() {
-  clearAutoAdvance();
   const visibleQs = getVisibleQs();
   const idx = getCurrentIndex();
   if (idx < visibleQs.length - 1) {
     setCurrentIndex(idx + 1);
     renderQuiz();
-  }
-}
-
-function clearAutoAdvance() {
-  if (autoAdvanceTimer) {
-    clearTimeout(autoAdvanceTimer);
-    autoAdvanceTimer = null;
   }
 }
 
@@ -1650,21 +1638,12 @@ function selectChoiceAnswer(id, userAnswer) {
   updateStats();
   updateProgress();
 
-  // Render current card with feedback first, then auto-advance
+  // Render current card with feedback
   renderQuiz();
-  clearAutoAdvance();
   const visibleQs = getVisibleQs();
   const currentIdx = getCurrentIndex();
   const nextUnanswered = findNextUnansweredIdx(currentIdx);
-  if (nextUnanswered >= 0) {
-    autoAdvanceTimer = setTimeout(() => {
-      if (!quizFinished) {
-        setCurrentIndex(nextUnanswered);
-        renderQuiz();
-        checkFinish();
-      }
-    }, 1200);
-  } else {
+  if (nextUnanswered < 0) {
     checkFinish();
   }
 }
@@ -1782,21 +1761,12 @@ function submitFillAnswer(id) {
   updateStats();
   updateProgress();
 
-  // Render current card with feedback first, then auto-advance
+  // Render current card with feedback
   renderQuiz();
-  clearAutoAdvance();
   const visibleQs = getVisibleQs();
   const currentIdx = getCurrentIndex();
   const nextUnanswered = findNextUnansweredIdx(currentIdx);
-  if (nextUnanswered >= 0) {
-    autoAdvanceTimer = setTimeout(() => {
-      if (!quizFinished) {
-        setCurrentIndex(nextUnanswered);
-        renderQuiz();
-        checkFinish();
-      }
-    }, 1200);
-  } else {
+  if (nextUnanswered < 0) {
     checkFinish();
   }
 }
