@@ -434,9 +434,8 @@ body {
 <div class="header">
   <h1>五年级科学测试题库</h1>
   <div class="header-stats">
-    <span id="stat-total">总题数: 394</span>
-    <span id="stat-correct">正确: 0</span>
-    <span id="stat-accuracy">正确率: -</span>
+    <span id="stat-total">当前: 0 题</span>
+    <span id="stat-mastered">已掌握: 0</span>
     <span id="stat-wrong">错题: 0</span>
   </div>
 </div>
@@ -456,7 +455,7 @@ body {
     <button id="btn-shuffle" onclick="shuffleQuestions()">随机打乱</button>
     <button id="btn-timer" onclick="toggleTimer()">计时器</button>
     <button id="btn-wrong-practice" style="display:none" onclick="startWrongQuiz()">错题练习</button>
-    <button id="btn-records" onclick="showRecords()">学习记录</button>
+    <button id="btn-records" onclick="showMastered()">已掌握</button>
     <span id="correct-count-display" style="font-size:13px;color:#888;margin-left:auto">已答对: 0</span>
     <span class="timer-display" id="timer-display" style="display:none">00:00</span>
   </div>
@@ -1203,6 +1202,7 @@ let timerSeconds = 0;
 let timerInterval = null;
 let quizFinished = false;
 let wrongMap = {};
+let masteredSet = {};
 let choiceIndex = 0;
 let fillIndex = 0;
 
@@ -1217,6 +1217,18 @@ function saveWrongMap() {
   localStorage.setItem(getStorageKey() + "_wrongMap", JSON.stringify(wrongMap));
 }
 
+function loadMasteredSet() {
+  try {
+    const raw = localStorage.getItem(getStorageKey() + "_mastered");
+    if (raw) masteredSet = JSON.parse(raw);
+    else masteredSet = {};
+  } catch(e) { masteredSet = {}; }
+}
+
+function saveMasteredSet() {
+  localStorage.setItem(getStorageKey() + "_mastered", JSON.stringify(masteredSet));
+}
+
 function getCurrentIndex() {
   return currentMode === "choice" ? choiceIndex : fillIndex;
 }
@@ -1225,7 +1237,7 @@ function setCurrentIndex(val) {
   else fillIndex = val;
 }
 function getVisibleQs() {
-  return currentQuestions.filter(q => q._correct !== true);
+  return currentQuestions.filter(q => !masteredSet[q.id]);
 }
 function findNextUnansweredIdx(startIdx) {
   const visibleQs = getVisibleQs();
@@ -1288,11 +1300,12 @@ function switchMode(mode) {
   document.getElementById("timer-display").textContent = "00:00";
   document.getElementById("correct-count-display").textContent = "已答对: 0";
 
-  document.getElementById("stat-total").textContent = "总题数: " + getData().length;
-  document.getElementById("stat-correct").textContent = "正确: 0";
-  document.getElementById("stat-accuracy").textContent = "正确率: -";
+  document.getElementById("stat-total").textContent = "当前: " + getData().length + " 题";
+  document.getElementById("stat-mastered").textContent = "已掌握: 0";
+  document.getElementById("stat-wrong").textContent = "错题: 0";
 
   loadWrongMap();
+  loadMasteredSet();
   updateWrongStat();
 
   renderUnitSelector();
@@ -1352,15 +1365,16 @@ function startQuiz(unit) {
     }
   });
 
+  loadMasteredSet();
+
   if (unit) {
-    currentQuestions = data.filter(q => q.unit === unit).map(q => ({...q, _answered: false, _correct: null, _userAnswer: null}));
+    currentQuestions = data.filter(q => q.unit === unit && !masteredSet[q.id]).map(q => ({...q, _answered: false, _correct: null, _userAnswer: null}));
   } else {
-    currentQuestions = data.map(q => ({...q, _answered: false, _correct: null, _userAnswer: null}));
+    currentQuestions = data.filter(q => !masteredSet[q.id]).map(q => ({...q, _answered: false, _correct: null, _userAnswer: null}));
   }
 
   document.getElementById("stat-total").textContent = "当前: " + currentQuestions.length + " 题";
-  document.getElementById("stat-correct").textContent = "正确: 0";
-  document.getElementById("stat-accuracy").textContent = "正确率: -";
+  document.getElementById("stat-mastered").textContent = "已掌握: " + Object.keys(masteredSet).length;
 
   loadWrongMap();
   updateWrongStat();
@@ -1371,7 +1385,8 @@ function startQuiz(unit) {
 
 function startWrongQuiz() {
   loadWrongMap();
-  const wrongIds = Object.keys(wrongMap).map(Number);
+  loadMasteredSet();
+  const wrongIds = Object.keys(wrongMap).filter(id => !masteredSet[Number(id)]).map(Number);
   if (wrongIds.length === 0) {
     alert("暂无错题");
     return;
@@ -1403,9 +1418,8 @@ function startWrongQuiz() {
 
   currentQuestions = data.filter(q => wrongIds.includes(q.id)).map(q => ({...q, _answered: false, _correct: null, _userAnswer: null}));
 
-  document.getElementById("stat-total").textContent = "当前: " + currentQuestions.length + " 题 (错题本)";
-  document.getElementById("stat-correct").textContent = "正确: 0";
-  document.getElementById("stat-accuracy").textContent = "正确率: -";
+  document.getElementById("stat-total").textContent = "当前: " + currentQuestions.length + " 题 (错题练习)";
+  document.getElementById("stat-mastered").textContent = "已掌握: " + Object.keys(masteredSet).length;
 
   renderQuiz();
   updateProgress();
@@ -1468,12 +1482,8 @@ function updateProgress() {
 }
 
 function updateStats() {
-  document.getElementById("stat-correct").textContent = "正确: " + correctCount;
+  document.getElementById("stat-mastered").textContent = "已掌握: " + Object.keys(masteredSet).length;
   document.getElementById("correct-count-display").textContent = "已答对: " + correctCount;
-  if (answeredCount > 0) {
-    const pct = Math.round(correctCount / answeredCount * 100);
-    document.getElementById("stat-accuracy").textContent = "正确率: " + pct + "%";
-  }
 }
 
 // ==================== CHOICE MODE ====================
@@ -1585,6 +1595,8 @@ function selectChoiceAnswer(id, userAnswer) {
   answeredCount++;
   if (q._correct) {
     correctCount++;
+    masteredSet[q.id] = true;
+    saveMasteredSet();
     delete wrongMap[q.id];
   } else {
     wrongMap[q.id] = (wrongMap[q.id] || 0) + 1;
@@ -1697,6 +1709,8 @@ function submitFillAnswer(id) {
   answeredCount++;
   if (correct) {
     correctCount++;
+    masteredSet[q.id] = true;
+    saveMasteredSet();
     delete wrongMap[q.id];
   } else {
     wrongMap[q.id] = (wrongMap[q.id] || 0) + 1;
@@ -1750,8 +1764,6 @@ function finishQuiz() {
   const total = currentQuestions.length;
   const score = correctCount;
 
-  saveRecord(score, total);
-
   const now = new Date();
   const dateStr = `${now.getFullYear()}年${(now.getMonth()+1).toString().padStart(2,'0')}月${now.getDate().toString().padStart(2,'0')}日 ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}:${now.getSeconds().toString().padStart(2,'0')}`;
 
@@ -1792,120 +1804,69 @@ function finishQuiz() {
   document.getElementById("result-panel").scrollIntoView({ behavior: "smooth" });
 }
 
-function saveRecord(score, total) {
-  let records = [];
-  try {
-    const raw = localStorage.getItem(getStorageKey() + "_records");
-    if (raw) records = JSON.parse(raw);
-  } catch(e) {}
 
-  const now = new Date();
-  records.push({
-    date: now.toISOString(),
-    dateDisplay: `${now.getFullYear()}年${(now.getMonth()+1).toString().padStart(2,'0')}月${now.getDate().toString().padStart(2,'0')}日 ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`,
-    unit: currentUnit || (currentMode === "choice" ? "全部混合" : "全部填空"),
-    mode: currentMode,
-    score: score,
-    total: total,
-    pct: total > 0 ? Math.round(score / total * 100) : 0,
-    timerSeconds: timerOn ? timerSeconds : null
-  });
-
-  if (records.length > 100) records = records.slice(-100);
-  localStorage.setItem(getStorageKey() + "_records", JSON.stringify(records));
-
-  // Save wrong questions
-  const wrongQs = currentQuestions.filter(q => q._correct === false);
-  if (wrongQs.length > 0) {
-    let wrongBook = [];
-    try {
-      const raw = localStorage.getItem(getStorageKey() + "_wrong");
-      if (raw) wrongBook = JSON.parse(raw);
-    } catch(e) {}
-
-    for (const wq of wrongQs) {
-      wrongMap[wq.id] = (wrongMap[wq.id] || 0) + 1;
-      const exists = wrongBook.find(w => w.id === wq.id);
-      if (!exists) {
-        const entry = {
-          id: wq.id,
-          unit: wq.unit,
-          lesson: wq.lesson,
-          question: wq.question,
-          answer: wq.answer,
-          userAnswer: wq._userAnswer || "",
-          mode: currentMode,
-          date: now.toISOString()
-        };
-        if (currentMode === "choice") {
-          entry.options = wq.options;
-          entry.explanation = wq.explanation || "";
-        }
-        wrongBook.push(entry);
-      }
-    }
-
-    if (wrongBook.length > 500) wrongBook = wrongBook.slice(-500);
-    localStorage.setItem(getStorageKey() + "_wrong", JSON.stringify(wrongBook));
-    saveWrongMap();
-    updateWrongStat();
-  }
-}
-
-function showRecords() {
-  let records = [];
-  try {
-    const raw = localStorage.getItem(getStorageKey() + "_records");
-    if (raw) records = JSON.parse(raw);
-  } catch(e) {}
+// ==================== MASTERED ====================
+function showMastered() {
+  loadMasteredSet();
+  const data = getData();
+  const ids = Object.keys(masteredSet).map(Number);
+  const modeLabel = currentMode === "choice" ? "选择题" : "填空题";
 
   document.getElementById("quiz-area").innerHTML = "";
   document.getElementById("result-panel").style.display = "none";
   document.getElementById("wrong-book-area").style.display = "none";
 
   const area = document.getElementById("records-area");
-  if (records.length === 0) {
-    area.innerHTML = '<div class="empty-state"><div style="font-size:48px;margin-bottom:12px;">&#128214;</div><p>${currentMode === "choice" ? "选择题" : "填空题"}暂无学习记录</p></div>';
+  if (ids.length === 0) {
+    area.innerHTML = '<div class="empty-state"><div style="font-size:48px;margin-bottom:12px;">&#127942;</div><p>' + modeLabel + '暂无已掌握题目</p></div>';
   } else {
-    let html = `<h3 style="margin-bottom:12px">${currentMode === "choice" ? "选择题" : "填空题"}学习记录 (${records.length} 条)</h3>
-      <button class="btn btn-danger" onclick="clearRecords()" style="margin-bottom:16px">清空记录</button>
-      <div style="overflow-x:auto">
-      <table class="record-table">
-        <tr><th>日期</th><th>测试范围</th><th>得分</th><th>正确率</th><th>用时</th></tr>`;
-
-    const reversed = [...records].reverse();
-    for (const r of reversed) {
-      let timerStr = "-";
-      if (r.timerSeconds !== null && r.timerSeconds !== undefined) {
-        const m = Math.floor(r.timerSeconds / 60);
-        const s = r.timerSeconds % 60;
-        timerStr = `${m}分${s}秒`;
-      }
-      html += `<tr>
-        <td>${r.dateDisplay}</td>
-        <td>${r.unit}</td>
-        <td>${r.score} / ${r.total}</td>
-        <td>${r.pct}%</td>
-        <td>${timerStr}</td>
-      </tr>`;
+    const masteredQs = data.filter(q => ids.includes(q.id));
+    // Group by unit
+    const grouped = {};
+    for (const q of masteredQs) {
+      if (!grouped[q.unit]) grouped[q.unit] = [];
+      grouped[q.unit].push(q);
     }
-    html += '</table></div>';
+    const sortedUnits = Object.keys(grouped).sort();
+
+    let html = '<h3 style="margin-bottom:12px">' + modeLabel + '已掌握 (' + ids.length + ' 题)</h3>';
+    html += '<button class="btn btn-danger" onclick="clearMastered()" style="margin-bottom:16px">清空已掌握</button>';
+
+    for (const unit of sortedUnits) {
+      const qs = grouped[unit];
+      html += '<h4 style="margin:20px 0 10px;padding-bottom:6px;border-bottom:2px solid var(--primary);color:var(--primary)">' + unit + ' (' + qs.length + ' 题)</h4>';
+      for (const q of qs) {
+        html += '<div class="quiz-card" style="margin-bottom:12px">';
+        html += '<div class="quiz-meta"><span>' + q.lesson + '</span><span>#' + q.id + '</span></div>';
+        html += '<div class="quiz-question">' + q.question + '</div>';
+        html += '<div class="explanation show"><strong>正确答案：</strong>' + q.answer + '</div>';
+        if (currentMode === "choice" && q.explanation) {
+          html += '<div class="explanation show"><strong>解析：</strong>' + q.explanation + '</div>';
+        }
+        html += '</div>';
+      }
+    }
     area.innerHTML = html;
   }
   area.style.display = "block";
   area.scrollIntoView({ behavior: "smooth" });
 }
 
-function clearRecords() {
-  if (confirm("确定要清空「" + (currentMode === "choice" ? "选择题" : "填空题") + "」所有学习记录吗？此操作不可撤销。")) {
-    localStorage.removeItem(getStorageKey() + "_records");
-    showRecords();
+function clearMastered() {
+  const modeLabel = currentMode === "choice" ? "选择题" : "填空题";
+  if (confirm("确定要清空「" + modeLabel + "」所有已掌握题目吗？清空后这些题目将重新出现在测试中。此操作不可撤销。")) {
+    masteredSet = {};
+    saveMasteredSet();
+    document.getElementById("stat-mastered").textContent = "已掌握: 0";
+    document.getElementById("records-area").style.display = "none";
+    document.getElementById("records-area").innerHTML = "";
   }
 }
 
 // ==================== START ====================
-document.getElementById("stat-total").textContent = "总题数: " + CHOICE_DATA.length;
+document.getElementById("stat-total").textContent = "当前: " + CHOICE_DATA.length + " 题";
 loadWrongMap();
+loadMasteredSet();
 updateWrongStat();
 renderUnitSelector();
 startQuiz(null);
